@@ -67,12 +67,12 @@ const addCardTemplate = (task) => {
   const {description, color, reapeatingDays, dueDate,  isArchive, isFavorite} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
-  const isDateShowing = !!dueDate; // написать фкнцию для возврата значений
+  const isDateShowing = !!dueDate; 
 
   const date = isDateShowing ? `${dueDate.getDate()} ${_const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()]}` : '';  
   const time = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.formatTime)(dueDate) : '';
  
-  const month = _const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()];
+
   const isRepeat = (element) => {
    return element === true;
   };
@@ -117,8 +117,8 @@ const addCardTemplate = (task) => {
             <div class="card__dates">
               <div class="card__date-deadline">
                 <p class="card__input-deadline-wrap">
-                  <span class="card__date">${isDateShowing ? month : ''}</span>
-                  <span class="card__time">16:15</span>
+                  <span class="card__date">${isDateShowing ? date : ''}</span>
+                  <span class="card__time">${time}</span>
                 </p>
               </div>
             </div>
@@ -429,7 +429,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const generateTask = () => {
-    const dueDate =  Math.random() > 0.5 ? new Date() : (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomDate)();
+    const dueDate =  Math.random() > 0.5 ? null : (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomDate)();
     return {
         description: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.TASK_DESC),
         color: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.COLORS_CARD),
@@ -471,7 +471,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "formatTime": () => (/* binding */ formatTime)
 /* harmony export */ });
 const getRandomIntNumber = (min, max) => {
-    return min + parseInt(Math.random() * (max - min));
+    return parseInt(Math.random() * (max - min) + min);
 };
 
 const getRandomElemFromArray = (array) => {
