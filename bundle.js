@@ -56,26 +56,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "addCardTemplate": () => (/* binding */ addCardTemplate)
 /* harmony export */ });
+/* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
+
+
 const addCardTemplate = (task) => {
 
   const {description, color, reapeatingDays, dueDate,  isArchive, isFavorite} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
-  const isDateShowing = !!dueDate;
+  const isDateShowing = !!dueDate; // написать фкнцию для возврата значений
+
   const date = isDateShowing ? `${dueDate.getDate()}` : `${MOTH_NAMES[dueDate.getMonth()]}`;  // для карточки задачи 
-  const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
-
-  
-
+ 
+  const month = _const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()];
   const isRepeat = (element) => {
    return element === true;
   };
+
+  const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
   const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
     return `
-    <article class="card card--${color}">
+    <article class="card card--${color} ${repeatClass} ${deadlineClass}"
+    >
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">
@@ -108,7 +113,7 @@ const addCardTemplate = (task) => {
             <div class="card__dates">
               <div class="card__date-deadline">
                 <p class="card__input-deadline-wrap">
-                  <span class="card__date">23 September</span>
+                  <span class="card__date">${isDateShowing ? month : ''}</span>
                   <span class="card__time">16:15</span>
                 </p>
               </div>
@@ -173,7 +178,7 @@ const addCardForm = (task) => {
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
   const isDateShowing = !!dueDate;
-  const date = isDateShowing ? `${dueDate.getDate()}` : `${_const_js__WEBPACK_IMPORTED_MODULE_0__.MOTH_NAMES[dueDate.getMonth()]}`;  // для карточки задачи 
+  const date = isDateShowing ? `${dueDate.getDate()}` : `${_const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()]}`;  // для карточки задачи 
   const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
 
 
@@ -185,7 +190,7 @@ const addCardForm = (task) => {
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
     return `
-    <article class="card card--edit card--${color} ${repeatClass}">
+    <article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__color-bar">
@@ -351,6 +356,7 @@ const addMenu = () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "COLORS_CARD": () => (/* binding */ COLORS_CARD),
+/* harmony export */   "MONTH_NAMES": () => (/* binding */ MONTH_NAMES),
 /* harmony export */   "TASK_DESC": () => (/* binding */ TASK_DESC)
 /* harmony export */ });
 const TASK_DESC = ['Сделать домашку', 'Изучить теорию', 'Приготовить еду'];
