@@ -333,14 +333,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "createFilterTemplate": () => (/* binding */ createFilterTemplate)
 /* harmony export */ });
-const createInput = (name, count) => {
+const createInput = (filter, isChecked) => {
+    const {name, count} = filter;
     return `
         <input
             type="radio"
             id="filter__${name}"
             class="filter__input visually-hidden"
             name="filter"
-            checked />
+            ${isChecked ? 'checked' : ''} />
         <label for="filter__${name}" class="filter__label">
             ${name} <span class="filter__${name}-count">${count}</span>
         </label>
@@ -348,9 +349,8 @@ const createInput = (name, count) => {
 };
 
 const createFilterTemplate = (filters) => {
-    const filtersMarkup = filters.map((input) => {
-        return createInput(input.name, input.count)
-    }).join('\n');
+    const filtersMarkup = filters.map((filter, i) => {
+        return createInput(filter, i === 0)}).join('\n');
 
     return `
         ${filtersMarkup}   
@@ -418,32 +418,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "generateFilters": () => (/* binding */ generateFilters)
 /* harmony export */ });
+const filterNames  = ['all', 'overdue', 'today', 'favorites', 'repeating', 'archive'];
+
 const generateFilters = () => {
-   return [{
-        name: 'all',
-        count: '14',
-    },
-    {
-        name: 'overdue',
-        count: '18',
-    },
-    {
-        name: 'today',
-        count: '15',
-    },
-    {
-        name: 'favorites',
-        count: '10',
-    },
-    {
-        name: 'repeating',
-        count: '14',
-    },
-    {
-        name: 'archive',
-        count: '14',
-    },
-];
+   return filterNames.map((filterName) => {
+        return {
+            name: filterName,
+            count: parseInt(Math.random() * 20),
+        }
+   });
 };
 
 
