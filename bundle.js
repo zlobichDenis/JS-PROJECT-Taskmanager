@@ -57,6 +57,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "addCardTemplate": () => (/* binding */ addCardTemplate)
 /* harmony export */ });
 /* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+
+
 
 
 const addCardTemplate = (task) => {
@@ -66,14 +69,15 @@ const addCardTemplate = (task) => {
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
   const isDateShowing = !!dueDate; // написать фкнцию для возврата значений
 
-  const date = isDateShowing ? `${dueDate.getDate()}` : `${MOTH_NAMES[dueDate.getMonth()]}`;  // для карточки задачи 
+  const date = isDateShowing ? `${dueDate.getDate()} ${_const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()]}` : '';  
+  const time = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.formatTime)(dueDate) : '';
  
   const month = _const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()];
   const isRepeat = (element) => {
    return element === true;
   };
 
-  const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
+  const deadlineClass = isExpired ? `card--deadline` : ``; 
   const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
@@ -141,6 +145,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "addCardForm": () => (/* binding */ addCardForm)
 /* harmony export */ });
 /* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+
 
 
 
@@ -178,7 +184,8 @@ const addCardForm = (task) => {
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
   const isDateShowing = !!dueDate;
-  const date = isDateShowing ? `${dueDate.getDate()}` : `${_const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()]}`;  // для карточки задачи 
+  const date = isDateShowing ? `${dueDate.getDate()} ${_const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()]}` : '';  
+  const time = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.formatTime)(dueDate) : '';
   const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
 
 
@@ -215,19 +222,19 @@ const addCardForm = (task) => {
               <button class="card__date-deadline-toggle" type="button">
                 date: <span class="card__date-status">${isDateShowing ? 'yes' : 'no'}</span>
               </button>
-
-              <fieldset class="card__date-deadline">
-                <label class="card__input-deadline-wrap">
-                  <input
-                    class="card__date"
-                    type="text"
-                    placeholder=""
-                    name="date"
-                    value="${dueDate}"
-                  />
-                </label>
-              </fieldset>
-
+              ${isDateShowing ? `
+                    <fieldset class="card__date-deadline">
+                      <label class="card__input-deadline-wrap">
+                        <input
+                          class="card__date"
+                          type="text"
+                          placeholder=""
+                          name="date"
+                          value="${date} ${time}"
+                        />
+                      </label>
+                    </fieldset>`
+               : ''}
               <button class="card__repeat-toggle" type="button">
                 repeat:<span class="card__repeat-status">${isRepeated ? 'yes' : 'no'}</span>
               </button>
@@ -422,13 +429,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const generateTask = () => {
+    const dueDate =  Math.random() > 0.5 ? new Date() : (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomDate)();
     return {
         description: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.TASK_DESC),
         color: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.COLORS_CARD),
         reapitingDays: null,
         isArchive: Math.random() * 0.5,
         isFavorite: Math.random() * 0.5,
-        dueDate: new Date,
+        dueDate,
         reapeatingDays: {
             'mo': true,
             'tu': false,
@@ -458,14 +466,37 @@ const generateTasks = (count) => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getRandomIntNumber": () => (/* binding */ getRandomIntNumber),
-/* harmony export */   "getRandomElemFromArray": () => (/* binding */ getRandomElemFromArray)
+/* harmony export */   "getRandomElemFromArray": () => (/* binding */ getRandomElemFromArray),
+/* harmony export */   "getRandomDate": () => (/* binding */ getRandomDate),
+/* harmony export */   "formatTime": () => (/* binding */ formatTime)
 /* harmony export */ });
 const getRandomIntNumber = (min, max) => {
-    return parseInt(Math.random() * (max - min) + min);
+    return min + parseInt(Math.random() * (max - min));
 };
 
 const getRandomElemFromArray = (array) => {
     return array[getRandomIntNumber(0, array.length - 1)];
+};
+
+const getRandomDate = () => {
+    const targetDate = new Date;
+    const sign = Math.random() > 0.5 ? 1 : -1;
+    const diffValue = sign * getRandomIntNumber(0, 11);
+
+    targetDate.setDate(targetDate.getDate() + diffValue);
+
+    return targetDate
+};
+
+const castTimeFormat = (value) => {
+    return value < 10 ? `0${value}` : String(value);
+};
+
+const formatTime = (date) => {
+    const hours = castTimeFormat(date.getHours() % 12);
+    const minutes = castTimeFormat(date.getMinutes())
+
+    return `${hours}:${minutes}`
 };
 
 
