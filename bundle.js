@@ -136,11 +136,13 @@ const createColorsMarkup = () => {
 };
 
 const createRepeatingDaysMarkup = (reapeatingDays) => { //дописать
-  return `
-      <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-mo-4" name="repeat" value="mo"/>
-    <label class="card__repeat-day" for="repeat-mo-4">mo</label
->
-  `
+  const keys = Object.keys(reapeatingDays);
+  return keys.map((key) => {
+    return `
+    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${key}-4" name="repeat" value="${key}" ${reapeatingDays[key] ? 'checked = "true"' : ''}/>
+  <label class="card__repeat-day" for="repeat-${key}-4">${key}</label>
+`
+  }).join('\n');
 };
 
 
@@ -404,10 +406,10 @@ const generateTask = () => {
         reapeatingDays: {
             'mo': true,
             'tu': false,
-            'we': false,
+            'we': true,
             'th': false,
             'fr': false,
-            'sa': false,
+            'sa': true,
             'su': false,
         },
     };
@@ -532,7 +534,7 @@ const board = document.querySelector('.board');
 const boardTasks = board.querySelector('.board__tasks');
 
 const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_6__.generateFilters)();
-const TASK_COUNT = 3;
+const TASK_COUNT = 5;
 const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_7__.generateTasks)(TASK_COUNT);
 
 
@@ -544,7 +546,9 @@ const createPage = () => {
   board.insertAdjacentHTML('afterbegin', (0,_components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__.addBoardFilter)());
   board.insertAdjacentHTML('beforeend', (0,_components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__.addBtnLoadMore)());
   boardTasks.insertAdjacentHTML('afterbegin', (0,_components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.addCardForm)(tasks[0]));
-  boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)());
+  for (let i = 1; i < TASK_COUNT; i++) {
+    boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(tasks[i]));
+  };
 };
 
 
