@@ -159,14 +159,13 @@ const addCardForm = (task) => {
   const isDateShowing = !!dueDate;
 /*   const date = isDateShowing ? `${dueDate.getDate()}` : `${MOTH_NAMES[dueDate.getMonth()]}`; */ // Написать функции для определения месяца и даты
 
-  const repeatClass = 'card--repeat';
+  const repeatClass = 'card--repeat'; //  дописать 
   const deadlineClass = isExpired ? `card--deadline` : ``; // Найти куда вставить 
 
   const isRepeat = (element) => {
-    element === true;
+   return element === true;
   };
-  const isRepeated = Object.values(reapeatingDays).some(isRepeat); // Дописать
-
+  const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
     return `
     <article class="card card--edit card--${color} ${repeatClass}">
     <form class="card__form" method="get">
