@@ -122,6 +122,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
 
 
+
+
 const createColorsMarkup = () => {
   return _const_js__WEBPACK_IMPORTED_MODULE_0__.COLORS_CARD.map((color) => {
     return `
@@ -143,12 +145,22 @@ const createRepeatingDaysMarkup = (reapeatingDays) => { //дописать
 
 
 const addCardForm = (task) => {
-  const repeatClass = 'card--repeat';
-  const deadlineClass = 'yes';
 
   const {description, color, reapeatingDays, dueDate} = task;
-  const reapeatingDaysMarkup = createRepeatingDaysMarkup(reapeatingDays);
-  const colors = createColorsMarkup();
+
+
+
+  const reapeatingDaysMarkup = createRepeatingDaysMarkup(reapeatingDays); 
+  const colors = createColorsMarkup(); // Дописать
+
+  const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
+  const isDateShowing = !!dueDate;
+/*   const date = isDateShowing ? `${dueDate.getDate()}` : `${MOTH_NAMES[dueDate.getMonth()]}`; */ // Написать функции для определения месяца и даты
+
+  const repeatClass = 'card--repeat';
+  const deadlineClass = isExpired ? `card--deadline` : ``; // Найти куда вставить 
+
+  const isRepeat = Object.values(reapeatingDays).some(Boolean); // Дописать
 
     return `
     <article class="card card--edit card--${color} ${repeatClass}">
@@ -174,7 +186,7 @@ const addCardForm = (task) => {
           <div class="card__details">
             <div class="card__dates">
               <button class="card__date-deadline-toggle" type="button">
-                date: <span class="card__date-status">yes</span>
+                date: <span class="card__date-status">${isDateShowing ? 'yes' : 'no'}</span>
               </button>
 
               <fieldset class="card__date-deadline">
@@ -190,7 +202,7 @@ const addCardForm = (task) => {
               </fieldset>
 
               <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">yes</span>
+                repeat:<span class="card__repeat-status">${isRepeat ? 'yes' : 'no'}</span>
               </button>
 
               <fieldset class="card__repeat-days">
@@ -377,16 +389,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "generateTasks": () => (/* binding */ generateTasks),
 /* harmony export */   "generateTask": () => (/* binding */ generateTask)
 /* harmony export */ });
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
+
+
 const generateTask = () => {
     return {
-        description: `Сделать домашку`,
+        description: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.TASK_DESC),
         color: `pink`,
         reapitingDays: null,
         isArchive: Math.random() * 0.5,
         isFavorite: Math.random() * 0.5,
         dueDate: new Date,
-        deadlineClass: `card--deadline`,
-        repeatClass: `card--repeat`,
         reapeatingDays: {
             'mo': true,
             'tu': false,
@@ -401,6 +415,29 @@ const generateTask = () => {
 
 const generateTasks = (count) => {
     return new Array(count).fill('').map(generateTask);
+};
+
+
+
+/***/ }),
+
+/***/ "./src/util.js":
+/*!*********************!*\
+  !*** ./src/util.js ***!
+  \*********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getRandomIntNumber": () => (/* binding */ getRandomIntNumber),
+/* harmony export */   "getRandomElemFromArray": () => (/* binding */ getRandomElemFromArray)
+/* harmony export */ });
+const getRandomIntNumber = (min, max) => {
+    return parseInt(Math.random() * (max - min) + min);
+};
+
+const getRandomElemFromArray = (array) => {
+    return array[getRandomIntNumber(0, array.length - 1)];
 };
 
 
