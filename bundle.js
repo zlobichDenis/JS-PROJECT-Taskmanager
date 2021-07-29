@@ -135,7 +135,7 @@ const createColorsMarkup = () => {
   }).join('\n');
 };
 
-const createRepeatingDaysMarkup = (reapeatingDays) => { //дописать
+const createRepeatingDaysMarkup = (reapeatingDays) => { 
   const keys = Object.keys(reapeatingDays);
   return keys.map((key) => {
     return `
@@ -153,7 +153,7 @@ const addCardForm = (task) => {
 
 
   const reapeatingDaysMarkup = createRepeatingDaysMarkup(reapeatingDays); 
-  const colors = createColorsMarkup(); // Дописать
+  const colors = createColorsMarkup(); 
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
   const isDateShowing = !!dueDate;
@@ -162,7 +162,10 @@ const addCardForm = (task) => {
   const repeatClass = 'card--repeat';
   const deadlineClass = isExpired ? `card--deadline` : ``; // Найти куда вставить 
 
-  const isRepeat = Object.values(reapeatingDays).some(Boolean); // Дописать
+  const isRepeat = (element) => {
+    element === true;
+  };
+  const isRepeated = Object.values(reapeatingDays).some(isRepeat); // Дописать
 
     return `
     <article class="card card--edit card--${color} ${repeatClass}">
@@ -204,7 +207,7 @@ const addCardForm = (task) => {
               </fieldset>
 
               <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">${isRepeat ? 'yes' : 'no'}</span>
+                repeat:<span class="card__repeat-status">${isRepeated ? 'yes' : 'no'}</span>
               </button>
 
               <fieldset class="card__repeat-days">
