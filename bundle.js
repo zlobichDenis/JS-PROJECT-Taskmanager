@@ -54,9 +54,10 @@ const addBtnLoadMore = () => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addCardExample": () => (/* binding */ addCardExample)
+/* harmony export */   "addCardTemplate": () => (/* binding */ addCardTemplate)
 /* harmony export */ });
-const addCardExample = () => {
+const addCardTemplate = () => {
+
     return `
     <article class="card card--black">
     <div class="card__form">
@@ -118,205 +119,104 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "addCardForm": () => (/* binding */ addCardForm)
 /* harmony export */ });
-const addCardForm = () => {
+/* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
+
+
+const createColorsMarkup = () => {
+  return _const_js__WEBPACK_IMPORTED_MODULE_0__.COLORS_CARD.map((color) => {
     return `
-    <article class="card card--edit card--black">
-      <form class="card__form" method="get">
-        <div class="card__inner">
-          <div class="card__color-bar">
-            <svg width="100%" height="10">
-              <use xlink:href="#wave"></use>
-            </svg>
-          </div>
+    <input type="radio" id="color-${color}-4" class="card__color-input card__color-input--${color} visually-hidden" name="color"value="${color}"
+    />
+    <label for="color-${color}-4" class="card__color card__color--${color}">${color}</label
+>
+`
+  }).join('\n');
+};
 
-          <div class="card__textarea-wrap">
-            <label>
-              <textarea
-                class="card__text"
-                placeholder="Start typing your text here..."
-                name="text"
-              >This is example of new task, you can set date and time.</textarea>
-            </label>
-          </div>
+const createRepeatingDaysMarkup = (reapeatingDays) => { //дописать
+  return `
+      <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-mo-4" name="repeat" value="mo"/>
+    <label class="card__repeat-day" for="repeat-mo-4">mo</label
+>
+  `
+};
 
-          <div class="card__settings">
-            <div class="card__details">
-              <div class="card__dates">
-                <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">no</span>
-                </button>
 
-                <fieldset class="card__date-deadline" disabled>
-                  <label class="card__input-deadline-wrap">
-                    <input
-                      class="card__date"
-                      type="text"
-                      placeholder="23 September"
-                      name="date"
-                    />
-                  </label>
-                </fieldset>
+const addCardForm = (task) => {
+  const repeatClass = 'card--repeat';
+  const deadlineClass = 'yes';
 
-                <button class="card__repeat-toggle" type="button">
-                  repeat:<span class="card__repeat-status">no</span>
-                </button>
+  const {description, color, reapeatingDays, dueDate} = task;
+  const reapeatingDaysMarkup = createRepeatingDaysMarkup(reapeatingDays);
+  const colors = createColorsMarkup();
 
-                <fieldset class="card__repeat-days" disabled>
-                  <div class="card__repeat-days-inner">
-                    <input
-                      class="visually-hidden card__repeat-day-input"
-                      type="checkbox"
-                      id="repeat-mo-1"
-                      name="repeat"
-                      value="mo"
-                    />
-                    <label class="card__repeat-day" for="repeat-mo-1"
-                      >mo</label
-                    >
-                    <input
-                      class="visually-hidden card__repeat-day-input"
-                      type="checkbox"
-                      id="repeat-tu-1"
-                      name="repeat"
-                      value="tu"
-                      checked
-                    />
-                    <label class="card__repeat-day" for="repeat-tu-1"
-                      >tu</label
-                    >
-                    <input
-                      class="visually-hidden card__repeat-day-input"
-                      type="checkbox"
-                      id="repeat-we-1"
-                      name="repeat"
-                      value="we"
-                    />
-                    <label class="card__repeat-day" for="repeat-we-1"
-                      >we</label
-                    >
-                    <input
-                      class="visually-hidden card__repeat-day-input"
-                      type="checkbox"
-                      id="repeat-th-1"
-                      name="repeat"
-                      value="th"
-                    />
-                    <label class="card__repeat-day" for="repeat-th-1"
-                      >th</label
-                    >
-                    <input
-                      class="visually-hidden card__repeat-day-input"
-                      type="checkbox"
-                      id="repeat-fr-1"
-                      name="repeat"
-                      value="fr"
-                      checked
-                    />
-                    <label class="card__repeat-day" for="repeat-fr-1"
-                      >fr</label
-                    >
-                    <input
-                      class="visually-hidden card__repeat-day-input"
-                      type="checkbox"
-                      name="repeat"
-                      value="sa"
-                      id="repeat-sa-1"
-                    />
-                    <label class="card__repeat-day" for="repeat-sa-1"
-                      >sa</label
-                    >
-                    <input
-                      class="visually-hidden card__repeat-day-input"
-                      type="checkbox"
-                      id="repeat-su-1"
-                      name="repeat"
-                      value="su"
-                      checked
-                    />
-                    <label class="card__repeat-day" for="repeat-su-1"
-                      >su</label
-                    >
-                  </div>
-                </fieldset>
-              </div>
-            </div>
+    return `
+    <article class="card card--edit card--${color} ${repeatClass}">
+    <form class="card__form" method="get">
+      <div class="card__inner">
+        <div class="card__color-bar">
+          <svg class="card__color-bar-wave" width="100%" height="10">
+            <use xlink:href="#wave"></use>
+          </svg>
+        </div>
 
-            <div class="card__colors-inner">
-              <h3 class="card__colors-title">Color</h3>
-              <div class="card__colors-wrap">
-                <input
-                  type="radio"
-                  id="color-black-1"
-                  class="card__color-input card__color-input--black visually-hidden"
-                  name="color"
-                  value="black"
-                  checked
-                />
-                <label
-                  for="color-black-1"
-                  class="card__color card__color--black"
-                  >black</label
-                >
-                <input
-                  type="radio"
-                  id="color-yellow-1"
-                  class="card__color-input card__color-input--yellow visually-hidden"
-                  name="color"
-                  value="yellow"
-                />
-                <label
-                  for="color-yellow-1"
-                  class="card__color card__color--yellow"
-                  >yellow</label
-                >
-                <input
-                  type="radio"
-                  id="color-blue-1"
-                  class="card__color-input card__color-input--blue visually-hidden"
-                  name="color"
-                  value="blue"
-                />
-                <label
-                  for="color-blue-1"
-                  class="card__color card__color--blue"
-                  >blue</label
-                >
-                <input
-                  type="radio"
-                  id="color-green-1"
-                  class="card__color-input card__color-input--green visually-hidden"
-                  name="color"
-                  value="green"
-                />
-                <label
-                  for="color-green-1"
-                  class="card__color card__color--green"
-                  >green</label
-                >
-                <input
-                  type="radio"
-                  id="color-pink-1"
-                  class="card__color-input card__color-input--pink visually-hidden"
-                  name="color"
-                  value="pink"
-                />
-                <label
-                  for="color-pink-1"
-                  class="card__color card__color--pink"
-                  >pink</label
-                >
-              </div>
+        <div class="card__textarea-wrap">
+          <label>
+            <textarea
+              class="card__text"
+              placeholder="Start typing your text here..."
+              name="text"
+            >${description}</textarea>
+          </label>
+        </div>
+
+        <div class="card__settings">
+          <div class="card__details">
+            <div class="card__dates">
+              <button class="card__date-deadline-toggle" type="button">
+                date: <span class="card__date-status">yes</span>
+              </button>
+
+              <fieldset class="card__date-deadline">
+                <label class="card__input-deadline-wrap">
+                  <input
+                    class="card__date"
+                    type="text"
+                    placeholder=""
+                    name="date"
+                    value="${dueDate}"
+                  />
+                </label>
+              </fieldset>
+
+              <button class="card__repeat-toggle" type="button">
+                repeat:<span class="card__repeat-status">yes</span>
+              </button>
+
+              <fieldset class="card__repeat-days">
+                <div class="card__repeat-days-inner">
+                  ${reapeatingDaysMarkup}
+                </div>
+              </fieldset>
             </div>
           </div>
 
-          <div class="card__status-btns">
-            <button class="card__save" type="submit">save</button>
-            <button class="card__delete" type="button">delete</button>
+          <div class="card__colors-inner">
+            <h3 class="card__colors-title">Color</h3>
+            <div class="card__colors-wrap">
+              ${colors}
+            </div>
           </div>
         </div>
-      </form>
-    </article>
-    `
+
+        <div class="card__status-btns">
+          <button class="card__save" type="submit">save</button>
+          <button class="card__delete" type="button">delete</button>
+        </div>
+      </div>
+    </form>
+  </article>
+  `
 };
 
 
@@ -408,6 +308,37 @@ const addMenu = () => {
 
 /***/ }),
 
+/***/ "./src/const.js":
+/*!**********************!*\
+  !*** ./src/const.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "COLORS_CARD": () => (/* binding */ COLORS_CARD),
+/* harmony export */   "TASK_DESC": () => (/* binding */ TASK_DESC)
+/* harmony export */ });
+const TASK_DESC = ['Сделать домашку', 'Изучить теорию', 'Приготовить еду'];
+const COLORS_CARD = ['black', 'yellow', 'blue', 'green', 'pink'];
+const MONTH_NAMES = [
+    'January',
+    'Febrary',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'Semtember',
+    'October',
+    'November',
+    'December',
+];
+
+
+/***/ }),
+
 /***/ "./src/mock/filter.js":
 /*!****************************!*\
   !*** ./src/mock/filter.js ***!
@@ -430,6 +361,47 @@ const generateFilters = () => {
 };
 
 
+
+
+
+/***/ }),
+
+/***/ "./src/mock/task.js":
+/*!**************************!*\
+  !*** ./src/mock/task.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "generateTasks": () => (/* binding */ generateTasks),
+/* harmony export */   "generateTask": () => (/* binding */ generateTask)
+/* harmony export */ });
+const generateTask = () => {
+    return {
+        description: `Сделать домашку`,
+        color: `pink`,
+        reapitingDays: null,
+        isArchive: Math.random() * 0.5,
+        isFavorite: Math.random() * 0.5,
+        dueDate: new Date,
+        deadlineClass: `card--deadline`,
+        repeatClass: `card--repeat`,
+        reapeatingDays: {
+            'mo': true,
+            'tu': false,
+            'we': false,
+            'th': false,
+            'fr': false,
+            'sa': false,
+            'su': false,
+        },
+    };
+};
+
+const generateTasks = (count) => {
+    return new Array(count).fill('').map(generateTask);
+};
 
 
 
@@ -505,6 +477,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/cardExample.js */ "./src/components/cardExample.js");
 /* harmony import */ var _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/btnLoadMore.js */ "./src/components/btnLoadMore.js");
 /* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
+/* harmony import */ var _mock_task_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mock/task.js */ "./src/mock/task.js");
+
+
 
 
 
@@ -520,6 +495,8 @@ const board = document.querySelector('.board');
 const boardTasks = board.querySelector('.board__tasks');
 
 const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_6__.generateFilters)();
+const TASK_COUNT = 3;
+const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_7__.generateTasks)(TASK_COUNT);
 
 
 //
@@ -529,8 +506,8 @@ const createPage = () => {
   mainFilter.insertAdjacentHTML('afterbegin', (0,_components_filters_js__WEBPACK_IMPORTED_MODULE_1__.createFilterTemplate)(filters));
   board.insertAdjacentHTML('afterbegin', (0,_components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__.addBoardFilter)());
   board.insertAdjacentHTML('beforeend', (0,_components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__.addBtnLoadMore)());
-  boardTasks.insertAdjacentHTML('afterbegin', (0,_components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.addCardForm)());
-  boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardExample)());
+  boardTasks.insertAdjacentHTML('afterbegin', (0,_components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.addCardForm)(tasks[0]));
+  boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)());
 };
 
 
