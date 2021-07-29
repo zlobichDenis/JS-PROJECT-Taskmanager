@@ -331,67 +331,29 @@ const addCardForm = () => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addFilter": () => (/* binding */ addFilter)
+/* harmony export */   "createFilterTemplate": () => (/* binding */ createFilterTemplate)
 /* harmony export */ });
-const addFilter = () => {
+const createInput = (name, count) => {
     return `
         <input
-        type="radio"
-        id="filter__all"
-        class="filter__input visually-hidden"
-        name="filter"
-        checked
-    />
-    <label for="filter__all" class="filter__label">
-        All <span class="filter__all-count">13</span></label
-    >
-    <input
-        type="radio"
-        id="filter__overdue"
-        class="filter__input visually-hidden"
-        name="filter"
-        disabled
-    />
-    <label for="filter__overdue" class="filter__label"
-        >Overdue <span class="filter__overdue-count">0</span></label
-    >
-    <input
-        type="radio"
-        id="filter__today"
-        class="filter__input visually-hidden"
-        name="filter"
-        disabled
-    />
-    <label for="filter__today" class="filter__label"
-        >Today <span class="filter__today-count">0</span></label
-    >
-    <input
-        type="radio"
-        id="filter__favorites"
-        class="filter__input visually-hidden"
-        name="filter"
-    />
-    <label for="filter__favorites" class="filter__label"
-        >Favorites <span class="filter__favorites-count">1</span></label
-    >
-    <input
-        type="radio"
-        id="filter__repeating"
-        class="filter__input visually-hidden"
-        name="filter"
-    />
-    <label for="filter__repeating" class="filter__label"
-        >Repeating <span class="filter__repeating-count">1</span></label
-    >
-    <input
-        type="radio"
-        id="filter__archive"
-        class="filter__input visually-hidden"
-        name="filter"
-    />
-    <label for="filter__archive" class="filter__label"
-        >Archive <span class="filter__archive-count">115</span></label
-    >
+            type="radio"
+            id="filter__${name}"
+            class="filter__input visually-hidden"
+            name="filter"
+            checked />
+        <label for="filter__${name}" class="filter__label">
+            ${name} <span class="filter__${name}-count">${count}</span>
+        </label>
+        `
+};
+
+const createFilterTemplate = (filters) => {
+    const filtersMarkup = filters.map((input) => {
+        return createInput(input.name, input.count)
+    }).join('\n');
+
+    return `
+        ${filtersMarkup}   
     `
 };
 
@@ -441,6 +403,50 @@ const addMenu = () => {
             </section>
     `
 };
+
+
+
+/***/ }),
+
+/***/ "./src/mock/filter.js":
+/*!****************************!*\
+  !*** ./src/mock/filter.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "generateFilters": () => (/* binding */ generateFilters)
+/* harmony export */ });
+const generateFilters = () => {
+   return [{
+        name: 'all',
+        count: '14',
+    },
+    {
+        name: 'overdue',
+        count: '18',
+    },
+    {
+        name: 'today',
+        count: '15',
+    },
+    {
+        name: 'favorites',
+        count: '10',
+    },
+    {
+        name: 'repeating',
+        count: '14',
+    },
+    {
+        name: 'archive',
+        count: '14',
+    },
+];
+};
+
+
 
 
 
@@ -515,6 +521,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/cardForm.js */ "./src/components/cardForm.js");
 /* harmony import */ var _components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/cardExample.js */ "./src/components/cardExample.js");
 /* harmony import */ var _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/btnLoadMore.js */ "./src/components/btnLoadMore.js");
+/* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
+
 
 
 
@@ -528,12 +536,14 @@ const mainFilter = document.querySelector('.main__filter');
 const board = document.querySelector('.board');
 const boardTasks = board.querySelector('.board__tasks');
 
+const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_6__.generateFilters)();
+
 
 //
 // Create page
 const createPage = () => {
   mainContol.insertAdjacentHTML('beforeend', (0,_components_menu_js__WEBPACK_IMPORTED_MODULE_0__.addMenu)());
-  mainFilter.insertAdjacentHTML('afterbegin', (0,_components_filters_js__WEBPACK_IMPORTED_MODULE_1__.addFilter)());
+  mainFilter.insertAdjacentHTML('afterbegin', (0,_components_filters_js__WEBPACK_IMPORTED_MODULE_1__.createFilterTemplate)(filters));
   board.insertAdjacentHTML('afterbegin', (0,_components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__.addBoardFilter)());
   board.insertAdjacentHTML('beforeend', (0,_components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__.addBtnLoadMore)());
   boardTasks.insertAdjacentHTML('afterbegin', (0,_components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.addCardForm)());
