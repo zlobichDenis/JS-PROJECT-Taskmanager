@@ -56,22 +56,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "addCardTemplate": () => (/* binding */ addCardTemplate)
 /* harmony export */ });
-const addCardTemplate = () => {
+const addCardTemplate = (task) => {
+
+  const {description, color, reapeatingDays, dueDate,  isArchive, isFavorite} = task;
+
+  const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
+  const isDateShowing = !!dueDate;
+  const date = isDateShowing ? `${dueDate.getDate()}` : `${MOTH_NAMES[dueDate.getMonth()]}`;  // для карточки задачи 
+  const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
+
+  
+
+  const isRepeat = (element) => {
+   return element === true;
+  };
+  const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
+
+  const repeatClass = isRepeated ? 'card--repeat' : '';
 
     return `
-    <article class="card card--black">
+    <article class="card card--${color}">
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">
           <button type="button" class="card__btn card__btn--edit">
             edit
           </button>
-          <button type="button" class="card__btn card__btn--archive">
+          <button type="button" class="card__btn card__btn--${isArchive ? 'archive' : 'disabled'}">
             archive
           </button>
           <button
             type="button"
-            class="card__btn card__btn--favorites card__btn--disabled"
+            class="card__btn card__btn--favorites card__btn--${isFavorite ? 'favorite' : 'disabled'}"
           >
             favorites
           </button>
@@ -84,7 +100,7 @@ const addCardTemplate = () => {
         </div>
 
         <div class="card__textarea-wrap">
-          <p class="card__text">Example default task with default color.</p>
+          <p class="card__text">${description}</p>
         </div>
 
         <div class="card__settings">
@@ -157,15 +173,17 @@ const addCardForm = (task) => {
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
   const isDateShowing = !!dueDate;
-/*   const date = isDateShowing ? `${dueDate.getDate()}` : `${MOTH_NAMES[dueDate.getMonth()]}`; */ // Написать функции для определения месяца и даты
+  const date = isDateShowing ? `${dueDate.getDate()}` : `${_const_js__WEBPACK_IMPORTED_MODULE_0__.MOTH_NAMES[dueDate.getMonth()]}`;  // для карточки задачи 
+  const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
 
-  const repeatClass = 'card--repeat'; //  дописать 
-  const deadlineClass = isExpired ? `card--deadline` : ``; // Найти куда вставить 
 
   const isRepeat = (element) => {
    return element === true;
   };
   const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
+
+  const repeatClass = isRepeated ? 'card--repeat' : '';
+
     return `
     <article class="card card--edit card--${color} ${repeatClass}">
     <form class="card__form" method="get">
@@ -400,7 +418,7 @@ __webpack_require__.r(__webpack_exports__);
 const generateTask = () => {
     return {
         description: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.TASK_DESC),
-        color: `pink`,
+        color: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.COLORS_CARD),
         reapitingDays: null,
         isArchive: Math.random() * 0.5,
         isFavorite: Math.random() * 0.5,
@@ -536,7 +554,7 @@ const board = document.querySelector('.board');
 const boardTasks = board.querySelector('.board__tasks');
 
 const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_6__.generateFilters)();
-const TASK_COUNT = 5;
+const TASK_COUNT = 10;
 const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_7__.generateTasks)(TASK_COUNT);
 
 
