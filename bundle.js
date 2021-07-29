@@ -144,7 +144,7 @@ const createColorsMarkup = () => {
   return _const_js__WEBPACK_IMPORTED_MODULE_0__.COLORS_CARD.map((color) => {
     return `
     <input type="radio" id="color-${color}-4" class="card__color-input card__color-input--${color} visually-hidden" name="color"value="${color}"
-    />
+    ${color === 'black' ? 'checked' : ''}/>
     <label for="color-${color}-4" class="card__color card__color--${color}">${color}</label
 >
 `
