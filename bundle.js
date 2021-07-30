@@ -485,7 +485,7 @@ const getRandomElemFromArray = (array) => {
 const getRandomDate = () => {
     const targetDate = new Date;
     const sign = Math.random() > 0.5 ? 1 : -1;
-    const diffValue = sign * getRandomIntNumber(0, 11);
+    const diffValue = sign * getRandomIntNumber(0, 8);
 
     targetDate.setDate(targetDate.getDate() + diffValue);
 
@@ -600,6 +600,7 @@ const boardTasks = board.querySelector('.board__tasks');
 
 
 const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_6__.generateFilters)();
+
 const TASK_COUNT = 22;
 const SHOW_TASK_START = 8;
 const SHOW_TASK_BY_BTN = 4;
@@ -620,8 +621,9 @@ const addMoreBtn = board.querySelector('.load-more');
 
 // Events
 addMoreBtn.addEventListener('click', () => {
-  const prevTasksCount = SHOW_TASK_START;
+  const prevTasksCount = showingTasksCount;
   showingTasksCount = showingTasksCount + SHOW_TASK_BY_BTN;
+  console.log(tasks.slice(prevTasksCount, showingTasksCount));
   tasks.slice(prevTasksCount, showingTasksCount).forEach((task) => {
     boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(task));
   });
