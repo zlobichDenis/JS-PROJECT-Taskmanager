@@ -608,29 +608,23 @@ const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_7__.generateTasks)(TASK_
 let showingTasksCount = SHOW_TASK_START;
 
 // Create page
-const createPage = () => {
   mainContol.insertAdjacentHTML('beforeend', (0,_components_menu_js__WEBPACK_IMPORTED_MODULE_0__.addMenu)());
   mainFilter.insertAdjacentHTML('afterbegin', (0,_components_filters_js__WEBPACK_IMPORTED_MODULE_1__.createFilterTemplate)(filters));
   board.insertAdjacentHTML('afterbegin', (0,_components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__.addBoardFilter)());
   boardTasks.insertAdjacentHTML('afterbegin', (0,_components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.addCardForm)(tasks[0]));
-/*   board.insertAdjacentHTML('beforeend', addBtnLoadMore()); */
   for (let i = 1; i < showingTasksCount; i++) {
     boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(tasks[i]));
   };
-};
 board.insertAdjacentHTML('beforeend', (0,_components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__.addBtnLoadMore)());
 const addMoreBtn = board.querySelector('.load-more');
 
 // Events
-window.onload = createPage();
 addMoreBtn.addEventListener('click', () => {
   const prevTasksCount = SHOW_TASK_START;
   showingTasksCount = showingTasksCount + SHOW_TASK_BY_BTN;
   tasks.slice(prevTasksCount, showingTasksCount).forEach((task) => {
     boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(task));
   });
-/*   const visibleCards = document.querySelectorAll('.card');
-  console.log(tasks, visibleCards) */
   if (showingTasksCount >= tasks.length) {
     addMoreBtn.remove();
   };
