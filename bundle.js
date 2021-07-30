@@ -598,8 +598,11 @@ const mainFilter = document.querySelector('.main__filter');
 const board = document.querySelector('.board');
 const boardTasks = board.querySelector('.board__tasks');
 
+
 const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_6__.generateFilters)();
-const TASK_COUNT = 10;
+const TASK_COUNT = 26;
+const SHOW_TASK_START = 8;
+const SHOW_TASK_BY_BTN = 8;
 const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_7__.generateTasks)(TASK_COUNT);
 
 
@@ -609,17 +612,25 @@ const createPage = () => {
   mainContol.insertAdjacentHTML('beforeend', (0,_components_menu_js__WEBPACK_IMPORTED_MODULE_0__.addMenu)());
   mainFilter.insertAdjacentHTML('afterbegin', (0,_components_filters_js__WEBPACK_IMPORTED_MODULE_1__.createFilterTemplate)(filters));
   board.insertAdjacentHTML('afterbegin', (0,_components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__.addBoardFilter)());
-  board.insertAdjacentHTML('beforeend', (0,_components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__.addBtnLoadMore)());
   boardTasks.insertAdjacentHTML('afterbegin', (0,_components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.addCardForm)(tasks[0]));
-  for (let i = 1; i < TASK_COUNT; i++) {
+/*   board.insertAdjacentHTML('beforeend', addBtnLoadMore()); */
+  for (let i = 1; i < SHOW_TASK_START; i++) {
     boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(tasks[i]));
   };
 };
-
-
+board.insertAdjacentHTML('beforeend', (0,_components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__.addBtnLoadMore)());
+const addMoreBtn = board.querySelector('.load-more');
 
 // Events
 window.onload = createPage();
+addMoreBtn.addEventListener('click', () => {
+  const prevTaskCount = SHOW_TASK_START;
+  const showingTaskCount = prevTaskCount + SHOW_TASK_BY_BTN;
+  console.log()
+  tasks.slice(prevTaskCount, showingTaskCount).forEach((task) => {
+    boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(task));
+  });
+});
 
 
 
