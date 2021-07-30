@@ -430,22 +430,14 @@ __webpack_require__.r(__webpack_exports__);
 
 const generateTask = () => {
     const dueDate =  Math.random() > 0.5 ? null : (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomDate)();
+
     return {
         description: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.TASK_DESC),
         color: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.COLORS_CARD),
-        reapitingDays: null,
         isArchive: Math.random() * 0.5,
         isFavorite: Math.random() * 0.5,
         dueDate,
-        reapeatingDays: {
-            'mo': true,
-            'tu': false,
-            'we': true,
-            'th': false,
-            'fr': false,
-            'sa': true,
-            'su': false,
-        },
+        reapeatingDays: dueDate ? _util_js__WEBPACK_IMPORTED_MODULE_0__.defaultReapeatingDays : (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.generateRepeatingDays)(),
     };
 };
 
@@ -468,8 +460,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getRandomIntNumber": () => (/* binding */ getRandomIntNumber),
 /* harmony export */   "getRandomElemFromArray": () => (/* binding */ getRandomElemFromArray),
 /* harmony export */   "getRandomDate": () => (/* binding */ getRandomDate),
-/* harmony export */   "formatTime": () => (/* binding */ formatTime)
+/* harmony export */   "formatTime": () => (/* binding */ formatTime),
+/* harmony export */   "generateRepeatingDays": () => (/* binding */ generateRepeatingDays),
+/* harmony export */   "defaultReapeatingDays": () => (/* binding */ defaultReapeatingDays)
 /* harmony export */ });
+const defaultReapeatingDays = {
+    'mo': false,
+    'tu': false,
+    'we': false,
+    'th': false,
+    'fr': false,
+    'sa': false,
+    'su': false,
+};
+
 const getRandomIntNumber = (min, max) => {
     return parseInt(Math.random() * (max - min) + min);
 };
@@ -497,6 +501,10 @@ const formatTime = (date) => {
     const minutes = castTimeFormat(date.getMinutes())
 
     return `${hours}:${minutes}`
+};
+
+const generateRepeatingDays = () => {
+    return Object.assign({}, defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
 };
 
 
