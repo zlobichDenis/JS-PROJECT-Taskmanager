@@ -869,7 +869,7 @@ const renderBoard = (tasks) => {
     });
 
     if (showingTasksCounter >= tasks.length) {
-      loadMoreBtn.getElement().remove();
+      loadMoreBtn.remove();
       loadMoreBtn.removeElement();
     }
   });
