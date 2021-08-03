@@ -16,8 +16,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const createBoardTemplate = () => {
-    return `
-    <section class="board container">
+    return `<section class="board container">
         <div class="board__tasks"></div>
     </section>
     `
@@ -61,8 +60,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const createSortTemplate = () => {
-    return `
-        <div class="board__filter-list">
+    return `<div class="board__filter-list">
             <a href="#" class="board__filter" data-sort-type="default">SORT BY DEFAULT</a>
             <a href="#" class="board__filter" data-sort-type="date-up">SORT BY DATE up</a>
             <a href="#" class="board__filter" data-sort-type="date-down">SORT BY DATE down</a>
@@ -110,8 +108,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const createBtnLoadMore = () => {
-    return `
-    <button class="load-more" type="button">load more</button>
+    return `<button class="load-more" type="button">load more</button>
     `
 };
 
@@ -175,8 +172,7 @@ const createCardTemplate = (task) => {
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
-    return `
-    <article class="card card--${color} ${repeatClass} ${deadlineClass}"
+    return `<article class="card card--${color} ${repeatClass} ${deadlineClass}"
     >
     <div class="card__form">
       <div class="card__inner">
@@ -314,8 +310,7 @@ const createEditCardForm = (task) => {
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
-    return `
-    <article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
+    return `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__color-bar">
@@ -425,8 +420,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const createInput = (filter, isChecked) => {
     const {name, count} = filter;
-    return `
-        <input
+    return `<input
             type="radio"
             id="filter__${name}"
             class="filter__input visually-hidden"
@@ -442,8 +436,7 @@ const createFilterTemplate = (filters) => {
     const filtersMarkup = filters.map((filter, i) => {
         return createInput(filter, i === 0)}).join('\n');
 
-    return `
-    <section class="main__filter filter container">${filtersMarkup}</section> 
+    return `<section class="main__filter filter container">${filtersMarkup}</section> 
     `
 };
 
@@ -487,8 +480,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const createSiteMenuTemplate = () => {
-    return `
-        <section class="control__btn-wrap">
+    return `<section class="control__btn-wrap">
             <input
                 type="radio"
                 name="control"
@@ -703,7 +695,8 @@ const generateRepeatingDays = () => {
 const createElement = (template) => {
     const newElement = document.createElement('div');
     newElement.innerHTML = template;
-    return newElement;
+    console.log(newElement.firstChild)
+    return newElement.firstChild;
 };
 
 const RenderPosition = {
@@ -847,7 +840,7 @@ const renderTask = (taskList, task) => {
 
 
 const renderBoard = (tasks) => {
-  (0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__.default().getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+  (0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__.default().getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.AFTERBEGIN);
 
   const taskList = boardComponent.getElement().querySelector('.board__tasks');
 
