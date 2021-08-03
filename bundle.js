@@ -569,6 +569,8 @@ const generateTasks = (count) => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "createElement": () => (/* binding */ createElement),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "getRandomIntNumber": () => (/* binding */ getRandomIntNumber),
 /* harmony export */   "getRandomElemFromArray": () => (/* binding */ getRandomElemFromArray),
 /* harmony export */   "getRandomDate": () => (/* binding */ getRandomDate),
@@ -624,6 +626,22 @@ const createElement = (template) => {
     newElement.innerHTML = template;
 
     return newElement.firstChild;
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RenderPosition = {
+    AFTERBEGIN: 'afterbegin',
+    BEFOREEND: 'beforeend',
+});
+
+const render = (container, element, place) => {
+    switch(place) {
+        case RenderPosition.AFTERBEGIN:
+            container.prepend(element);
+            break;
+        case RenderPosition.BEFOREEND:
+            container.append(element);
+            break;
+    }
 };
 
 
