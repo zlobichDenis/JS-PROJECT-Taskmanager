@@ -1,13 +1,98 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/components/board-tasks.js":
+/*!***************************************!*\
+  !*** ./src/components/board-tasks.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Board)
+/* harmony export */ });
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+
+
+const createBoardTemplate = () => {
+    return `
+    <section class="board container">
+        <div class="board__tasks"></div>
+    </section>
+    `
+}; 
+
+class Board {
+    constructor() {
+        this._element = null;
+    }
+
+    getTemplate() {
+        return createBoardTemplate();
+    }
+
+    getElement() {
+        if(!this._element) {
+            this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
+        }
+
+        return this._element;
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
+
+/***/ }),
 
 /***/ "./src/components/boardFilters.js":
 /*!****************************************!*\
   !*** ./src/components/boardFilters.js ***!
   \****************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-throw new Error("Module parse failed: Export 'addBoardFilter' is not defined (35:9)\nYou may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders\n| }\n| \n> export { addBoardFilter };");
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Sort)
+/* harmony export */ });
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+
+
+const createSortTemplate = () => {
+    return `
+        <div class="board__filter-list">
+            <a href="#" class="board__filter" data-sort-type="default">SORT BY DEFAULT</a>
+            <a href="#" class="board__filter" data-sort-type="date-up">SORT BY DATE up</a>
+            <a href="#" class="board__filter" data-sort-type="date-down">SORT BY DATE down</a>
+        </div>
+    `
+};
+
+class Sort {
+    constructor () {
+        this._element = null;
+    }
+
+    getTemplate() {
+        return createSortTemplate();
+    }
+
+    getElement() {
+        if (!this._element) {
+            return this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
+        }
+
+        return this._element;
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
+
+
 
 /***/ }),
 
@@ -17,12 +102,11 @@ throw new Error("Module parse failed: Export 'addBoardFilter' is not defined (35
   \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ LoadMoreBtn)
 /* harmony export */ });
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util */ "./src/util.js");
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
 
 
 const createBtnLoadMore = () => {
@@ -42,7 +126,7 @@ class LoadMoreBtn {
 
     getElement() {
         if(!this._element) {
-            this._element = (0,_util__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate())
+            this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate())
         }
 
         return this._element
@@ -51,7 +135,7 @@ class LoadMoreBtn {
     removeElement() {
         this._element = null;
     }
-}
+};
 
 
 /***/ }),
@@ -62,7 +146,6 @@ class LoadMoreBtn {
   \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Task)
@@ -175,7 +258,6 @@ class Task {
   \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ EditForm)
@@ -309,12 +391,12 @@ class EditForm {
   }
 
   getTemplate() {
-    return createEditCardForm();
+    return createEditCardForm(this._task);
   }
 
   getElement() {
     if (!this._element) {
-      this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(this.getTemplate);
+      this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(this.getTemplate());
     }
 
     return this._element;
@@ -334,11 +416,13 @@ class EditForm {
   \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Filter)
 /* harmony export */ });
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+
+
 const createInput = (filter, isChecked) => {
     const {name, count} = filter;
     return `
@@ -375,7 +459,7 @@ class Filter {
 
     getElement() {
         if (!this._element) {
-            this._element = createElement(this.getTemplate);
+            this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
         }
 
         return this._element;
@@ -395,12 +479,11 @@ class Filter {
   \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ SiteMenu)
 /* harmony export */ });
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util */ "./src/util.js");
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
 
 
 const createSiteMenuTemplate = () => {
@@ -447,7 +530,7 @@ class SiteMenu {
 
     getElement() {
         if(!this._element) {
-            this._element = (0,_util__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate);
+            this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
         }
 
         return this._element;
@@ -466,7 +549,6 @@ class SiteMenu {
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "COLORS_CARD": () => (/* binding */ COLORS_CARD),
@@ -499,7 +581,6 @@ const MONTH_NAMES = [
   \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "generateFilters": () => (/* binding */ generateFilters)
@@ -527,7 +608,6 @@ const generateFilters = () => {
   \**************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "generateTasks": () => (/* binding */ generateTasks),
@@ -565,11 +645,10 @@ const generateTasks = (count) => {
   \*********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "createElement": () => (/* binding */ createElement),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "RenderPosition": () => (/* binding */ RenderPosition),
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "getRandomIntNumber": () => (/* binding */ getRandomIntNumber),
 /* harmony export */   "getRandomElemFromArray": () => (/* binding */ getRandomElemFromArray),
@@ -624,22 +703,21 @@ const generateRepeatingDays = () => {
 const createElement = (template) => {
     const newElement = document.createElement('div');
     newElement.innerHTML = template;
-
-    return newElement.firstChild;
+    return newElement;
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RenderPosition = {
+const RenderPosition = {
     AFTERBEGIN: 'afterbegin',
     BEFOREEND: 'beforeend',
-});
+};
 
 const render = (container, element, place) => {
-    switch(place) {
+    switch (place) {
         case RenderPosition.AFTERBEGIN:
             container.prepend(element);
             break;
         case RenderPosition.BEFOREEND:
-            container.append(element);
+            container.append(element)
             break;
     }
 };
@@ -677,18 +755,6 @@ const render = (container, element, place) => {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -719,22 +785,26 @@ const render = (container, element, place) => {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
 /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_menu_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/menu.js */ "./src/components/menu.js");
+/* harmony import */ var _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/board-tasks.js */ "./src/components/board-tasks.js");
 /* harmony import */ var _components_filters_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/filters.js */ "./src/components/filters.js");
-/* harmony import */ var _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/boardFilters.js */ "./src/components/boardFilters.js");
-/* harmony import */ var _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/btnLoadMore.js */ "./src/components/btnLoadMore.js");
 /* harmony import */ var _components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/cardForm.js */ "./src/components/cardForm.js");
 /* harmony import */ var _components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/cardExample.js */ "./src/components/cardExample.js");
-/* harmony import */ var _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/btnLoadMore.js */ "./src/components/btnLoadMore.js");
-/* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
-/* harmony import */ var _mock_task_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mock/task.js */ "./src/mock/task.js");
+/* harmony import */ var _components_menu_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/menu.js */ "./src/components/menu.js");
+/* harmony import */ var _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/boardFilters.js */ "./src/components/boardFilters.js");
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./util.js */ "./src/util.js");
+/* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
+/* harmony import */ var _mock_task_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./mock/task.js */ "./src/mock/task.js");
+
+
+
+
 
 
 
@@ -746,43 +816,79 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // Variables
-const mainContol = document.querySelector('.main__control');
-const mainFilter = document.querySelector('.main__filter');
-const board = document.querySelector('.board');
-const boardTasks = board.querySelector('.board__tasks');
 
-
-const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_6__.generateFilters)();
 
 const TASK_COUNT = 22;
 const SHOW_TASK_START = 8;
 const SHOW_TASK_BY_BTN = 4;
-const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_7__.generateTasks)(TASK_COUNT);
 
-let showingTasksCount = SHOW_TASK_START;
 
-// Create page
-  mainContol.insertAdjacentHTML('beforeend', (0,_components_menu_js__WEBPACK_IMPORTED_MODULE_0__.addMenu)());
-  mainFilter.insertAdjacentHTML('afterbegin', (0,_components_filters_js__WEBPACK_IMPORTED_MODULE_1__.createFilterTemplate)(filters));
-  board.insertAdjacentHTML('afterbegin', (0,_components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__.addBoardFilter)());
-  boardTasks.insertAdjacentHTML('afterbegin', (0,_components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.addCardForm)(tasks[0]));
-  for (let i = 1; i < showingTasksCount; i++) {
-    boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(tasks[i]));
+//
+const renderTask = (taskList, task) => {
+  const clickOnEditBtn = () => {
+    taskList.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
   };
-board.insertAdjacentHTML('beforeend', (0,_components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__.addBtnLoadMore)());
-const addMoreBtn = board.querySelector('.load-more');
 
-// Events
-addMoreBtn.addEventListener('click', () => {
-  const prevTasksCount = showingTasksCount;
-  showingTasksCount = showingTasksCount + SHOW_TASK_BY_BTN;
-  tasks.slice(prevTasksCount, showingTasksCount).forEach((task) => {
-    boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(task));
+  const submitEditForm = (evt) => {
+    evt.preventDefault();
+    taskList.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  };
+
+  const taskComponent = new _components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.default(task);
+  const editBtn = taskComponent.getElement().querySelector('.card__btn--edit');
+  const taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.default(task);
+  const editForm = taskEditComponent.getElement().querySelector('.card__form');
+
+  editBtn.addEventListener('click', clickOnEditBtn);
+  editForm.addEventListener('submit', submitEditForm);
+
+  (0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(taskList, taskComponent.getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+};
+
+
+const renderBoard = (tasks) => {
+  (0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__.default().getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.AFTERBEGIN);
+
+  const taskList = boardComponent.getElement().querySelector('.board__tasks');
+
+  let showingTasksCounter = SHOW_TASK_START;
+  console.log(tasks.slice(0, showingTasksCounter))
+    tasks.slice(0, showingTasksCounter).forEach(task => {
+      renderTask(taskList, task);
+    })
+
+  ;(0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_2__.default().getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+  const loadMoreBtn = document.querySelector('.load-more');
+
+  loadMoreBtn.addEventListener('click', () => {
+    const prevTasksCount = showingTasksCounter;
+    showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
+
+    tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
+      renderTask(taskList, task);
+    });
+
+    if (showingTasksCounter >= tasks.length) {
+      loadMoreBtn.getElement().remove();
+      loadMoreBtn.removeElement();
+    }
   });
-  if (showingTasksCount >= tasks.length) {
-    addMoreBtn.remove();
-  };
-});
+};
+
+const siteMainElement = document.querySelector('.main__filter');
+const siteHeaderElement = document.querySelector('.main__control');
+
+
+const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_9__.generateTasks)(TASK_COUNT);
+const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_8__.generateFilters)();
+
+(0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteHeaderElement, new _components_menu_js__WEBPACK_IMPORTED_MODULE_5__.default().getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+(0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteMainElement, new _components_filters_js__WEBPACK_IMPORTED_MODULE_1__.default(filters).getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+
+const boardComponent = new _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_0__.default();
+(0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteMainElement, boardComponent.getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+renderBoard(tasks);
+//
 
 
 
