@@ -54,7 +54,7 @@ const addBtnLoadMore = () => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addCardTemplate": () => (/* binding */ addCardTemplate)
+/* harmony export */   "default": () => (/* binding */ Task)
 /* harmony export */ });
 /* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
@@ -62,7 +62,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const addCardTemplate = (task) => {
+const createCardTemplate = (task) => {
 
   const {description, color, reapeatingDays, dueDate,  isArchive, isFavorite} = task;
 
@@ -72,7 +72,6 @@ const addCardTemplate = (task) => {
   const date = isDateShowing ? `${dueDate.getDate()} ${_const_js__WEBPACK_IMPORTED_MODULE_0__.MONTH_NAMES[dueDate.getMonth()]}` : '';  
   const time = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.formatTime)(dueDate) : '';
  
-
   const isRepeat = (element) => {
    return element === true;
   };
@@ -129,6 +128,31 @@ const addCardTemplate = (task) => {
   </article>
     `
 };
+
+class Task {
+    constructor(task) {
+      this._task = task;
+
+      this._element = null;
+    }
+
+    getTemplate() {
+      return createCardTemplate(this._task);
+    }
+
+    getElement() {
+      if (!this._element) {
+        this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(this.getTemplate())
+      }
+
+      return this._element;
+    }
+
+    removeElement() {
+      this._element = null;
+    }
+}
+
 
 
 
@@ -447,6 +471,7 @@ const generateTasks = (count) => {
 
 
 
+
 /***/ }),
 
 /***/ "./src/util.js":
@@ -457,6 +482,7 @@ const generateTasks = (count) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createElement": () => (/* binding */ createElement),
 /* harmony export */   "getRandomIntNumber": () => (/* binding */ getRandomIntNumber),
 /* harmony export */   "getRandomElemFromArray": () => (/* binding */ getRandomElemFromArray),
 /* harmony export */   "getRandomDate": () => (/* binding */ getRandomDate),
@@ -506,6 +532,15 @@ const formatTime = (date) => {
 const generateRepeatingDays = () => {
     return Object.assign({}, defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
 };
+
+const createElement = (template) => {
+    const newElement = document.createElement('div');
+    newElement.innerHTML = template;
+
+    return newElement.firstChild;
+};
+
+
 
 
 
@@ -623,7 +658,6 @@ const addMoreBtn = board.querySelector('.load-more');
 addMoreBtn.addEventListener('click', () => {
   const prevTasksCount = showingTasksCount;
   showingTasksCount = showingTasksCount + SHOW_TASK_BY_BTN;
-  console.log(tasks.slice(prevTasksCount, showingTasksCount));
   tasks.slice(prevTasksCount, showingTasksCount).forEach((task) => {
     boardTasks.insertAdjacentHTML('beforeend', (0,_components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.addCardTemplate)(task));
   });
