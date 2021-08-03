@@ -1,28 +1,13 @@
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/components/boardFilters.js":
 /*!****************************************!*\
   !*** ./src/components/boardFilters.js ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addBoardFilter": () => (/* binding */ addBoardFilter)
-/* harmony export */ });
-const addBoardFilter = () => {
-    return `
-        <div class="board__filter-list">
-            <a href="#" class="board__filter" data-sort-type="default">SORT BY DEFAULT</a>
-            <a href="#" class="board__filter" data-sort-type="date-up">SORT BY DATE up</a>
-            <a href="#" class="board__filter" data-sort-type="date-down">SORT BY DATE down</a>
-        </div>
-    `
-};
-
-
+throw new Error("Module parse failed: Export 'addBoardFilter' is not defined (35:9)\nYou may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders\n| }\n| \n> export { addBoardFilter };");
 
 /***/ }),
 
@@ -32,16 +17,41 @@ const addBoardFilter = () => {
   \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addBtnLoadMore": () => (/* binding */ addBtnLoadMore)
+/* harmony export */   "default": () => (/* binding */ LoadMoreBtn)
 /* harmony export */ });
-const addBtnLoadMore = () => {
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util */ "./src/util.js");
+
+
+const createBtnLoadMore = () => {
     return `
     <button class="load-more" type="button">load more</button>
     `
 };
 
+class LoadMoreBtn {
+    constructor() {
+        this._element = null;
+    }
+
+    getTemplate() {
+        return createBtnLoadMore();
+    }
+
+    getElement() {
+        if(!this._element) {
+            this._element = (0,_util__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate())
+        }
+
+        return this._element
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
 
 
 /***/ }),
@@ -52,6 +62,7 @@ const addBtnLoadMore = () => {
   \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Task)
@@ -164,9 +175,10 @@ class Task {
   \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addCardForm": () => (/* binding */ addCardForm)
+/* harmony export */   "default": () => (/* binding */ EditForm)
 /* harmony export */ });
 /* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
@@ -197,7 +209,7 @@ const createRepeatingDaysMarkup = (reapeatingDays) => {
 };
 
 
-const addCardForm = (task) => {
+const createEditCardForm = (task) => {
 
   const {description, color, reapeatingDays, dueDate} = task;
 
@@ -290,6 +302,29 @@ const addCardForm = (task) => {
 };
 
 
+class EditForm {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditCardForm();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(this.getTemplate);
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
 
 /***/ }),
 
@@ -299,9 +334,10 @@ const addCardForm = (task) => {
   \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createFilterTemplate": () => (/* binding */ createFilterTemplate)
+/* harmony export */   "default": () => (/* binding */ Filter)
 /* harmony export */ });
 const createInput = (filter, isChecked) => {
     const {name, count} = filter;
@@ -327,6 +363,28 @@ const createFilterTemplate = (filters) => {
     `
 };
 
+class Filter {
+    constructor(filters) {
+        this._filters = filters;
+        this._element = null;
+    }
+
+    getTemplate() {
+        return createFilterTemplate(this._filters);
+    }
+
+    getElement() {
+        if (!this._element) {
+            this._element = createElement(this.getTemplate);
+        }
+
+        return this._element;
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
 
 
 /***/ }),
@@ -337,11 +395,15 @@ const createFilterTemplate = (filters) => {
   \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addMenu": () => (/* binding */ addMenu)
+/* harmony export */   "default": () => (/* binding */ SiteMenu)
 /* harmony export */ });
-const addMenu = () => {
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util */ "./src/util.js");
+
+
+const createSiteMenuTemplate = () => {
     return `
         <section class="control__btn-wrap">
             <input
@@ -374,7 +436,27 @@ const addMenu = () => {
     `
 };
 
+class SiteMenu {
+    constructor() {
+        this._element = null;
+    }
 
+    getTemplate() {
+        return createSiteMenuTemplate()
+    }
+
+    getElement() {
+        if(!this._element) {
+            this._element = (0,_util__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate);
+        }
+
+        return this._element;
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
 
 /***/ }),
 
@@ -384,6 +466,7 @@ const addMenu = () => {
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "COLORS_CARD": () => (/* binding */ COLORS_CARD),
@@ -416,6 +499,7 @@ const MONTH_NAMES = [
   \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "generateFilters": () => (/* binding */ generateFilters)
@@ -443,6 +527,7 @@ const generateFilters = () => {
   \**************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "generateTasks": () => (/* binding */ generateTasks),
@@ -480,6 +565,7 @@ const generateTasks = (count) => {
   \*********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "createElement": () => (/* binding */ createElement),
@@ -573,6 +659,18 @@ const createElement = (template) => {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -603,8 +701,9 @@ const createElement = (template) => {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
+"use strict";
 /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
@@ -612,6 +711,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_menu_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/menu.js */ "./src/components/menu.js");
 /* harmony import */ var _components_filters_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/filters.js */ "./src/components/filters.js");
 /* harmony import */ var _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/boardFilters.js */ "./src/components/boardFilters.js");
+/* harmony import */ var _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_components_boardFilters_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/cardForm.js */ "./src/components/cardForm.js");
 /* harmony import */ var _components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/cardExample.js */ "./src/components/cardExample.js");
 /* harmony import */ var _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/btnLoadMore.js */ "./src/components/btnLoadMore.js");
