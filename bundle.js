@@ -443,7 +443,7 @@ const createFilterTemplate = (filters) => {
         return createInput(filter, i === 0)}).join('\n');
 
     return `
-        ${filtersMarkup}   
+    <section class="main__filter filter container">${filtersMarkup}</section> 
     `
 };
 
@@ -847,7 +847,7 @@ const renderTask = (taskList, task) => {
 
 
 const renderBoard = (tasks) => {
-  (0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__.default().getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.AFTERBEGIN);
+  (0,_util_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__.default().getElement(), _util_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
 
   const taskList = boardComponent.getElement().querySelector('.board__tasks');
 
@@ -875,7 +875,7 @@ const renderBoard = (tasks) => {
   });
 };
 
-const siteMainElement = document.querySelector('.main__filter');
+const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.main__control');
 
 
