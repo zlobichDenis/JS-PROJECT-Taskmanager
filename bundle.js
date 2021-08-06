@@ -588,7 +588,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "createElement": () => (/* binding */ createElement),
 /* harmony export */   "RenderPosition": () => (/* binding */ RenderPosition),
 /* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "replace": () => (/* binding */ replace)
+/* harmony export */   "replace": () => (/* binding */ replace),
+/* harmony export */   "remove": () => (/* binding */ remove)
 /* harmony export */ });
 const createElement = (template) => {
     const newElement = document.createElement('div');
@@ -616,6 +617,10 @@ const render = (container, element, place) => {
 const replace = (parent, oldElement, newElement) => {
     parent.replaceChild(newElement, oldElement);
 };
+
+const remove = (element) => {
+    element.remove();
+}
 
 /***/ }),
 
@@ -813,11 +818,15 @@ const renderBoard = (tasks) => {
     tasks.slice(0, showingTasksCounter).forEach(task => {
       renderTask(taskList, task);
     })
+    
+    const loadMoreBtnComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_2__.default();
 
-  ;(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_2__.default().getElement(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
-  const loadMoreBtn = document.querySelector('.load-more');
+  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), loadMoreBtnComponent.getElement(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+/*   const loadMoreBtn = document.querySelector('.load-more'); */
+    
 
-  loadMoreBtn.addEventListener('click', () => {
+
+  loadMoreBtn.getElement().addEventListener('click', () => {
     const prevTasksCount = showingTasksCounter;
     showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
 
@@ -826,7 +835,7 @@ const renderBoard = (tasks) => {
     });
 
     if (showingTasksCounter >= tasks.length) {
-      loadMoreBtn.remove();
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.remove)(loadMoreBtnComponent.getElement());
       loadMoreBtn.removeElement();
     }
   });
