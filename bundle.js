@@ -606,7 +606,6 @@ __webpack_require__.r(__webpack_exports__);
 const createElement = (template) => {
     const newElement = document.createElement('div');
     newElement.innerHTML = template;
-    console.log(newElement.firstChild)
     return newElement.firstChild;
 };
 
@@ -840,7 +839,6 @@ const renderBoard = (tasks) => {
   const taskList = boardComponent.getElement().querySelector('.board__tasks');
 
   let showingTasksCounter = SHOW_TASK_START;
-  console.log(tasks.slice(0, showingTasksCounter))
     tasks.slice(0, showingTasksCounter).forEach(task => {
       renderTask(taskList, task);
     })
