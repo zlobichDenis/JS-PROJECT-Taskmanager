@@ -56,9 +56,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const createBoardTemplate = () => {
-    return `<section class="board container">
-        <div class="board__tasks"></div>
-    </section>
+    return `<section class="board container"></section>
     `
 }; 
 
@@ -67,6 +65,148 @@ class Board extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.default 
         return createBoardTemplate();
     }
 }
+
+/***/ }),
+
+/***/ "./src/components/board.js":
+/*!*********************************!*\
+  !*** ./src/components/board.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ BoardController)
+/* harmony export */ });
+/* harmony import */ var _btnLoadMore_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./btnLoadMore.js */ "./src/components/btnLoadMore.js");
+/* harmony import */ var _cardForm_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cardForm.js */ "./src/components/cardForm.js");
+/* harmony import */ var _cardExample_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cardExample.js */ "./src/components/cardExample.js");
+/* harmony import */ var _boardFilters_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./boardFilters.js */ "./src/components/boardFilters.js");
+/* harmony import */ var _no_tasks_component_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./no-tasks-component.js */ "./src/components/no-tasks-component.js");
+/* harmony import */ var _tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./tasks-list-component.js */ "./src/components/tasks-list-component.js");
+/* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../render.js */ "./src/render.js");
+
+
+
+
+
+
+
+
+
+
+
+const SHOW_TASK_START = 8;
+const SHOW_TASK_BY_BTN = 4;
+
+
+
+const renderTask = (taskList, task) => {
+
+  const clickOnEditBtn = () => {
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.replace)(taskEditComponent, taskComponent);
+  };
+
+  const submitEditForm = (evt) => {
+    evt.preventDefault();
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.replace)(taskComponent, taskEditComponent);
+  };
+
+  const taskComponent = new _cardExample_js__WEBPACK_IMPORTED_MODULE_2__.default(task);
+  const taskEditComponent = new _cardForm_js__WEBPACK_IMPORTED_MODULE_1__.default(task);
+
+
+  taskComponent.setEditButtonClickHandler(() => {
+    clickOnEditBtn()
+  });
+
+  taskEditComponent.setSubmitHandler((evt) => {
+    evt.preventDefault();
+    submitEditForm();
+  });
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+};
+
+
+/* const renderBoard = (boardComponent, tasks) => {    
+  const isAllTasksArchived = tasks.every((task) => task.isArchive);
+
+  if (isAllTasksArchived) {
+      render(boardComponent.getElement(), new TasksComponent(), RenderPosition.BEFOREEND);
+      return;
+  }
+  render(boardComponent.getElement(), new SortComponent(), RenderPosition.AFTERBEGIN);
+
+  const taskList = boardComponent.getElement().querySelector('.board__tasks');
+
+  let showingTasksCounter = SHOW_TASK_START;
+    tasks.slice(0, showingTasksCounter).forEach(task => {
+      renderTask(taskList, task);
+    })
+    
+  const loadMoreBtnComponent = new LoadMoreBtnComponent();
+
+  render(boardComponent.getElement(), loadMoreBtnComponent, RenderPosition.BEFOREEND);
+
+  loadMoreBtnComponent.setClickHandler(() => {
+    const prevTasksCount = showingTasksCounter;
+    showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
+
+    tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
+      renderTask(taskList, task);
+    });
+
+    if (showingTasksCounter >= tasks.length) {
+      remove(loadMoreBtnComponent);
+    }
+  });
+}; */
+
+class BoardController {
+    constructor(container) {
+        this._container = container;
+        this._noTaskComponent = new _no_tasks_component_js__WEBPACK_IMPORTED_MODULE_4__.default();
+        this._tasksComponent = new _tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__.default();
+        this._sortComponent = new _boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.default();
+        this._loadMoreButtonComponent = new _btnLoadMore_js__WEBPACK_IMPORTED_MODULE_0__.default();
+    }
+
+    render(tasks) {
+        const container = this._container.getElement()
+        const isAllTasksArchived = tasks.every((task) => task.isArchive);
+        console.log(isAllTasksArchived)
+        if (isAllTasksArchived) {
+            (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._noTaskComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+            return;
+        }
+        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._sortComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.AFTERBEGIN);
+        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._tasksComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+
+        const tasksList = this._tasksComponent.getElement();
+      
+        let showingTasksCounter = SHOW_TASK_START;
+          tasks.slice(0, showingTasksCounter).forEach(task => {
+            renderTask(tasksList, task);
+          });
+        
+        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+      
+        this._loadMoreButtonComponent.setClickHandler(() => {
+          const prevTasksCount = showingTasksCounter;
+          showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
+
+          tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
+            renderTask(tasksList, task);
+          });
+      
+          if (showingTasksCounter >= tasks.length) {
+            (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(this._loadMoreButtonComponent);
+          };
+        });
+    }
+}
+
+
 
 /***/ }),
 
@@ -493,6 +633,60 @@ class SiteMenu extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.defau
 
 /***/ }),
 
+/***/ "./src/components/no-tasks-component.js":
+/*!**********************************************!*\
+  !*** ./src/components/no-tasks-component.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ NoTaskComponent)
+/* harmony export */ });
+/* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component */ "./src/components/abstract-component.js");
+
+
+const createNoTasksTemplate = () => {
+    return `<p class="board__no-tasks">
+      Click «ADD NEW TASK» in menu to create your first task
+    </p>`
+};
+
+class NoTaskComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__.default{
+    getTemplate() {
+        return createNoTasksTemplate();
+    }
+}
+
+/***/ }),
+
+/***/ "./src/components/tasks-list-component.js":
+/*!************************************************!*\
+  !*** ./src/components/tasks-list-component.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TaskList)
+/* harmony export */ });
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
+
+const createTaskListTemplate = () => {
+    return `<div class="board__tasks"></div>`
+}; 
+
+class TaskList extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.default {
+    getTemplate() {
+        return createTaskListTemplate();
+    }
+}
+
+
+
+/***/ }),
+
 /***/ "./src/const.js":
 /*!**********************!*\
   !*** ./src/const.js ***!
@@ -573,8 +767,8 @@ const generateTask = () => {
     return {
         description: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.TASK_DESC),
         color: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.COLORS_CARD),
-        isArchive: Math.random() * 0.5,
-        isFavorite: Math.random() * 0.5,
+        isArchive: Math.random() > 0.5,
+        isFavorite: Math.random() > 0.5,
         dueDate,
         reapeatingDays: dueDate ? _util_js__WEBPACK_IMPORTED_MODULE_0__.defaultReapeatingDays : (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.generateRepeatingDays)(),
     };
@@ -775,15 +969,11 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/board-tasks.js */ "./src/components/board-tasks.js");
 /* harmony import */ var _components_filters_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/filters.js */ "./src/components/filters.js");
-/* harmony import */ var _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/btnLoadMore.js */ "./src/components/btnLoadMore.js");
-/* harmony import */ var _components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/cardForm.js */ "./src/components/cardForm.js");
-/* harmony import */ var _components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/cardExample.js */ "./src/components/cardExample.js");
-/* harmony import */ var _components_menu_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/menu.js */ "./src/components/menu.js");
-/* harmony import */ var _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/boardFilters.js */ "./src/components/boardFilters.js");
-/* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./render.js */ "./src/render.js");
-/* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
-/* harmony import */ var _mock_task_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./mock/task.js */ "./src/mock/task.js");
-
+/* harmony import */ var _components_menu_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/menu.js */ "./src/components/menu.js");
+/* harmony import */ var _components_board_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/board.js */ "./src/components/board.js");
+/* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./render.js */ "./src/render.js");
+/* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
+/* harmony import */ var _mock_task_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mock/task.js */ "./src/mock/task.js");
 
 
 
@@ -801,82 +991,85 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const TASK_COUNT = 22;
-const SHOW_TASK_START = 8;
-const SHOW_TASK_BY_BTN = 4;
+// const SHOW_TASK_START = 8;
+// const SHOW_TASK_BY_BTN = 4;
 
 
-//
-const renderTask = (taskList, task) => {
+// //
+// const renderTask = (taskList, task) => {
 
-  const clickOnEditBtn = () => {
-    (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.replace)(taskEditComponent, taskComponent);
-  };
+//   const clickOnEditBtn = () => {
+//     replace(taskEditComponent, taskComponent);
+//   };
 
-  const submitEditForm = (evt) => {
-    evt.preventDefault();
-    (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.replace)(taskComponent, taskEditComponent);
-  };
+//   const submitEditForm = (evt) => {
+//     evt.preventDefault();
+//     replace(taskComponent, taskEditComponent);
+//   };
 
-  const taskComponent = new _components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.default(task);
-  const taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.default(task);
-
-
-  taskComponent.setEditButtonClickHandler(() => {
-    clickOnEditBtn()
-  });
-
-  taskEditComponent.setSubmitHandler((evt) => {
-    evt.preventDefault();
-    submitEditForm();
-  });
-      (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(taskList, taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
-};
+//   const taskComponent = new TaskComponent(task);
+//   const taskEditComponent = new EditFormComponent(task);
 
 
-const renderBoard = (tasks) => {
-  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__.default(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.AFTERBEGIN);
+//   taskComponent.setEditButtonClickHandler(() => {
+//     clickOnEditBtn()
+//   });
 
-  const taskList = boardComponent.getElement().querySelector('.board__tasks');
+//   taskEditComponent.setSubmitHandler((evt) => {
+//     evt.preventDefault();
+//     submitEditForm();
+//   });
+//       render(taskList, taskComponent, RenderPosition.BEFOREEND);
+// };
 
-  let showingTasksCounter = SHOW_TASK_START;
-    tasks.slice(0, showingTasksCounter).forEach(task => {
-      renderTask(taskList, task);
-    })
+
+// const renderBoard = (tasks) => {
+//   render(boardComponent.getElement(), new SortComponent(), RenderPosition.AFTERBEGIN);
+
+//   const taskList = boardComponent.getElement().querySelector('.board__tasks');
+
+//   let showingTasksCounter = SHOW_TASK_START;
+//     tasks.slice(0, showingTasksCounter).forEach(task => {
+//       renderTask(taskList, task);
+//     })
     
-  const loadMoreBtnComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_2__.default();
+//   const loadMoreBtnComponent = new LoadMoreBtnComponent();
 
-  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), loadMoreBtnComponent, _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
-/*   const loadMoreBtn = document.querySelector('.load-more'); */
+//   render(boardComponent.getElement(), loadMoreBtnComponent, RenderPosition.BEFOREEND);
+// /*   const loadMoreBtn = document.querySelector('.load-more'); */
     
 
 
-  loadMoreBtnComponent.setClickHandler(() => {
-    const prevTasksCount = showingTasksCounter;
-    showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
+//   loadMoreBtnComponent.setClickHandler(() => {
+//     const prevTasksCount = showingTasksCounter;
+//     showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
 
-    tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
-      renderTask(taskList, task);
-    });
+//     tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
+//       renderTask(taskList, task);
+//     });
 
-    if (showingTasksCounter >= tasks.length) {
-      (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.remove)(loadMoreBtnComponent);
-    }
-  });
-};
+//     if (showingTasksCounter >= tasks.length) {
+//       remove(loadMoreBtnComponent);
+//     }
+//   });
+// };
 
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.main__control');
 
 
-const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_9__.generateTasks)(TASK_COUNT);
-const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_8__.generateFilters)();
+const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_6__.generateTasks)(TASK_COUNT);
+const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_5__.generateFilters)();
 
-(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteHeaderElement, new _components_menu_js__WEBPACK_IMPORTED_MODULE_5__.default(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
-(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteMainElement, new _components_filters_js__WEBPACK_IMPORTED_MODULE_1__.default(filters), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+(0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(siteHeaderElement, new _components_menu_js__WEBPACK_IMPORTED_MODULE_2__.default(), _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND);
+(0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(siteMainElement, new _components_filters_js__WEBPACK_IMPORTED_MODULE_1__.default(filters), _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND);
 
 const boardComponent = new _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_0__.default();
-(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
-renderBoard(tasks);
+const boardController = new _components_board_js__WEBPACK_IMPORTED_MODULE_3__.default(boardComponent);
+
+(0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND);
+boardController.render(tasks);
+/* renderBoard(tasks); */
 //
 
 
