@@ -603,13 +603,13 @@ const RenderPosition = {
     BEFOREEND: 'beforeend',
 };
 
-const render = (container, element, place) => {
+const render = (container, component, place) => {
     switch (place) {
         case RenderPosition.AFTERBEGIN:
-            container.prepend(element);
+            container.prepend(component.getElement());
             break;
         case RenderPosition.BEFOREEND:
-            container.append(element)
+            container.append(component.getElement())
             break;
     }
 };
@@ -804,12 +804,12 @@ const renderTask = (taskList, task) => {
   editBtn.addEventListener('click', clickOnEditBtn);
   editForm.addEventListener('submit', submitEditForm);
 
-  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(taskList, taskComponent.getElement(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(taskList, taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
 };
 
 
 const renderBoard = (tasks) => {
-  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__.default().getElement(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.AFTERBEGIN);
+  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_6__.default(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.AFTERBEGIN);
 
   const taskList = boardComponent.getElement().querySelector('.board__tasks');
 
@@ -819,14 +819,14 @@ const renderBoard = (tasks) => {
       renderTask(taskList, task);
     })
     
-    const loadMoreBtnComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_2__.default();
+  const loadMoreBtnComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_2__.default();
 
-  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), loadMoreBtnComponent.getElement(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(boardComponent.getElement(), loadMoreBtnComponent, _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
 /*   const loadMoreBtn = document.querySelector('.load-more'); */
     
 
 
-  loadMoreBtn.getElement().addEventListener('click', () => {
+  loadMoreBtnComponent.getElement().addEventListener('click', () => {
     const prevTasksCount = showingTasksCounter;
     showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
 
@@ -836,7 +836,7 @@ const renderBoard = (tasks) => {
 
     if (showingTasksCounter >= tasks.length) {
       (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.remove)(loadMoreBtnComponent.getElement());
-      loadMoreBtn.removeElement();
+      loadMoreBtnComponent.removeElement();
     }
   });
 };
@@ -848,11 +848,11 @@ const siteHeaderElement = document.querySelector('.main__control');
 const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_9__.generateTasks)(TASK_COUNT);
 const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_8__.generateFilters)();
 
-(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteHeaderElement, new _components_menu_js__WEBPACK_IMPORTED_MODULE_5__.default().getElement(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
-(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteMainElement, new _components_filters_js__WEBPACK_IMPORTED_MODULE_1__.default(filters).getElement(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteHeaderElement, new _components_menu_js__WEBPACK_IMPORTED_MODULE_5__.default(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteMainElement, new _components_filters_js__WEBPACK_IMPORTED_MODULE_1__.default(filters), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
 
 const boardComponent = new _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_0__.default();
-(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteMainElement, boardComponent.getElement(), _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+(0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
 renderBoard(tasks);
 //
 
