@@ -2,6 +2,46 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/components/abstract-component.js":
+/*!**********************************************!*\
+  !*** ./src/components/abstract-component.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AbstractComponent)
+/* harmony export */ });
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util */ "./src/util.js");
+
+
+class AbstractComponent {
+    constructor() {
+        if(new.target === AbstractComponent) {
+            throw new Error(`Can't instance AbstractComponent, only concrete one.`);
+        }
+        this._element = null;
+    }
+
+    getTemplate() {
+        throw new Error ('Abstract method not implemented: getTemplate');
+    }
+
+    getElement() {
+        if(!this._element) {
+            this._element = (0,_util__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
+        }
+
+        return this._element;
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
+
+/***/ }),
+
 /***/ "./src/components/board-tasks.js":
 /*!***************************************!*\
   !*** ./src/components/board-tasks.js ***!
@@ -13,6 +53,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ Board)
 /* harmony export */ });
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
 
 
 const createBoardTemplate = () => {
@@ -22,25 +64,9 @@ const createBoardTemplate = () => {
     `
 }; 
 
-class Board {
-    constructor() {
-        this._element = null;
-    }
-
+class Board extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.default {
     getTemplate() {
         return createBoardTemplate();
-    }
-
-    getElement() {
-        if(!this._element) {
-            this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
-        }
-
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
     }
 }
 
@@ -57,6 +83,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ Sort)
 /* harmony export */ });
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
 
 
 const createSortTemplate = () => {
@@ -68,25 +96,9 @@ const createSortTemplate = () => {
     `
 };
 
-class Sort {
-    constructor () {
-        this._element = null;
-    }
-
+class Sort extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.default {
     getTemplate() {
         return createSortTemplate();
-    }
-
-    getElement() {
-        if (!this._element) {
-            return this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
-        }
-
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
     }
 }
 
@@ -105,6 +117,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ LoadMoreBtn)
 /* harmony export */ });
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
 
 
 const createBtnLoadMore = () => {
@@ -112,25 +126,9 @@ const createBtnLoadMore = () => {
     `
 };
 
-class LoadMoreBtn {
-    constructor() {
-        this._element = null;
-    }
-
+class LoadMoreBtn extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.default {
     getTemplate() {
         return createBtnLoadMore();
-    }
-
-    getElement() {
-        if(!this._element) {
-            this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate())
-        }
-
-        return this._element
-    }
-
-    removeElement() {
-        this._element = null;
     }
 };
 
@@ -149,6 +147,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
 
 
 
@@ -219,27 +219,14 @@ const createCardTemplate = (task) => {
     `
 };
 
-class Task {
+class Task extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_2__.default {
     constructor(task) {
+      super();
       this._task = task;
-
-      this._element = null;
     }
 
     getTemplate() {
       return createCardTemplate(this._task);
-    }
-
-    getElement() {
-      if (!this._element) {
-        this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(this.getTemplate())
-      }
-
-      return this._element;
-    }
-
-    removeElement() {
-      this._element = null;
     }
 }
 
@@ -260,6 +247,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
 
 
 
@@ -379,26 +368,14 @@ const createEditCardForm = (task) => {
 };
 
 
-class EditForm {
+class EditForm extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_2__.default {
   constructor(task) {
+    super()
     this._task = task;
-    this._element = null;
   }
 
   getTemplate() {
     return createEditCardForm(this._task);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
@@ -416,6 +393,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ Filter)
 /* harmony export */ });
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
 
 
 const createInput = (filter, isChecked) => {
@@ -440,26 +419,15 @@ const createFilterTemplate = (filters) => {
     `
 };
 
-class Filter {
+class Filter extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.default {
     constructor(filters) {
-        this._filters = filters;
-        this._element = null;
-    }
+        super();
 
+        this._filters = filters;
+    }
+    
     getTemplate() {
         return createFilterTemplate(this._filters);
-    }
-
-    getElement() {
-        if (!this._element) {
-            this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
-        }
-
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
     }
 }
 
@@ -477,6 +445,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ SiteMenu)
 /* harmony export */ });
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
 
 
 const createSiteMenuTemplate = () => {
@@ -511,25 +481,9 @@ const createSiteMenuTemplate = () => {
     `
 };
 
-class SiteMenu {
-    constructor() {
-        this._element = null;
-    }
-
+class SiteMenu extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.default {
     getTemplate() {
-        return createSiteMenuTemplate()
-    }
-
-    getElement() {
-        if(!this._element) {
-            this._element = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.createElement)(this.getTemplate());
-        }
-
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
+        return createSiteMenuTemplate();
     }
 }
 
