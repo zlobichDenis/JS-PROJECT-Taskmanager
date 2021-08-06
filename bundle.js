@@ -96,6 +96,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 const SHOW_TASK_START = 8;
 const SHOW_TASK_BY_BTN = 4;
 
@@ -127,40 +128,26 @@ const renderTask = (taskList, task) => {
       (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
 };
 
+const getSortedTasks = (tasks, sortType, from, to) => {
+    let sortedTasks = [];
+    const showingTaks = tasks.slice();
 
-/* const renderBoard = (boardComponent, tasks) => {    
-  const isAllTasksArchived = tasks.every((task) => task.isArchive);
-
-  if (isAllTasksArchived) {
-      render(boardComponent.getElement(), new TasksComponent(), RenderPosition.BEFOREEND);
-      return;
-  }
-  render(boardComponent.getElement(), new SortComponent(), RenderPosition.AFTERBEGIN);
-
-  const taskList = boardComponent.getElement().querySelector('.board__tasks');
-
-  let showingTasksCounter = SHOW_TASK_START;
-    tasks.slice(0, showingTasksCounter).forEach(task => {
-      renderTask(taskList, task);
-    })
-    
-  const loadMoreBtnComponent = new LoadMoreBtnComponent();
-
-  render(boardComponent.getElement(), loadMoreBtnComponent, RenderPosition.BEFOREEND);
-
-  loadMoreBtnComponent.setClickHandler(() => {
-    const prevTasksCount = showingTasksCounter;
-    showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
-
-    tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
-      renderTask(taskList, task);
-    });
-
-    if (showingTasksCounter >= tasks.length) {
-      remove(loadMoreBtnComponent);
+    switch (sortType){
+        case _boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DATE_UP:
+            sortedTasks = showingTaks.sort((a, b) => a.dueDate - b.dueDate);
+            break;
+        case _boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DATE_DOWN:
+            sortedTasks = showingTaks.sort((a, b) => b.dueDate - a.dueDate);
+            break;
+        case _boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DEFAULT:
+            sortedTasks = showingTaks;
+            break;
     }
-  });
-}; */
+
+    return sortedTasks.slice(from, to);
+};
+
+
 
 class BoardController {
     constructor(container) {
@@ -172,9 +159,29 @@ class BoardController {
     }
 
     render(tasks) {
+
+        const renderLoadButton = () => {
+            if (showingTasksCounter >= tasks.length) {
+                return;
+            }
+
+            (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render) (container, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+
+            this._loadMoreButtonComponent.setClickHandler(() => {
+                const prevTasksCount = showingTasksCounter;
+                showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
+      
+                tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
+                  renderTask(tasksList, task);
+                });
+            
+                if (showingTasksCounter >= tasks.length) {
+                  (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(this._loadMoreButtonComponent);
+                };
+              });
+        };
         const container = this._container.getElement()
         const isAllTasksArchived = tasks.every((task) => task.isArchive);
-        console.log(isAllTasksArchived)
         if (isAllTasksArchived) {
             (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._noTaskComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
             return;
@@ -189,19 +196,20 @@ class BoardController {
             renderTask(tasksList, task);
           });
         
-        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
-      
-        this._loadMoreButtonComponent.setClickHandler(() => {
-          const prevTasksCount = showingTasksCounter;
-          showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
+        renderLoadButton()
+    
 
-          tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
-            renderTask(tasksList, task);
-          });
-      
-          if (showingTasksCounter >= tasks.length) {
-            (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(this._loadMoreButtonComponent);
-          };
+        this._sortComponent.setSortTypeChangeHandler((sortType) => {
+            showingTasksCounter = SHOW_TASK_START;
+
+            const sortedTasks = getSortedTasks(tasks, sortType, 0, showingTasksCounter);
+
+            tasksList.innerHTML = '';
+
+            sortedTasks.slice(0, showingTasksCounter).forEach((task) => {
+                renderTask(tasksList, task);
+            });
+            renderLoadButton()
         });
     }
 }
@@ -218,23 +226,56 @@ class BoardController {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SortType": () => (/* binding */ SortType),
 /* harmony export */   "default": () => (/* binding */ Sort)
 /* harmony export */ });
 /* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
 
 
+const SortType = {
+    DATE_DOWN: 'date-down',
+    DATE_UP: 'date-up',
+    DEFAULT: 'default',
+};
+
 const createSortTemplate = () => {
     return `<div class="board__filter-list">
-            <a href="#" class="board__filter" data-sort-type="default">SORT BY DEFAULT</a>
-            <a href="#" class="board__filter" data-sort-type="date-up">SORT BY DATE up</a>
-            <a href="#" class="board__filter" data-sort-type="date-down">SORT BY DATE down</a>
+            <a href="#" class="board__filter" data-sort-type="${SortType.DEFAULT}">SORT BY DEFAULT</a>
+            <a href="#" class="board__filter" data-sort-type="${SortType.DATE_UP}">SORT BY DATE up</a>
+            <a href="#" class="board__filter" data-sort-type="${SortType.DATE_DOWN}">SORT BY DATE down</a>
         </div>
     `
 };
 
 class Sort extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.default {
+    constructor() {
+        super();
+
+        this._currentSortType = SortType.DEFAULT;
+    }
     getTemplate() {
         return createSortTemplate();
+    }
+
+    getSortType() {
+        return this._currentSortType;
+    }
+
+    setSortTypeChangeHandler(handler) {
+        this.getElement().addEventListener('click', (evt) => {
+            evt.preventDefault()
+
+            const sortType = evt.target.dataset.sortType;
+
+            if (evt.target.tagName !== 'A') {
+                return;
+            }
+
+            this._currentSortType = sortType;
+
+            handler(this._currentSortType);
+        })
+
     }
 }
 
@@ -1069,8 +1110,7 @@ const boardController = new _components_board_js__WEBPACK_IMPORTED_MODULE_3__.de
 
 (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND);
 boardController.render(tasks);
-/* renderBoard(tasks); */
-//
+
 
 
 
