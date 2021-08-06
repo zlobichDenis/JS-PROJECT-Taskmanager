@@ -124,6 +124,10 @@ class LoadMoreBtn extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.de
     getTemplate() {
         return createBtnLoadMore();
     }
+
+    setClickHandler(handler) {
+        this.getElement().addEventListener('click', handler);
+    }
 };
 
 
@@ -221,6 +225,10 @@ class Task extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_2__.default {
 
     getTemplate() {
       return createCardTemplate(this._task);
+    }
+
+    setEditButtonClickHandler(handler) {
+      this.getElement().querySelector('.card__btn--edit').addEventListener('click', handler)
     }
 }
 
@@ -370,6 +378,10 @@ class EditForm extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_2__.defau
 
   getTemplate() {
     return createEditCardForm(this._task);
+  }
+
+  setSubmitHandler(handler) {
+    this.getElement().querySelector('form').addEventListener('submit', handler)
   }
 }
 
@@ -614,12 +626,21 @@ const render = (container, component, place) => {
     }
 };
 
-const replace = (parent, oldElement, newElement) => {
-    parent.replaceChild(newElement, oldElement);
+const replace = (newComponent, oldComponent) => {
+    const parentElement = oldComponent.getElement().parentElement;
+    const newElement = newComponent.getElement();
+    const oldElement = oldComponent.getElement();
+
+    const isExistElement = !!(parentElement && newElement && oldElement);
+
+    if(isExistElement && parentElement.contains(oldElement)) {
+        parentElement.replaceChild(newElement, oldElement);
+    }
 };
 
-const remove = (element) => {
-    element.remove();
+const remove = (component) => {
+    component.getElement().remove();
+    component.removeElement();
 }
 
 /***/ }),
@@ -787,24 +808,29 @@ const SHOW_TASK_BY_BTN = 4;
 
 //
 const renderTask = (taskList, task) => {
+
   const clickOnEditBtn = () => {
-    (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.replace)(taskList, taskEditComponent.getElement(), taskComponent.getElement());
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.replace)(taskEditComponent, taskComponent);
   };
 
   const submitEditForm = (evt) => {
     evt.preventDefault();
-    (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.replace)(taskList, taskComponent.getElement(), taskEditComponent.getElement());
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.replace)(taskComponent, taskEditComponent);
   };
 
   const taskComponent = new _components_cardExample_js__WEBPACK_IMPORTED_MODULE_4__.default(task);
-  const editBtn = taskComponent.getElement().querySelector('.card__btn--edit');
   const taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_3__.default(task);
-  const editForm = taskEditComponent.getElement().querySelector('.card__form');
 
-  editBtn.addEventListener('click', clickOnEditBtn);
-  editForm.addEventListener('submit', submitEditForm);
 
-  (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(taskList, taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
+  taskComponent.setEditButtonClickHandler(() => {
+    clickOnEditBtn()
+  });
+
+  taskEditComponent.setSubmitHandler((evt) => {
+    evt.preventDefault();
+    submitEditForm();
+  });
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.render)(taskList, taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_7__.RenderPosition.BEFOREEND);
 };
 
 
@@ -826,7 +852,7 @@ const renderBoard = (tasks) => {
     
 
 
-  loadMoreBtnComponent.getElement().addEventListener('click', () => {
+  loadMoreBtnComponent.setClickHandler(() => {
     const prevTasksCount = showingTasksCounter;
     showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
 
@@ -835,8 +861,7 @@ const renderBoard = (tasks) => {
     });
 
     if (showingTasksCounter >= tasks.length) {
-      (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.remove)(loadMoreBtnComponent.getElement());
-      loadMoreBtnComponent.removeElement();
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_7__.remove)(loadMoreBtnComponent);
     }
   });
 };
