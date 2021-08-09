@@ -857,7 +857,16 @@ class TaskController {
             evt.preventDefault();
             submitEditForm();
           });
-              (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.render)(taskList, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_2__.RenderPosition.BEFOREEND);
+
+          this._taskComponent.setArchiveButtonClickHandler(() => {
+            this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
+          });
+
+          this._taskComponent.setFavoritesButtonClickHandler(() => {
+            this.onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
+          });
+
+        (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.render)(taskList, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_2__.RenderPosition.BEFOREEND);
     }
 }
 
