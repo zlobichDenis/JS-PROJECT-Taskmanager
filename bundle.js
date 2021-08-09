@@ -206,7 +206,7 @@ const createCardTemplate = (task) => {
 
   const editButton = createButtonMarkup('edit');
   const archiveButton = createButtonMarkup('archive', !task.isArchive);
-  const favoriteButton = createButtonMarkup('favorites', !task.isFavorite);
+  const favoritesButton = createButtonMarkup('favorites', !task.isFavorite);
 
   const deadlineClass = isExpired ? `card--deadline` : ``; 
   const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
@@ -657,9 +657,9 @@ __webpack_require__.r(__webpack_exports__);
 const SHOW_TASK_START = 8;
 const SHOW_TASK_BY_BTN = 4;
 
-const renderTasks = (tasksList, tasks) => {
+const renderTasks = (tasksList, tasks, onDataChange) => {
   return tasks.map((task) => {
-    const taskController = new _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.default(tasksList);
+    const taskController = new _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.default(tasksList, onDataChange);
 
     taskController.render(task);
 
@@ -698,6 +698,9 @@ class BoardController {
         this._tasksComponent = new _components_tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__.default();
         this._sortComponent = new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.default();
         this._loadMoreButtonComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_0__.default();
+
+        this._onDataChange = this._onDataChange.bind(this);
+        this._onSortTypeChange = this._onSortTypeChange.bind(this);
     }
 
     render(tasks) {
@@ -735,7 +738,7 @@ class BoardController {
 
         const tasksList = this._tasksComponent.getElement();
 
-        const newTasks = renderTasks(tasksList, tasks.slice(0, this._showingTasksCount));
+        const newTasks = renderTasks(tasksList, tasks.slice(0, this._showingTasksCount), this._onDataChange);
         this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
       
 /*         let showingTasksCounter = SHOW_TASK_START;
@@ -763,7 +766,7 @@ class BoardController {
       this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
       
       const sortedTasks = getSortedTasks(this._tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
-      const newTasks = renderTasks(taskList, sortedTasks)
+      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange);
 
       this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
 
@@ -773,11 +776,22 @@ class BoardController {
       };
     }
 
-    _onSortTypeChange(sortType) {
-      tasksList.innerHTML = '';
-      showingTasksCounter = SHOW_TASK_START;
+    _onDataChange(taskController, oldData, newData) {
+      const index = this._tasks.findIndex((it) => it === oldData);
 
-      const newTasks = renderTasks(taskList, sortedTasks);
+      if (index === -1) {
+        return;
+      }
+
+      this._tasks = [].concat(this._tasks.slice(o, index), newData, this._tasks.slice(index + 1));
+
+      taskController.render(this._tasks[index]);
+    }
+
+    _onSortTypeChange(sortType) {
+      this._showingTasksCount = SHOW_TASK_START;
+
+      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange);
       this._showedTaskContollers = newTasks;
 
       this._renderLoadMoreButton();
@@ -806,35 +820,44 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class TaskController {
-    constructor(container) {
+    constructor(container, onDataChange) {
         this._container = container;
+        this._onDataChange = onDataChange;
         this._taskComponent = null;
         this._taskEditComponent = null;
     }
 
     render(task) {
+        // this._taskComponent.setArchiveButtonClickHandler(() => {
+
+        // });
+
+        // this._taskComponent.setFavoritesButtonClickHandler(() => {
+
+        // });
+
         const clickOnEditBtn = () => {
-            (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.replace)(taskEditComponent, taskComponent);
+            (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.replace)(this._taskEditComponent , this._taskComponent);
           };
         
           const submitEditForm = (evt) => {
             evt.preventDefault();
-            (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.replace)(taskComponent, taskEditComponent);
+            (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.replace)(this._taskComponent , this._taskEditComponent);
           };
         
-          const taskComponent = new TaskComponent(task);
-          const taskEditComponent = new EditFormComponent(task);
+          this._taskComponent = new _components_cardExample_js__WEBPACK_IMPORTED_MODULE_0__.default(task);
+          this._taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_1__.default(task);
         
         
-          taskComponent.setEditButtonClickHandler(() => {
+          this._taskComponent.setEditButtonClickHandler(() => {
             clickOnEditBtn()
           });
         
-          taskEditComponent.setSubmitHandler((evt) => {
+          this._taskEditComponent.setSubmitHandler((evt) => {
             evt.preventDefault();
             submitEditForm();
           });
-              (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.render)(taskList, taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_2__.RenderPosition.BEFOREEND);
+              (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.render)(taskList, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_2__.RenderPosition.BEFOREEND);
     }
 }
 
