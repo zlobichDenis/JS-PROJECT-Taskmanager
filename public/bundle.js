@@ -335,11 +335,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const createColorsMarkup = () => {
+const createColorsMarkup = (mainColor) => {
   return _const_js__WEBPACK_IMPORTED_MODULE_0__.COLORS_CARD.map((color) => {
     return `
     <input type="radio" id="color-${color}-4" class="card__color-input card__color-input--${color} visually-hidden" name="color"value="${color}"
-    ${color === 'black' ? 'checked' : ''}/>
+    ${color === mainColor ? 'checked' : ''}/>
     <label for="color-${color}-4" class="card__color card__color--${color}">${color}</label
 >
 `
@@ -362,9 +362,9 @@ const createEditCardForm = (task) => {
   const {description, color, reapeatingDays, dueDate} = task;
 
 
-
+  const mainColor = color;
   const reapeatingDaysMarkup = createRepeatingDaysMarkup(reapeatingDays); 
-  const colors = createColorsMarkup(); 
+  const colors = createColorsMarkup(mainColor); 
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
   const isDateShowing = !!dueDate;
@@ -376,11 +376,11 @@ const createEditCardForm = (task) => {
   const isRepeat = (element) => {
    return element === true;
   };
-  const isRepeated = Object.values(reapeatingDays).some(Boolean); 
+  const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
-    return `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
+    return `<article class="card card--edit card--${mainColor} ${repeatClass} ${deadlineClass}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__color-bar">
@@ -497,6 +497,13 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
         return element === true;
        };
       Object.values(this._task.reapeatingDays).some(isRepeat) ? this._task.reapeatingDays = _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays : this._task.reapeatingDays = Object.assign({}, _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
+      this.rerender();
+    });
+
+    element.querySelector('.card__colors-wrap')
+    .addEventListener('change', (evt) => {
+      this._task.color = evt.target.value;
+
       this.rerender();
     });
 
