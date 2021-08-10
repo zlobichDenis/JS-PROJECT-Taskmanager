@@ -486,8 +486,8 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
     const element = this.getElement();
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
-      console.log(this._isDateShowing)
-      this._isDateShowing = !this._isDateShowing;
+      this._task.dueDate === null ? this._task.dueDate = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.getRandomDate)() : this._task.dueDate = null;
+      console.log(this._task.dueDate)
 
       this.rerender();
     });

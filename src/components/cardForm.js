@@ -1,5 +1,5 @@
 import { COLORS_CARD, TASK_DESC, MONTH_NAMES } from "../const.js";
-import { formatTime } from "../util.js";
+import { formatTime, getRandomDate } from "../util.js";
 import AbstractSmartComponent from "./abstract-smart-component.js";
 
 
@@ -155,8 +155,8 @@ export default class EditForm extends AbstractSmartComponent {
     const element = this.getElement();
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
-      console.log(this._isDateShowing)
-      this._isDateShowing = !this._isDateShowing;
+      this._task.dueDate === null ? this._task.dueDate = getRandomDate() : this._task.dueDate = null;
+      console.log(this._task.dueDate)
 
       this.rerender();
     });
