@@ -17586,6 +17586,16 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_4__
     return createEditCardForm(this._task);
   }
 
+  reset() {
+    const task = this._task;
+    this._isDateShowing = !task.dueDate;
+    this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
+    this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+
+    this.rerender();
+  }
+
+
   setSubmitHandler(handler) {
     this.getElement().querySelector('form').addEventListener('submit', handler);
     this._submitHandler = handler;
@@ -17861,9 +17871,9 @@ __webpack_require__.r(__webpack_exports__);
 const SHOW_TASK_START = 8;
 const SHOW_TASK_BY_BTN = 4;
 
-const renderTasks = (tasksList, tasks, onDataChange) => {
+const renderTasks = (tasksList, tasks, onDataChange, onViewChange) => {
   return tasks.map((task) => {
-    const taskController = new _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.default(tasksList, onDataChange);
+    const taskController = new _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.default(tasksList, onDataChange, onViewChange);
 
     taskController.render(task);
 
@@ -17898,6 +17908,7 @@ class BoardController {
         this._tasks = [];
         this._showedTaskContollers = [];
         this._showingTasksCount = SHOW_TASK_START;
+        
         this._noTaskComponent = new _components_no_tasks_component_js__WEBPACK_IMPORTED_MODULE_4__.default();
         this._tasksComponent = new _components_tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__.default();
         this._sortComponent = new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.default();
@@ -17905,34 +17916,14 @@ class BoardController {
 
         this._onDataChange = this._onDataChange.bind(this);
         this._onSortTypeChange = this._onSortTypeChange.bind(this);
+        this._onViewChange = this._onViewChange.bind(this);
     }
 
     render(tasks) {
-
-        // const renderLoadButton = () => {
-        //     if (showingTasksCounter >= tasks.length) {
-        //         return;
-        //     }
-
-        //     render (container, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
-
-        //     this._loadMoreButtonComponent.setClickHandler(() => {
-        //         const prevTasksCount = showingTasksCounter;
-        //         showingTasksCounter = showingTasksCounter + SHOW_TASK_BY_BTN;
-      
-        //         tasks.slice(prevTasksCount, showingTasksCounter).forEach((task) => {
-        //           renderTask(tasksList, task);
-        //         });
-            
-        //         if (showingTasksCounter >= tasks.length) {
-        //           remove(this._loadMoreButtonComponent);
-        //         };
-        //       });
-        // };
         this._tasks = tasks;
         const container = this._container.getElement()
 
-        const isAllTasksArchived = tasks.every((task) => task.isArchive);
+        const isAllTasksArchived = this._tasks.every((task) => task.isArchive);
         if (isAllTasksArchived) {
             (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._noTaskComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
             return;
@@ -17942,27 +17933,10 @@ class BoardController {
 
         const tasksList = this._tasksComponent.getElement();
 
-        const newTasks = renderTasks(tasksList, tasks.slice(0, this._showingTasksCount), this._onDataChange);
+        const newTasks = renderTasks(tasksList, tasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
         this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
-      
-/*         let showingTasksCounter = SHOW_TASK_START;
-          tasks.slice(0, showingTasksCounter).forEach(task => {
-            renderTask(tasksList, task);
-          }); */
         
         this._renderLoadMoreButton();
-        // this._sortComponent.setSortTypeChangeHandler((sortType) => {
-        //     showingTasksCounter = SHOW_TASK_START;
-
-        //     const sortedTasks = getSortedTasks(tasks, sortType, 0, showingTasksCounter);
-
-        //     tasksList.innerHTML = '';
-
-        //     sortedTasks.slice(0, showingTasksCounter).forEach((task) => {
-        //         renderTask(tasksList, task);
-        //     });
-        //     renderLoadButton()
-        // });
     };
 
     _renderLoadMoreButton() {
@@ -17970,10 +17944,9 @@ class BoardController {
       this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
       
       const sortedTasks = getSortedTasks(this._tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
-      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange);
+      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
 
       this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
-
     
       if (showingTasksCounter >= tasks.length) {
         (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(this._loadMoreButtonComponent);
@@ -17994,11 +17967,20 @@ class BoardController {
 
     _onSortTypeChange(sortType) {
       this._showingTasksCount = SHOW_TASK_START;
+      const prevTasksCount = this._showingTasksCount;
+      this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
 
-      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange);
+      const sortedTasks = getSortedTasks(task, sortType, prevTasksCount, this._showingTasksCount);
+      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
       this._showedTaskContollers = newTasks;
 
       this._renderLoadMoreButton();
+    }
+
+    _onViewChange() {
+      this._showedTaskContollers.forEach((it) => {
+        it.setDefaultView(it);
+      })
     }
 }
 
@@ -18025,14 +18007,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class TaskController {
-    constructor(container, onDataChange) {
+    constructor(container, onDataChange, onViewChange) {
         this._container = container;
+
         this._onDataChange = onDataChange;
+        this._onViewChange = onViewChange;
+        /* this._mode = Mode.DEFAULT; */
+
         this._taskComponent = null;
         this._taskEditComponent = null;
     }
 
     render(task) {
+        const oldTaskComponent = this._taskComponent;
+        const oldTaskEditComponent = this._taskEditComponent;
         const clickOnEditBtn = () => {
             (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.replace)(this._taskEditComponent , this._taskComponent);
           };
@@ -18063,8 +18051,25 @@ class TaskController {
             this.onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
           });
 
-        (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.render)(taskList, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_2__.RenderPosition.BEFOREEND);
+          if(oldTaskEditComponent && oldTaskComponent) {
+              (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.replace)(this._taskComponent, oldTaskComponent);
+              (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.replace)(this._taskEditComponent, oldTaskEditComponent);
+          } else {
+              (0,_render_js__WEBPACK_IMPORTED_MODULE_2__.render)(this._container, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_2__.RenderPosition.BEFOREEND);
+          }
     }
+
+/*     setDefaultView() {
+        if (this._mode !== Mode.DEFAULT) {
+            this._replaceEditToTask();
+        }
+    }
+
+    _replaceEditToTask() {
+        this._onViewChange();
+        replace(this._taskEditComponent, this._taskComponent);
+        this.mode = Mode.EDIT;
+    } */
 }
 
 /***/ }),
