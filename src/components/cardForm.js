@@ -1,7 +1,5 @@
-import { isDate } from "lodash";
 import { COLORS_CARD, TASK_DESC, MONTH_NAMES } from "../const.js";
 import { formatTime } from "../util.js";
-import AbstractComponent from "./abstract-component.js";
 import AbstractSmartComponent from "./abstract-smart-component.js";
 
 
@@ -47,7 +45,7 @@ const createEditCardForm = (task) => {
   const isRepeat = (element) => {
    return element === true;
   };
-  const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
+  const isRepeated = Object.values(reapeatingDays).some(Boolean); 
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
@@ -76,8 +74,7 @@ const createEditCardForm = (task) => {
               <button class="card__date-deadline-toggle" type="button">
                 date: <span class="card__date-status">${isDateShowing ? 'yes' : 'no'}</span>
               </button>
-              ${isDateShowing ? `
-                    <fieldset class="card__date-deadline">
+              ${isDateShowing ? `<fieldset class="card__date-deadline">
                       <label class="card__input-deadline-wrap">
                         <input
                           class="card__date"
@@ -92,12 +89,11 @@ const createEditCardForm = (task) => {
               <button class="card__repeat-toggle" type="button">
                 repeat:<span class="card__repeat-status">${isRepeated ? 'yes' : 'no'}</span>
               </button>
-
-              <fieldset class="card__repeat-days">
-                <div class="card__repeat-days-inner">
-                  ${reapeatingDaysMarkup}
-                </div>
-              </fieldset>
+              ${isRepeated ? `<fieldset class="card__repeat-days">
+              <div class="card__repeat-days-inner">
+                ${reapeatingDaysMarkup}
+              </div>
+            </fieldset>` : ''}
             </div>
           </div>
 
@@ -132,12 +128,20 @@ export default class EditForm extends AbstractSmartComponent {
     return createEditCardForm(this._task);
   }
 
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this._subscribeOnEvents();
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
   reset() {
     const task = this._task;
     this._isDateShowing = !task.dueDate;
-    this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
-    this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
-
+    this._isRepeatingTask = Object.values(task.reapeatingDays).some(Boolean);
+    this._activeRepeatingDays = Object.assign({}, task.reapeatingDays);
     this.rerender();
   }
 
@@ -151,6 +155,7 @@ export default class EditForm extends AbstractSmartComponent {
     const element = this.getElement();
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
+      console.log(this._isDateShowing)
       this._isDateShowing = !this._isDateShowing;
 
       this.rerender();
@@ -159,26 +164,18 @@ export default class EditForm extends AbstractSmartComponent {
     element.querySelector('.card__repeat-toggle')
     .addEventListener('click', () => {
       this._isRepeatingTask = !this._isRepeatingTask;
-
+      console.log(this)
       this.rerender();
     });
 
     const repeatDays = element.querySelector('.card__repeat-days');
     if(repeatDays) {
       repeatDays.addEventListener('change', (evt) => {
+        this._activeRepeatingDays = this._task.reapeatingDays;
         this._activeRepeatingDays[evt.target.value] = evt.target.checked;
 
         this.rerender();
       })
     }
-  }
-
-  recoveryListeners() {
-    this.setSubmitHandler(this._submitHandler);
-    this._subscribeOnEvents();
-  }
-
-  rerender() {
-    super.rerender();
   }
 }

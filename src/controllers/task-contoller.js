@@ -1,6 +1,12 @@
+import AbstractSmartComponent from "../components/abstract-smart-component.js";
 import Task from "../components/cardExample.js";
 import EditForm from "../components/cardForm.js";
 import { render, replace, RenderPosition } from "../render.js";
+
+const Mode = {
+  EDIT: 'edit',
+  DEFAULT: 'default',
+};
 
 export default class TaskController {
     constructor(container, onDataChange, onViewChange) {
@@ -8,7 +14,7 @@ export default class TaskController {
 
         this._onDataChange = onDataChange;
         this._onViewChange = onViewChange;
-        /* this._mode = Mode.DEFAULT; */
+        this._mode = Mode.DEFAULT;
 
         this._taskComponent = null;
         this._taskEditComponent = null;
@@ -22,7 +28,6 @@ export default class TaskController {
           };
         
           const submitEditForm = (evt) => {
-            evt.preventDefault();
             replace(this._taskComponent , this._taskEditComponent);
           };
         
@@ -44,7 +49,7 @@ export default class TaskController {
           });
 
           this._taskComponent.setFavoritesButtonClickHandler(() => {
-            this.onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
+            this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
           });
 
           if(oldTaskEditComponent && oldTaskComponent) {
@@ -55,7 +60,7 @@ export default class TaskController {
           }
     }
 
-/*     setDefaultView() {
+    setDefaultView() {
         if (this._mode !== Mode.DEFAULT) {
             this._replaceEditToTask();
         }
@@ -65,5 +70,5 @@ export default class TaskController {
         this._onViewChange();
         replace(this._taskEditComponent, this._taskComponent);
         this.mode = Mode.EDIT;
-    } */
+    }
 }

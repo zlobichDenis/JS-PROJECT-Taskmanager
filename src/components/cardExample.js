@@ -34,6 +34,7 @@ const createCardTemplate = (task) => {
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
+
     return `<article class="card card--${color} ${repeatClass} ${deadlineClass}"
     >
     <div class="card__form">
@@ -87,7 +88,7 @@ export default class Task extends AbstractComponent {
     }
 
     setFavoritesButtonClickHandler(handler) {
-      this.getElement().querySelector('.card_btn--favorites')
+      this.getElement().querySelector('.card__btn--favorites')
       .addEventListener('click', handler);
     }
 

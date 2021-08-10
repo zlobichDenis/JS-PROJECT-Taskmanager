@@ -6,11 +6,11 @@ module.exports = {
     entry: `./src/main.js`,
     output: {
         filename: `bundle.js`,
-        path: path.join(__dirname, `public/JS-Project-Taskmanager`)
+        path: path.join(__dirname, `./public`)
     },
     devtool: `source-map`,
     devServer: {
-        contentBase: path.join(__dirname, `public`),
+        contentBase: path.join(__dirname, `./public`),
         watchContentBase: true
     }
 };
