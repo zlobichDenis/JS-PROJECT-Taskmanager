@@ -487,15 +487,16 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
       this._task.dueDate === null ? this._task.dueDate = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.getRandomDate)() : this._task.dueDate = null;
-      console.log(this._task.dueDate)
 
       this.rerender();
     });
 
     element.querySelector('.card__repeat-toggle')
     .addEventListener('click', () => {
-      this._isRepeatingTask = !this._isRepeatingTask;
-      console.log(this)
+      const isRepeat = (element) => {
+        return element === true;
+       };
+      Object.values(this._task.reapeatingDays).some(isRepeat) ? this._task.reapeatingDays = _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays : this._task.reapeatingDays = Object.assign({}, _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
       this.rerender();
     });
 

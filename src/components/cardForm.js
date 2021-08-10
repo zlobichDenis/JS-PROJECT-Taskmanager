@@ -1,5 +1,5 @@
 import { COLORS_CARD, TASK_DESC, MONTH_NAMES } from "../const.js";
-import { formatTime, getRandomDate } from "../util.js";
+import { defaultReapeatingDays, formatTime, generateRepeatingDays, getRandomDate } from "../util.js";
 import AbstractSmartComponent from "./abstract-smart-component.js";
 
 
@@ -156,15 +156,16 @@ export default class EditForm extends AbstractSmartComponent {
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
       this._task.dueDate === null ? this._task.dueDate = getRandomDate() : this._task.dueDate = null;
-      console.log(this._task.dueDate)
 
       this.rerender();
     });
 
     element.querySelector('.card__repeat-toggle')
     .addEventListener('click', () => {
-      this._isRepeatingTask = !this._isRepeatingTask;
-      console.log(this)
+      const isRepeat = (element) => {
+        return element === true;
+       };
+      Object.values(this._task.reapeatingDays).some(isRepeat) ? this._task.reapeatingDays = defaultReapeatingDays : this._task.reapeatingDays = Object.assign({}, defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
       this.rerender();
     });
 
