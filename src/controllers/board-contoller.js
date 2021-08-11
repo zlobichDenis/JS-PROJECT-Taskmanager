@@ -11,6 +11,7 @@ import { SortType } from '../components/boardFilters.js';
 import TaskController from './task-contoller.js';
 
 
+
 const SHOW_TASK_START = 8;
 const SHOW_TASK_BY_BTN = 4;
 
@@ -87,6 +88,8 @@ export default class BoardController {
         return;
       }
       const taskList = this._tasksComponent.getElement();
+
+
       const prevTasksCount = this._showingTasksCount;
       this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
       

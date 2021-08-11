@@ -42,10 +42,8 @@ const createEditCardForm = (task) => {
   const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
 
 
-  const isRepeat = (element) => {
-   return element === true;
-  };
-  const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
+
+  const isRepeated = Object.values(reapeatingDays).some(Boolean); 
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
@@ -153,19 +151,24 @@ export default class EditForm extends AbstractSmartComponent {
 
   _subscribeOnEvents() {
     const element = this.getElement();
+
+
+
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
-      this._task.dueDate === null ? this._task.dueDate = getRandomDate() : this._task.dueDate = null;
+      this._task.dueDate === null
+        ? this._task.dueDate = getRandomDate() 
+        : this._task.dueDate = null;
 
       this.rerender();
     });
 
     element.querySelector('.card__repeat-toggle')
     .addEventListener('click', () => {
-      const isRepeat = (element) => {
-        return element === true;
-       };
-      Object.values(this._task.reapeatingDays).some(isRepeat) ? this._task.reapeatingDays = defaultReapeatingDays : this._task.reapeatingDays = Object.assign({}, defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
+      this._isRepeatingTask = Object.values(this._task.reapeatingDays).some(Boolean)
+        ? this._task.reapeatingDays = defaultReapeatingDays
+        : this._task.reapeatingDays = Object.assign({}, defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
+
       this.rerender();
     });
 
@@ -181,7 +184,6 @@ export default class EditForm extends AbstractSmartComponent {
       repeatDays.addEventListener('change', (evt) => {
         this._activeRepeatingDays = this._task.reapeatingDays;
         this._activeRepeatingDays[evt.target.value] = evt.target.checked;
-
         this.rerender();
       })
     }

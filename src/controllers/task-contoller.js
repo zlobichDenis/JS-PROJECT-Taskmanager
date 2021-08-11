@@ -36,6 +36,7 @@ export default class TaskController {
         
         
           this._taskComponent.setEditButtonClickHandler(() => {
+            this._onViewChange();
             clickOnEditBtn()
           });
         
@@ -69,6 +70,6 @@ export default class TaskController {
     _replaceEditToTask() {
         this._onViewChange();
         replace(this._taskEditComponent, this._taskComponent);
-        this.mode = Mode.EDIT;
+        this._mode = Mode.EDIT;
     }
 }

@@ -373,10 +373,8 @@ const createEditCardForm = (task) => {
   const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
 
 
-  const isRepeat = (element) => {
-   return element === true;
-  };
-  const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
+
+  const isRepeated = Object.values(reapeatingDays).some(Boolean); 
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
 
@@ -484,19 +482,24 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
 
   _subscribeOnEvents() {
     const element = this.getElement();
+
+
+
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
-      this._task.dueDate === null ? this._task.dueDate = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.getRandomDate)() : this._task.dueDate = null;
+      this._task.dueDate === null
+        ? this._task.dueDate = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.getRandomDate)() 
+        : this._task.dueDate = null;
 
       this.rerender();
     });
 
     element.querySelector('.card__repeat-toggle')
     .addEventListener('click', () => {
-      const isRepeat = (element) => {
-        return element === true;
-       };
-      Object.values(this._task.reapeatingDays).some(isRepeat) ? this._task.reapeatingDays = _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays : this._task.reapeatingDays = Object.assign({}, _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
+      this._isRepeatingTask = Object.values(this._task.reapeatingDays).some(Boolean)
+        ? this._task.reapeatingDays = _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays
+        : this._task.reapeatingDays = Object.assign({}, _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
+
       this.rerender();
     });
 
@@ -512,7 +515,6 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
       repeatDays.addEventListener('change', (evt) => {
         this._activeRepeatingDays = this._task.reapeatingDays;
         this._activeRepeatingDays[evt.target.value] = evt.target.checked;
-
         this.rerender();
       })
     }
@@ -744,6 +746,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 const SHOW_TASK_START = 8;
 const SHOW_TASK_BY_BTN = 4;
 
@@ -820,6 +823,8 @@ class BoardController {
         return;
       }
       const taskList = this._tasksComponent.getElement();
+
+
       const prevTasksCount = this._showingTasksCount;
       this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
       
@@ -920,6 +925,7 @@ class TaskController {
         
         
           this._taskComponent.setEditButtonClickHandler(() => {
+            this._onViewChange();
             clickOnEditBtn()
           });
         
@@ -953,7 +959,7 @@ class TaskController {
     _replaceEditToTask() {
         this._onViewChange();
         (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskEditComponent, this._taskComponent);
-        this.mode = Mode.EDIT;
+        this._mode = Mode.EDIT;
     }
 }
 
@@ -1086,12 +1092,13 @@ const remove = (component) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "defaultReapeatingDays": () => (/* binding */ defaultReapeatingDays),
 /* harmony export */   "getRandomIntNumber": () => (/* binding */ getRandomIntNumber),
 /* harmony export */   "getRandomElemFromArray": () => (/* binding */ getRandomElemFromArray),
 /* harmony export */   "getRandomDate": () => (/* binding */ getRandomDate),
+/* harmony export */   "castTimeFormat": () => (/* binding */ castTimeFormat),
 /* harmony export */   "formatTime": () => (/* binding */ formatTime),
-/* harmony export */   "generateRepeatingDays": () => (/* binding */ generateRepeatingDays),
-/* harmony export */   "defaultReapeatingDays": () => (/* binding */ defaultReapeatingDays)
+/* harmony export */   "generateRepeatingDays": () => (/* binding */ generateRepeatingDays)
 /* harmony export */ });
 const defaultReapeatingDays = {
     'mo': false,
@@ -1135,7 +1142,6 @@ const formatTime = (date) => {
 const generateRepeatingDays = () => {
     return Object.assign({}, defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
 };
-
 
 
 
