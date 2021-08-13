@@ -498,8 +498,7 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
     .addEventListener('click', () => {
       this._isRepeatingTask = Object.values(this._task.reapeatingDays).some(Boolean)
         ? this._task.reapeatingDays = _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays
-        : this._task.reapeatingDays = Object.assign({}, _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
-
+        : this._task.reapeatingDays = Object.assign({}, _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays,{ 'mo': true });
       this.rerender();
     });
 
@@ -913,56 +912,54 @@ class TaskController {
     }
 
     render(task) {
-        const oldTaskComponent = this._taskComponent;
-        const oldTaskEditComponent = this._taskEditComponent;
-        const clickOnEditBtn = () => {
-            (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskEditComponent , this._taskComponent);
-          };
+      const oldTaskComponent = this._taskComponent;
+      const oldTaskEditComponent = this._taskEditComponent;
         
-          const submitEditForm = (evt) => {
-            (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskComponent , this._taskEditComponent);
-          };
-        
-          this._taskComponent = new _components_cardExample_js__WEBPACK_IMPORTED_MODULE_1__.default(task);
-          this._taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_2__.default(task);
+      this._taskComponent = new _components_cardExample_js__WEBPACK_IMPORTED_MODULE_1__.default(task);
+      this._taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_2__.default(task);
         
         
-          this._taskComponent.setEditButtonClickHandler(() => {
-            this._onViewChange();
-            clickOnEditBtn()
-          });
+      this._taskComponent.setEditButtonClickHandler(() => {
+        this._replaceTaskToEdit();
+      });
         
-          this._taskEditComponent.setSubmitHandler((evt) => {
-            evt.preventDefault();
-            submitEditForm();
-          });
+      this._taskEditComponent.setSubmitHandler((evt) => {
+        evt.preventDefault();
+        this._replaceEditToTask();
+      });
 
-          this._taskComponent.setArchiveButtonClickHandler(() => {
-            this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
-          });
+      this._taskComponent.setArchiveButtonClickHandler(() => {
+        this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
+      });
 
-          this._taskComponent.setFavoritesButtonClickHandler(() => {
-            this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
-          });
+      this._taskComponent.setFavoritesButtonClickHandler(() => {
+        this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
+      });
 
-          if(oldTaskEditComponent && oldTaskComponent) {
-              (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskComponent, oldTaskComponent);
-              (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskEditComponent, oldTaskEditComponent);
-          } else {
-              (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.render)(this._container, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_3__.RenderPosition.BEFOREEND);
-          }
-    }
+      if(oldTaskEditComponent && oldTaskComponent) {
+          (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskComponent, oldTaskComponent);
+          (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskEditComponent, oldTaskEditComponent);
+      } else {
+          (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.render)(this._container, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_3__.RenderPosition.BEFOREEND);
+      }
+  }
 
     setDefaultView() {
-        if (this._mode !== Mode.DEFAULT) {
-            this._replaceEditToTask();
-        }
+      if (this._mode !== Mode.DEFAULT) {
+          this._replaceEditToTask();
+      }
     }
 
     _replaceEditToTask() {
-        this._onViewChange();
-        (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskEditComponent, this._taskComponent);
-        this._mode = Mode.EDIT;
+      this._taskEditComponent.reset();
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskComponent, this._taskEditComponent);
+      this._mode = Mode.DEFAULT;
+    }
+
+    _replaceTaskToEdit() {
+      this._onViewChange();
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskEditComponent, this._taskComponent);
+      this._mode = Mode.EDIT;
     }
 }
 
@@ -1073,7 +1070,7 @@ const replace = (newComponent, oldComponent) => {
     const newElement = newComponent.getElement();
     const oldElement = oldComponent.getElement();
 
-    const isExistElement = !!(parentElement && newElement && oldElement);
+    const isExistElement = (parentElement && newElement && oldElement);
 
     if(isExistElement && parentElement.contains(oldElement)) {
         parentElement.replaceChild(newElement, oldElement);

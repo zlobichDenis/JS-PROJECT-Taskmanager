@@ -21,55 +21,53 @@ export default class TaskController {
     }
 
     render(task) {
-        const oldTaskComponent = this._taskComponent;
-        const oldTaskEditComponent = this._taskEditComponent;
-        const clickOnEditBtn = () => {
-            replace(this._taskEditComponent , this._taskComponent);
-          };
+      const oldTaskComponent = this._taskComponent;
+      const oldTaskEditComponent = this._taskEditComponent;
         
-          const submitEditForm = (evt) => {
-            replace(this._taskComponent , this._taskEditComponent);
-          };
-        
-          this._taskComponent = new Task(task);
-          this._taskEditComponent = new EditForm(task);
+      this._taskComponent = new Task(task);
+      this._taskEditComponent = new EditForm(task);
         
         
-          this._taskComponent.setEditButtonClickHandler(() => {
-            this._onViewChange();
-            clickOnEditBtn()
-          });
+      this._taskComponent.setEditButtonClickHandler(() => {
+        this._replaceTaskToEdit();
+      });
         
-          this._taskEditComponent.setSubmitHandler((evt) => {
-            evt.preventDefault();
-            submitEditForm();
-          });
+      this._taskEditComponent.setSubmitHandler((evt) => {
+        evt.preventDefault();
+        this._replaceEditToTask();
+      });
 
-          this._taskComponent.setArchiveButtonClickHandler(() => {
-            this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
-          });
+      this._taskComponent.setArchiveButtonClickHandler(() => {
+        this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
+      });
 
-          this._taskComponent.setFavoritesButtonClickHandler(() => {
-            this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
-          });
+      this._taskComponent.setFavoritesButtonClickHandler(() => {
+        this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
+      });
 
-          if(oldTaskEditComponent && oldTaskComponent) {
-              replace(this._taskComponent, oldTaskComponent);
-              replace(this._taskEditComponent, oldTaskEditComponent);
-          } else {
-              render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
-          }
-    }
+      if(oldTaskEditComponent && oldTaskComponent) {
+          replace(this._taskComponent, oldTaskComponent);
+          replace(this._taskEditComponent, oldTaskEditComponent);
+      } else {
+          render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
+      }
+  }
 
     setDefaultView() {
-        if (this._mode !== Mode.DEFAULT) {
-            this._replaceEditToTask();
-        }
+      if (this._mode !== Mode.DEFAULT) {
+          this._replaceEditToTask();
+      }
     }
 
     _replaceEditToTask() {
-        this._onViewChange();
-        replace(this._taskEditComponent, this._taskComponent);
-        this._mode = Mode.EDIT;
+      this._taskEditComponent.reset();
+      replace(this._taskComponent, this._taskEditComponent);
+      this._mode = Mode.DEFAULT;
+    }
+
+    _replaceTaskToEdit() {
+      this._onViewChange();
+      replace(this._taskEditComponent, this._taskComponent);
+      this._mode = Mode.EDIT;
     }
 }

@@ -167,8 +167,7 @@ export default class EditForm extends AbstractSmartComponent {
     .addEventListener('click', () => {
       this._isRepeatingTask = Object.values(this._task.reapeatingDays).some(Boolean)
         ? this._task.reapeatingDays = defaultReapeatingDays
-        : this._task.reapeatingDays = Object.assign({}, defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
-
+        : this._task.reapeatingDays = Object.assign({}, defaultReapeatingDays,{ 'mo': true });
       this.rerender();
     });
 
