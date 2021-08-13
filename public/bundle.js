@@ -824,18 +824,20 @@ class BoardController {
       }
       const taskList = this._tasksComponent.getElement();
 
-
-      const prevTasksCount = this._showingTasksCount;
-      this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
-      
-      const sortedTasks = getSortedTasks(this._tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
-      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
-
-      this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
-    
-      if (this._showingTasksCount >= this._tasks.length) {
-        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(this._loadMoreButtonComponent);
-      };
+      this._loadMoreButtonComponent.getElement().addEventListener('click', () => {
+        const prevTasksCount = this._showingTasksCount;
+        this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
+        
+        const sortedTasks = getSortedTasks(this._tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
+        const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
+  
+        this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
+        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+        if (this._showingTasksCount >= this._tasks.length) {
+          (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(this._loadMoreButtonComponent);
+        };
+      })
+      ;(0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
     }
 
     _onDataChange(taskController, oldData, newData) {
@@ -856,7 +858,7 @@ class BoardController {
       this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
 
       const sortedTasks = getSortedTasks(task, sortType, prevTasksCount, this._showingTasksCount);
-      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
+/*       const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange); */
       this._showedTaskContollers = newTasks;
 
       this._renderLoadMoreButton();

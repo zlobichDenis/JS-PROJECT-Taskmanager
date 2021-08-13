@@ -89,18 +89,20 @@ export default class BoardController {
       }
       const taskList = this._tasksComponent.getElement();
 
-
-      const prevTasksCount = this._showingTasksCount;
-      this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
-      
-      const sortedTasks = getSortedTasks(this._tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
-      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
-
-      this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
-    
-      if (this._showingTasksCount >= this._tasks.length) {
-        remove(this._loadMoreButtonComponent);
-      };
+      this._loadMoreButtonComponent.getElement().addEventListener('click', () => {
+        const prevTasksCount = this._showingTasksCount;
+        this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
+        
+        const sortedTasks = getSortedTasks(this._tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
+        const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
+  
+        this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
+        render(taskList, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+        if (this._showingTasksCount >= this._tasks.length) {
+          remove(this._loadMoreButtonComponent);
+        };
+      })
+      render(taskList, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
     }
 
     _onDataChange(taskController, oldData, newData) {
@@ -121,7 +123,7 @@ export default class BoardController {
       this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
 
       const sortedTasks = getSortedTasks(task, sortType, prevTasksCount, this._showingTasksCount);
-      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
+/*       const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange); */
       this._showedTaskContollers = newTasks;
 
       this._renderLoadMoreButton();
