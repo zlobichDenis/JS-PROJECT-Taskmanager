@@ -796,6 +796,8 @@ class BoardController {
         this._onDataChange = this._onDataChange.bind(this);
         this._onSortTypeChange = this._onSortTypeChange.bind(this);
         this._onViewChange = this._onViewChange.bind(this);
+
+        this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     }
 
     render(tasks) {
@@ -809,7 +811,6 @@ class BoardController {
         }
         (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._sortComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.AFTERBEGIN);
         (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._tasksComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
-
         const tasksList = this._tasksComponent.getElement();
 
         const newTasks = renderTasks(tasksList, this._tasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
@@ -824,7 +825,7 @@ class BoardController {
       }
       const taskList = this._tasksComponent.getElement();
 
-      this._loadMoreButtonComponent.getElement().addEventListener('click', () => {
+      this._loadMoreButtonComponent.setClickHandler(() => {
         const prevTasksCount = this._showingTasksCount;
         this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
         
@@ -853,12 +854,12 @@ class BoardController {
     }
 
     _onSortTypeChange(sortType) {
-      this._showingTasksCount = SHOW_TASK_START;
-      const prevTasksCount = this._showingTasksCount;
-      this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
+      this._showingTasksCount = this._showedTaskContollers.length;
 
-      const sortedTasks = getSortedTasks(task, sortType, prevTasksCount, this._showingTasksCount);
-/*       const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange); */
+      const taskListElement = this._tasksComponent.getElement();
+      taskListElement.innerHTML = ``
+      const sortedTasks = getSortedTasks(this._tasks, sortType, 0, this._showingTasksCount);
+      const newTasks = renderTasks(taskListElement, sortedTasks, this._onDataChange, this._onViewChange);
       this._showedTaskContollers = newTasks;
 
       this._renderLoadMoreButton();
