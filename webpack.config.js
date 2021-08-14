@@ -1,4 +1,6 @@
 const path = require(`path`);
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+
 
 
 module.exports = {
@@ -9,5 +11,18 @@ module.exports = {
         filename: `bundle.js`,
         path: path.join(__dirname, `./public`),
     },
-    devtool: `source-map`
+    devtool: `source-map`,
+    plugins: [
+        new MomentLocalesPlugin({
+            localesToKeep: ['es-us'],
+        }),
+    ],
+    module:{
+        rules: [
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader']
+            }
+        ]
+    }
 };

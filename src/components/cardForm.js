@@ -1,6 +1,8 @@
 import { COLORS_CARD, TASK_DESC, MONTH_NAMES } from "../const.js";
 import { defaultReapeatingDays, formatTime, generateRepeatingDays, getRandomDate } from "../util.js";
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import flatpickr from "flatpickr";
+
 
 
 
