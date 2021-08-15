@@ -1,5 +1,5 @@
 import { COLORS_CARD, TASK_DESC, MONTH_NAMES } from "../const.js";
-import { formatTime } from "../util.js";
+import { formatTime, formatDate } from "../util.js";
 import AbstractComponent from "./abstract-component.js";
 
 const createButtonMarkup = (name, isActive = true) => {
@@ -18,7 +18,7 @@ const createCardTemplate = (task) => {
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
   const isDateShowing = !!dueDate; 
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : '';  
+  const date = isDateShowing ? formatDate(dueDate): '';  
   const time = isDateShowing ? formatTime(dueDate) : '';
  
   const isRepeat = (element) => {
