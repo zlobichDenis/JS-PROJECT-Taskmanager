@@ -2,6 +2,7 @@ import { COLORS_CARD, TASK_DESC, MONTH_NAMES } from "../const.js";
 import { defaultReapeatingDays, formatTime, generateRepeatingDays, getRandomDate } from "../util.js";
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import flatpickr from "flatpickr";
+import 'flatpickr/dist/flatpickr.min.css';
 
 
 
@@ -122,6 +123,9 @@ export default class EditForm extends AbstractSmartComponent {
     this._task = task;
     this._submitHandler = null;
     this._subscribeOnEvents();
+    this._flatpickr = null;
+    this._applyFlatpickr();
+
   }
 
   getTemplate() {
@@ -135,6 +139,7 @@ export default class EditForm extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+    this._applyFlatpickr();
   }
 
   reset() {
@@ -143,6 +148,22 @@ export default class EditForm extends AbstractSmartComponent {
     this._isRepeatingTask = Object.values(task.reapeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.reapeatingDays);
     this.rerender();
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector('.card__date');
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._submitHandler.duedate || 'today',
+      })
+    }
   }
 
 
@@ -158,10 +179,9 @@ export default class EditForm extends AbstractSmartComponent {
 
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
-      this._task.dueDate === null
-        ? this._task.dueDate = getRandomDate() 
+      this._isDateShowing = this._task.dueDate === null
+        ? this._task.dueDate = getRandomDate()
         : this._task.dueDate = null;
-
       this.rerender();
     });
 
