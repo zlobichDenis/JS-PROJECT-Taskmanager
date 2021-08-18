@@ -85,4 +85,14 @@ export default class Filter extends AbstractComponent {
     getTemplate() {
         return createFilterTemplate(this._filters);
     }
+
+    _setActiveFilterAll(handler) {
+        this.getElement().querySelector('#filter__all')
+        .addEventListener('click', handler);
+    }
+
+    _setActiveFilterOverdue(handler) {
+        this.getElement().querySelector('#filter__overdue')
+        .addEventListener('click', handler);
+    }
 }

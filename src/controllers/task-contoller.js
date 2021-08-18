@@ -1,7 +1,7 @@
 import AbstractSmartComponent from "../components/abstract-smart-component.js";
 import Task from "../components/cardExample.js";
 import EditForm from "../components/cardForm.js";
-import { render, replace, RenderPosition } from "../render.js";
+import { render, replace, RenderPosition, remove } from "../render.js";
 
 const Mode = {
   EDIT: 'edit',
@@ -57,6 +57,11 @@ export default class TaskController {
       if (this._mode !== Mode.DEFAULT) {
           this._replaceEditToTask();
       }
+    }
+
+    destroy() {
+      remove(this._taskEditComponent);
+      remove(this._taskComponent);
     }
 
     _replaceEditToTask() {

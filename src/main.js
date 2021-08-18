@@ -20,8 +20,8 @@ tasksModel.setTasks(tasks);
 /* const filters = generateFilters(); */
 
 render(siteHeaderElement, new SiteMenuComponent(), RenderPosition.BEFOREEND);
-const filterComponent = new FiltersController(siteMainElement, tasksModel);
-filterComponent.render();
+const filterController = new FiltersController(siteMainElement, tasksModel);
+filterController.render();
 /* render(siteMainElement, new FilterComponent(filters), RenderPosition.BEFOREEND); */
 
 

@@ -1,4 +1,6 @@
 import moment from "moment";
+import { getArchiveTasks, getFavoritesTasks, getOverdueTasks, getRepeatingTasks, getTodaysTasks } from "./components/filters";
+import { FilterType } from "./const";
 
 export const defaultReapeatingDays = {
     'mo': false,
@@ -43,6 +45,18 @@ export const formatDate = (date) => {
 export const generateRepeatingDays = () => {
     return Object.assign({}, defaultReapeatingDays,{ 'mo': Math.random() > 0.5});
 };
+
+export const getTasksByFilter = (tasks, filter) => {
+    switch (filter) {
+        case 'all': return tasks;
+        case 'overdue': return getOverdueTasks(tasks);
+        case 'todays': return getTodaysTasks(tasks);
+        case 'favorites': return getFavoritesTasks(tasks);
+        case 'repeating': return getRepeatingTasks(tasks);
+        case 'archive': return getArchiveTasks(tasks);
+    }
+};
+
 
 
 

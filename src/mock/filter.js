@@ -1,12 +1,10 @@
-const filterNames  = ['all', 'overdue', 'today', 'favorites', 'repeating', 'archive'];
+import { getTasksByFilter } from "../util";
 
-const generateFilters = () => {
-   return filterNames.map((filterName) => {
-        return {
-            name: filterName,
-            count: parseInt(Math.random() * 20),
-        }
-   });
+const generateFilters = (filterName, allTasks) => {
+    return {
+        name: filterName,
+        count: getTasksByFilter(allTasks, filterName).length,
+    }
 };
 
 export { generateFilters };
