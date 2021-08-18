@@ -9812,7 +9812,7 @@ class BoardController {
       ;(0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
     }
 
-    _onDataChange(taskController, oldData, newData) {
+/*     _onDataChange(taskController, oldData, newData) {
       const index = this._tasks.findIndex((it) => it === oldData);
 
       if (index === -1) {
@@ -9822,7 +9822,7 @@ class BoardController {
       this._tasks = [].concat(this._tasks.slice(0, index), newData, this._tasks.slice(index + 1));
 
       taskController.render(this._tasks[index]);
-    }
+    } */
 
     _onSortTypeChange(sortType) {
       this._showingTasksCount = this._showedTaskContollers.length;
