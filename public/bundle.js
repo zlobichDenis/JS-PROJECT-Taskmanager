@@ -9753,42 +9753,41 @@ const getSortedTasks = (tasks, sortType, from, to) => {
 
 
 class BoardController {
-    constructor(container) {
-        this._container = container;
-        this._tasks = [];
-        this._showedTaskContollers = [];
-        this._showingTasksCount = SHOW_TASK_START;
+  constructor(container, taskModel) {
+    this._container = container;
+    this._taskModel = taskModel;
+
+    this._showedTaskContollers = [];
+    this._showingTasksCount = SHOW_TASK_START;
         
-        this._noTaskComponent = new _components_no_tasks_component_js__WEBPACK_IMPORTED_MODULE_4__.default();
-        this._tasksComponent = new _components_tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__.default();
-        this._sortComponent = new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.default();
-        this._loadMoreButtonComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_0__.default();
+    this._noTaskComponent = new _components_no_tasks_component_js__WEBPACK_IMPORTED_MODULE_4__.default();
+    this._tasksComponent = new _components_tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__.default();
+    this._sortComponent = new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.default();
+    this._loadMoreButtonComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_0__.default();
 
-        this._onDataChange = this._onDataChange.bind(this);
-        this._onSortTypeChange = this._onSortTypeChange.bind(this);
-        this._onViewChange = this._onViewChange.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
 
-        this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+}
+
+  render() {
+    const container = this._container.getElement();
+    const tasks = this._taskModel.getTasks();
+
+    const isAllTasksArchived = tasks.every((task) => task.isArchive);
+    if (isAllTasksArchived) {
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._noTaskComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+      return;
     }
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._sortComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.AFTERBEGIN);
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._tasksComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
 
-    render(tasks) {
-        this._tasks = tasks;
-        const container = this._container.getElement()
-
-        const isAllTasksArchived = this._tasks.every((task) => task.isArchive);
-        if (isAllTasksArchived) {
-            (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._noTaskComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
-            return;
-        }
-        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._sortComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.AFTERBEGIN);
-        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._tasksComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
-        const tasksList = this._tasksComponent.getElement();
-
-        const newTasks = renderTasks(tasksList, this._tasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
-        this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
+    this._renderTasks(tasks.slice(0, this._showingTasksCount));
         
-        this._renderLoadMoreButton();
-    };
+    this._renderLoadMoreButton();
+};
 
     _renderLoadMoreButton() {
       if (this._showingTasksCount >= this._tasks.length) {
@@ -9811,6 +9810,16 @@ class BoardController {
       })
       ;(0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
     }
+
+  _renderTasks(tasks) {
+    const tasksList = this._tasksComponent.getElement();
+
+    const newTasks = renderTasks(tasksList, tasks, this._onDataChange, this._onViewChange);
+    this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
+    
+    this._showingTasksCount = this._showedTaskContollers.length;
+      
+  }
 
 /*     _onDataChange(taskController, oldData, newData) {
       const index = this._tasks.findIndex((it) => it === oldData);
