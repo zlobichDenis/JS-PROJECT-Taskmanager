@@ -9789,27 +9789,26 @@ class BoardController {
     this._renderLoadMoreButton();
 };
 
-    _renderLoadMoreButton() {
-      if (this._showingTasksCount >= this._tasks.length) {
-        return;
-      }
-      const taskList = this._tasksComponent.getElement();
+  _renderLoadMoreButton() {
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(this._loadMoreButtonComponent);
 
-      this._loadMoreButtonComponent.setClickHandler(() => {
-        const prevTasksCount = this._showingTasksCount;
-        this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
-        
-        const sortedTasks = getSortedTasks(this._tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
-        const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
-  
-        this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
-        (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
-        if (this._showingTasksCount >= this._tasks.length) {
-          (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(this._loadMoreButtonComponent);
-        };
-      })
-      ;(0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+    if (this._showingTasksCount >= this._taskModel.getTasks().length) {
+      return;
     }
+    const taskList = this._tasksComponent.getElement();
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+    this._loadMoreButtonComponent.setClickHandler(() => {
+      const prevTasksCount = this._showingTasksCount;
+      const tasks = this._taskModel.getTasks();
+      this._showingTasksCount = this._showingTasksCount + SHOW_TASK_BY_BTN;
+        
+      const sortedTasks = getSortedTasks(tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
+      const newTasks = renderTasks(taskList, sortedTasks, this._onDataChange, this._onViewChange);
+  
+      this._showedTaskContollers = this._showedTaskContollers.concat(newTasks);
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(taskList, this._loadMoreButtonComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+    })
+}
 
   _renderTasks(tasks) {
     const tasksList = this._tasksComponent.getElement();
@@ -9821,24 +9820,20 @@ class BoardController {
       
   }
 
-/*     _onDataChange(taskController, oldData, newData) {
-      const index = this._tasks.findIndex((it) => it === oldData);
+  _onDataChange(taskController, oldData, newData) {
+    const isSucces = this._taskModel.updateTask(oldData.id, newData);
 
-      if (index === -1) {
-        return;
-      }
-
-      this._tasks = [].concat(this._tasks.slice(0, index), newData, this._tasks.slice(index + 1));
-
-      taskController.render(this._tasks[index]);
-    } */
+    if (isSucces) {
+      taskController.render(newData);
+    }
+}
 
     _onSortTypeChange(sortType) {
       this._showingTasksCount = this._showedTaskContollers.length;
 
       const taskListElement = this._tasksComponent.getElement();
       taskListElement.innerHTML = ``;
-      const sortedTasks = getSortedTasks(this._tasks, sortType, 0, this._showingTasksCount);
+      const sortedTasks = getSortedTasks(this._taskModel.getTasks(), sortType, 0, this._showingTasksCount);
       const newTasks = renderTasks(taskListElement, sortedTasks, this._onDataChange, this._onViewChange);
       this._showedTaskContollers = newTasks;
 
@@ -10011,6 +10006,57 @@ const generateTasks = (count) => {
 
 
 
+
+/***/ }),
+
+/***/ "./src/models/tasks.js":
+/*!*****************************!*\
+  !*** ./src/models/tasks.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Tasks)
+/* harmony export */ });
+class Tasks {
+    constructor() {
+        this._tasks = [];
+
+        this._dataChangeHandlers = [];
+    }
+
+    getTasks() {
+        return this._tasks;
+    }
+
+    setTasks(tasks) {
+        this._tasks = Array.from(tasks);
+        this._callHandlers(this._dataChangeHandlers);
+    }
+
+    updateTasks(id, task) {
+        const index = this._tasks.findIndex((it) => it.id === id);
+
+        if (index === -1) {
+            return false;
+        }
+
+        this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(0, index + 1));
+        this._callHandlers(this._dataChangeHandlers);
+
+        return true;
+    }
+
+    _setDataChangeHandlers(handler) {
+        this._dataChangeHandlers.push(handler);
+    }
+
+    _callHandlers(handlers) {
+        handlers.forEach((handler) => handler())
+    }
+}
 
 /***/ }),
 
@@ -10231,13 +10277,14 @@ var __webpack_exports__ = {};
   !*** ./src/main.js ***!
   \*********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/board-tasks.js */ "./src/components/board-tasks.js");
-/* harmony import */ var _components_filters_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/filters.js */ "./src/components/filters.js");
-/* harmony import */ var _components_menu_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/menu.js */ "./src/components/menu.js");
-/* harmony import */ var _controllers_board_contoller_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controllers/board-contoller.js */ "./src/controllers/board-contoller.js");
-/* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./render.js */ "./src/render.js");
-/* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
-/* harmony import */ var _mock_task_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mock/task.js */ "./src/mock/task.js");
+/* harmony import */ var _models_tasks_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./models/tasks.js */ "./src/models/tasks.js");
+/* harmony import */ var _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/board-tasks.js */ "./src/components/board-tasks.js");
+/* harmony import */ var _components_filters_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/filters.js */ "./src/components/filters.js");
+/* harmony import */ var _components_menu_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/menu.js */ "./src/components/menu.js");
+/* harmony import */ var _controllers_board_contoller_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./controllers/board-contoller.js */ "./src/controllers/board-contoller.js");
+/* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./render.js */ "./src/render.js");
+/* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
+/* harmony import */ var _mock_task_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mock/task.js */ "./src/mock/task.js");
 
 
 
@@ -10247,28 +10294,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-// Variables
 
 
 const TASK_COUNT = 22;
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.main__control');
 
+const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_7__.generateTasks)(TASK_COUNT);
+const tasksModel = new _models_tasks_js__WEBPACK_IMPORTED_MODULE_0__.default();
+tasksModel.setTasks(tasks);
+const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_6__.generateFilters)();
 
-const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_6__.generateTasks)(TASK_COUNT);
-const filters = (0,_mock_filter_js__WEBPACK_IMPORTED_MODULE_5__.generateFilters)();
+(0,_render_js__WEBPACK_IMPORTED_MODULE_5__.render)(siteHeaderElement, new _components_menu_js__WEBPACK_IMPORTED_MODULE_3__.default(), _render_js__WEBPACK_IMPORTED_MODULE_5__.RenderPosition.BEFOREEND);
+(0,_render_js__WEBPACK_IMPORTED_MODULE_5__.render)(siteMainElement, new _components_filters_js__WEBPACK_IMPORTED_MODULE_2__.default(filters), _render_js__WEBPACK_IMPORTED_MODULE_5__.RenderPosition.BEFOREEND);
 
-(0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(siteHeaderElement, new _components_menu_js__WEBPACK_IMPORTED_MODULE_2__.default(), _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND);
-(0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(siteMainElement, new _components_filters_js__WEBPACK_IMPORTED_MODULE_1__.default(filters), _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND);
+const boardComponent = new _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_1__.default();
+const boardController = new _controllers_board_contoller_js__WEBPACK_IMPORTED_MODULE_4__.default(boardComponent, tasksModel);
 
-const boardComponent = new _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_0__.default();
-const boardController = new _controllers_board_contoller_js__WEBPACK_IMPORTED_MODULE_3__.default(boardComponent);
-
-(0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND);
+(0,_render_js__WEBPACK_IMPORTED_MODULE_5__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_5__.RenderPosition.BEFOREEND);
 boardController.render(tasks);
 
 
