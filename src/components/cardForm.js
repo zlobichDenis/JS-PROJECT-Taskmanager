@@ -163,6 +163,7 @@ export default class EditForm extends AbstractSmartComponent {
       this._flatpickr = flatpickr(dateElement, {
         altInput: true,
         allowInput: true,
+        dateFormat: 'd m',
         defaultDate: this._task.duedate,
       })
     }

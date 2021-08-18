@@ -9437,6 +9437,7 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
       this._flatpickr = (0,flatpickr__WEBPACK_IMPORTED_MODULE_3__.default)(dateElement, {
         altInput: true,
         allowInput: true,
+        dateFormat: 'd m',
         defaultDate: this._task.duedate,
       })
     }
@@ -9985,6 +9986,7 @@ const generateTask = () => {
     const dueDate =  Math.random() > 0.5 ? null : (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomDate)();
 
     return {
+        id: String(new Date() + Math.random()),
         description: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.TASK_DESC),
         color: (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.getRandomElemFromArray)(_const_js__WEBPACK_IMPORTED_MODULE_1__.COLORS_CARD),
         isArchive: Math.random() > 0.5,
@@ -10114,11 +10116,6 @@ const castTimeFormat = (value) => {
 };
 
 const formatTime = (date) => {
-/*     const hours = castTimeFormat(date.getHours() % 12);
-    const minutes = castTimeFormat(date.getMinutes())
-
-    return `${hours}:${minutes}` */
-
     return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(`hh:mm`);
 };
 

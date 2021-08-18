@@ -4,6 +4,7 @@ const generateTask = () => {
     const dueDate =  Math.random() > 0.5 ? null : getRandomDate();
 
     return {
+        id: String(new Date() + Math.random()),
         description: getRandomElemFromArray(TASK_DESC),
         color: getRandomElemFromArray(COLORS_CARD),
         isArchive: Math.random() > 0.5,
