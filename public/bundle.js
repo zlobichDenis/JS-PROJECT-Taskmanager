@@ -9153,7 +9153,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const createButtonMarkup = (name, isActive = true) => {
+const createButtonMarkup = (name, isActive) => {
   return (
     `<button type="button" class="card__btn card__btn--${name} ${isActive ? '' : 'card__btn--disabled'}">
     ${name}
@@ -9177,8 +9177,8 @@ const createCardTemplate = (task) => {
   };
 
   const editButton = createButtonMarkup('edit');
-  const archiveButton = createButtonMarkup('archive', !task.isArchive);
-  const favoritesButton = createButtonMarkup('favorites', !task.isFavorite);
+  const archiveButton = createButtonMarkup('archive', task.isArchive);
+  const favoritesButton = createButtonMarkup('favorites', task.isFavorite);
 
   const deadlineClass = isExpired ? `card--deadline` : ``; 
   const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
@@ -9605,6 +9605,26 @@ class Filter extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.default
         this.getElement().querySelector('#filter__overdue')
         .addEventListener('click', handler);
     }
+
+    _setActiveFilterArchive(handler) {
+        this.getElement().querySelector('#filter__archive')
+        .addEventListener('click', handler);
+    }
+
+    _setActiveFilterFavorites(handler) {
+        this.getElement().querySelector('#filter__favorites')
+        .addEventListener('click', handler);
+    }
+
+    _setActiveFilterTodays(handler) {
+        this.getElement().querySelector('#filter__todays')
+        .addEventListener('click', handler);
+    }
+
+    _setActiveFilterRepeating(handler) {
+        this.getElement().querySelector('#filter__repeating')
+        .addEventListener('click', handler);
+    }
 }
 
 
@@ -10001,7 +10021,24 @@ class FiltersController {
 
         this._filterComponent._setActiveFilterOverdue(() => {
             this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.OVERDUE)
+        });
+
+        this._filterComponent._setActiveFilterArchive(() => {
+            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.ARCHIVE);
+        });
+
+        this._filterComponent._setActiveFilterFavorites(() => {
+            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.FAVORITES);
+        });
+
+        this._filterComponent._setActiveFilterTodays(() => {
+            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.TODAYS);
+        });
+
+        this._filterComponent._setActiveFilterRepeating(() => {
+            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.REPEATING);
         })
+
     }
 
     _onFilterChange(filterType) {

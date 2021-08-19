@@ -95,4 +95,24 @@ export default class Filter extends AbstractComponent {
         this.getElement().querySelector('#filter__overdue')
         .addEventListener('click', handler);
     }
+
+    _setActiveFilterArchive(handler) {
+        this.getElement().querySelector('#filter__archive')
+        .addEventListener('click', handler);
+    }
+
+    _setActiveFilterFavorites(handler) {
+        this.getElement().querySelector('#filter__favorites')
+        .addEventListener('click', handler);
+    }
+
+    _setActiveFilterTodays(handler) {
+        this.getElement().querySelector('#filter__todays')
+        .addEventListener('click', handler);
+    }
+
+    _setActiveFilterRepeating(handler) {
+        this.getElement().querySelector('#filter__repeating')
+        .addEventListener('click', handler);
+    }
 }

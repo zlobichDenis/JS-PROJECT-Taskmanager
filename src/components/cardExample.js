@@ -2,7 +2,7 @@ import { COLORS_CARD, TASK_DESC, MONTH_NAMES } from "../const.js";
 import { formatTime, formatDate } from "../util.js";
 import AbstractComponent from "./abstract-component.js";
 
-const createButtonMarkup = (name, isActive = true) => {
+const createButtonMarkup = (name, isActive) => {
   return (
     `<button type="button" class="card__btn card__btn--${name} ${isActive ? '' : 'card__btn--disabled'}">
     ${name}
@@ -26,8 +26,8 @@ const createCardTemplate = (task) => {
   };
 
   const editButton = createButtonMarkup('edit');
-  const archiveButton = createButtonMarkup('archive', !task.isArchive);
-  const favoritesButton = createButtonMarkup('favorites', !task.isFavorite);
+  const archiveButton = createButtonMarkup('archive', task.isArchive);
+  const favoritesButton = createButtonMarkup('favorites', task.isFavorite);
 
   const deadlineClass = isExpired ? `card--deadline` : ``; 
   const isRepeated = Object.values(reapeatingDays).some(isRepeat); 

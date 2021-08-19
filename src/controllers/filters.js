@@ -27,7 +27,24 @@ export default class FiltersController {
 
         this._filterComponent._setActiveFilterOverdue(() => {
             this._taskModel.setFilterType(FilterType.OVERDUE)
+        });
+
+        this._filterComponent._setActiveFilterArchive(() => {
+            this._taskModel.setFilterType(FilterType.ARCHIVE);
+        });
+
+        this._filterComponent._setActiveFilterFavorites(() => {
+            this._taskModel.setFilterType(FilterType.FAVORITES);
+        });
+
+        this._filterComponent._setActiveFilterTodays(() => {
+            this._taskModel.setFilterType(FilterType.TODAYS);
+        });
+
+        this._filterComponent._setActiveFilterRepeating(() => {
+            this._taskModel.setFilterType(FilterType.REPEATING);
         })
+
     }
 
     _onFilterChange(filterType) {
