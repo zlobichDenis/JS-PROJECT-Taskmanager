@@ -23,6 +23,20 @@ export default class Tasks {
         this._callHandlers(this._filterChangeHandlers);
     }
 
+    removeTask(id) {
+        const index = this._tasks.findIndex((it) => it.id === id);
+
+        if (index === -1) {
+            return false;
+        }
+
+        this._tasks = [].concat(this._tasks.slice(0, index), this._tasks.slice(index + 1));
+
+        this._callHandlers(this._dataChangeHandlers);
+
+        return true;
+    }
+
     setTasks(tasks) {
         this._tasks = Array.from(tasks);
         this._callHandlers(this._dataChangeHandlers);
@@ -35,10 +49,15 @@ export default class Tasks {
             return false;
         }
 
-        this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(0, index + 1));
+        this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
         this._callHandlers(this._dataChangeHandlers);
 
         return true;
+    }
+
+    addTask(task) {
+        this._tasks = [].concat(task, this._tasks);
+        this._callHandlers(this._dataChangeHandlers);
     }
 
     _setDataChangeHandlers(handler) {

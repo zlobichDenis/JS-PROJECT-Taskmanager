@@ -1,11 +1,30 @@
 import AbstractSmartComponent from "../components/abstract-smart-component.js";
 import Task from "../components/cardExample.js";
 import EditForm from "../components/cardForm.js";
+import { COLORS_CARD } from "../const.js";
 import { render, replace, RenderPosition, remove } from "../render.js";
 
-const Mode = {
+export const Mode = {
   EDIT: 'edit',
   DEFAULT: 'default',
+  ADDING: 'adding'
+};
+
+export const EmptyTask = {
+  description: ``,
+  dueDate: null,
+  reapeatingDays: {
+    mo: false,
+    tu: false,
+    we: false,
+    th: false,
+    fr: false,
+    sa: false,
+    su: false,
+  },
+  color: `black`,
+  isFavorite: false,
+  isArchive: false,
 };
 
 export default class TaskController {
@@ -20,22 +39,26 @@ export default class TaskController {
         this._taskEditComponent = null;
     }
 
-    render(task) {
+    render(task, mode) {
       const oldTaskComponent = this._taskComponent;
       const oldTaskEditComponent = this._taskEditComponent;
-        
+      this._mode = mode;
+      
       this._taskComponent = new Task(task);
-      this._taskEditComponent = new EditForm(task);
+      this._taskEditComponent = new EditForm(task, this._onDataChange);
         
-        
+      
       this._taskComponent.setEditButtonClickHandler(() => {
         this._replaceTaskToEdit();
       });
         
       this._taskEditComponent.setSubmitHandler((evt) => {
         evt.preventDefault();
-        this._replaceEditToTask();
+        const data = this._taskEditComponent.getData();
+        this._onDataChange(this, task, data);
       });
+
+      this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, task, null));
 
       this._taskComponent.setArchiveButtonClickHandler(() => {
         this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
@@ -44,10 +67,14 @@ export default class TaskController {
       this._taskComponent.setFavoritesButtonClickHandler(() => {
         this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
       });
-
+      if (this._mode === Mode.ADDING) {
+        render(this._container, this._taskEditComponent, RenderPosition.AFTERBEGIN);
+        return;
+      }
       if(oldTaskEditComponent && oldTaskComponent) {
           replace(this._taskComponent, oldTaskComponent);
           replace(this._taskEditComponent, oldTaskEditComponent);
+          this._replaceEditToTask();
       } else {
           render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
       }
@@ -66,7 +93,9 @@ export default class TaskController {
 
     _replaceEditToTask() {
       this._taskEditComponent.reset();
-      replace(this._taskComponent, this._taskEditComponent);
+      if (document.contains(this._taskEditComponent.getElement())) {
+        replace(this._taskComponent, this._taskEditComponent);
+      }
       this._mode = Mode.DEFAULT;
     }
 

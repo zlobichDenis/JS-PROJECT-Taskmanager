@@ -9270,8 +9270,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./abstract-smart-component.js */ "./src/components/abstract-smart-component.js");
 /* harmony import */ var flatpickr__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js");
 /* harmony import */ var flatpickr_dist_flatpickr_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flatpickr/dist/flatpickr.min.css */ "./node_modules/flatpickr/dist/flatpickr.min.css");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
@@ -9280,6 +9278,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const parseFormData = (formData) => {
+  const reapeatingDays = _const_js__WEBPACK_IMPORTED_MODULE_0__.DAYS.reduce((acc, day) => {
+    acc[day] = false;
+    return acc;
+  }, {});
+
+  const date = formData.get('date');
+
+  return {
+    description: formData.get('text'),
+    color: formData.get('color'),
+    dueDate: date ? new Date(date) : null,
+    reapeatingDays: formData.getAll('repeat').reduce((acc, it) => {
+      acc[it] = true;
+      return acc;
+    }, reapeatingDays),
+  };
+};
 
 
 const createColorsMarkup = (mainColor) => {
@@ -9397,10 +9413,13 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
   constructor(task) {
     super()
     this._task = task;
+    this._copyTask = null;
     this._submitHandler = null;
+    this._deleteButtonHandler = null;
     this._subscribeOnEvents();
     this._flatpickr = null;
     this._applyFlatpickr();
+    
 
   }
 
@@ -9410,6 +9429,7 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonHandler);
     this._subscribeOnEvents();
   }
 
@@ -9419,11 +9439,18 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
   }
 
   reset() {
-    const task = this._task;
-    this._isDateShowing = !task.dueDate;
-    this._isRepeatingTask = Object.values(task.reapeatingDays).some(Boolean);
-    this._activeRepeatingDays = Object.assign({}, task.reapeatingDays);
+    this._task = this._copyTask;
     this.rerender();
+  }
+
+  removeElement() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+
+      this._flatpickr = null;
+    }
+
+    super.removeElement();
   }
 
   _applyFlatpickr() {
@@ -9435,9 +9462,10 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
     if (this._task.dueDate) {
       const dateElement = this.getElement().querySelector('.card__date');
       this._flatpickr = (0,flatpickr__WEBPACK_IMPORTED_MODULE_3__.default)(dateElement, {
-        altInput: true,
+/*         altInput: true, */
         allowInput: true,
-        dateFormat: 'd m',
+        enableTime: true,
+        dateFormat: 'd M H:i',
         defaultDate: this._task.duedate,
       })
     }
@@ -9445,11 +9473,28 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
 
 
   setSubmitHandler(handler) {
-    this.getElement().querySelector('form').addEventListener('submit', handler);
+    this.getElement().querySelector('form')
+    .addEventListener('submit', handler);
+
     this._submitHandler = handler;
   }
 
+  getData() {
+    const form = this.getElement().querySelector('.card__form');
+    const formData = new FormData(form);
+     
+    return parseFormData(formData);
+  }
+
+  setDeleteButtonClickHandler(handler) {
+    this.getElement().querySelector('.card__delete')
+    .addEventListener('click', handler);
+
+    this._deleteButtonHandler = handler;
+  }
+
   _subscribeOnEvents() {
+    this._copyTask = Object.assign({}, this._task);
     const element = this.getElement();
 
     element.querySelector('.card__date-deadline-toggle')
@@ -9639,12 +9684,19 @@ class Filter extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.default
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MenuItem": () => (/* binding */ MenuItem),
 /* harmony export */   "default": () => (/* binding */ SiteMenu)
 /* harmony export */ });
 /* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../render.js */ "./src/render.js");
 /* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
 
 
+
+const MenuItem = {
+    NEW_TASK: 'control__new-task',
+    STATISTICS: 'control__statistics',
+    TASKS: 'control__task',
+};
 
 const createSiteMenuTemplate = () => {
     return `<section class="control__btn-wrap">
@@ -9681,6 +9733,26 @@ const createSiteMenuTemplate = () => {
 class SiteMenu extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.default {
     getTemplate() {
         return createSiteMenuTemplate();
+    }
+
+    setActiveItem(menuItem) {
+        const item = this.getElement().querySelector(`#${menuItem}`);
+
+        if (item) {
+            item.checked = true;
+        }
+    }
+
+    setOnChangeHandler(handler) {
+        this.getElement().addEventListener(`change`, (evt) => {
+            if (evt.target.tagName !== `INPUT`) {
+                return;
+            }
+
+            const menuItem = evt.target.id;
+
+            handler(menuItem);
+        });
     }
 }
 
@@ -9751,6 +9823,7 @@ class TaskList extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.defau
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "DAYS": () => (/* binding */ DAYS),
 /* harmony export */   "FilterType": () => (/* binding */ FilterType),
 /* harmony export */   "COLORS_CARD": () => (/* binding */ COLORS_CARD),
 /* harmony export */   "MONTH_NAMES": () => (/* binding */ MONTH_NAMES),
@@ -9775,6 +9848,8 @@ const MONTH_NAMES = [
     'November',
     'December',
 ];
+
+const DAYS = [`mo`,`tu`,'we',`th`,`fr`, `sa`,`su`];
 
 const FilterType = {
     ALL: 'all',
@@ -9808,6 +9883,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/tasks-list-component.js */ "./src/components/tasks-list-component.js");
 /* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../render.js */ "./src/render.js");
 /* harmony import */ var _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./task-contoller.js */ "./src/controllers/task-contoller.js");
+/* harmony import */ var _components_filters_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/filters.js */ "./src/components/filters.js");
+
+
 
 
 
@@ -9829,7 +9907,7 @@ const renderTasks = (tasksList, tasks, onDataChange, onViewChange) => {
   return tasks.map((task) => {
     const taskController = new _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.default(tasksList, onDataChange, onViewChange);
 
-    taskController.render(task);
+    taskController.render(task, _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.Mode.DEFAULT);
 
     return taskController;
   })
@@ -9869,6 +9947,8 @@ class BoardController {
     this._sortComponent = new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.default();
     this._loadMoreButtonComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_0__.default();
 
+    this._creatingTask = null;
+
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
@@ -9883,7 +9963,6 @@ class BoardController {
     const container = this._container.getElement();
     const tasks = this._taskModel.getTasks();
 
-
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
     if (isAllTasksArchived) {
       (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._noTaskComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
@@ -9893,9 +9972,19 @@ class BoardController {
     (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(container, this._tasksComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
 
     this._renderTasks(tasks.slice(0, this._showingTasksCount));
-        
+    
     this._renderLoadMoreButton();
 };
+
+  createTask() {
+    if (this._creatingTask) {
+      return;
+    }
+
+    const taskListElement = this._tasksComponent.getElement();
+    this._creatingTask = new _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.default(taskListElement, this._onDataChange, this._onViewChange);
+    this._creatingTask.render(_task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.EmptyTask, _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.Mode.ADDING)
+  }
 
   _removeTasks() {
     this._showedTaskContollers.forEach((taskController) => taskController.destroy());
@@ -9943,10 +10032,35 @@ class BoardController {
   }
 
   _onDataChange(taskController, oldData, newData) {
-    const isSucces = this._taskModel.updateTask(oldData.id, newData);
 
-    if (isSucces) {
-      taskController.render(newData);
+    if (oldData === _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.EmptyTask) {
+      this._creatingTask = null;
+      if (newData === null) {
+        taskController.destroy();
+        this._updateTasks(this._showingTasksCount);
+      } else {
+        this._taskModel.addTask(newData);
+        taskController.render(newData, _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.Mode.DEFAULT);
+
+        if (this._showingTasksCount % SHOW_TASK_BY_BTN === 0) {
+          const destroyedTask = this._showedTaskContollers.pop();
+          destroyedTask.destroy();
+        }
+    
+        this._showedTaskContollers = [].concat(taskController, this._showedTaksControllers);
+        this._showingTasksCount = this._showedTaskContollers.length;
+    
+        this._renderLoadMoreButton();
+      }
+    } else if (newData === null) {
+        this._taskModel.removeTask(oldData.id);
+        this._updateTasks(this._showingTasksCount);
+    } else {
+      const isSucces = this._taskModel.updateTask(oldData.id, newData);
+
+      if (isSucces) {
+        taskController.render(newData, _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.Mode.DEFAULT);
+      }
     }
 }
 
@@ -10004,50 +10118,76 @@ class FiltersController {
         this._container = container;
         this._taskModel = taskModel;
 
+        this._updateFilters = this._updateFilters.bind(this);
+
+        this._taskModel._setDataChangeHandlers(this._updateFilters);
+    }
+
+    _getTasksByFilter() {
+        const allTasks = this._taskModel.getAllTasks();
+        return Object.values(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType).map((filter) => {
+            return (0,_mock_filter__WEBPACK_IMPORTED_MODULE_2__.generateFilters)(filter, allTasks);
+        })
     }
 
     render() {
-        const allTasks = this._taskModel.getAllTasks();
-        this._filters = Object.values(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType).map((filter) => {
-            return (0,_mock_filter__WEBPACK_IMPORTED_MODULE_2__.generateFilters)(filter, allTasks);
-        })
+        this._filters = this._getTasksByFilter();
 
         this._filterComponent = new _components_filters__WEBPACK_IMPORTED_MODULE_1__.default(this._filters);
         (0,_render__WEBPACK_IMPORTED_MODULE_0__.render)(this._container, this._filterComponent, _render__WEBPACK_IMPORTED_MODULE_0__.RenderPosition.BEFOREEND)
+        this._subscribeOnEvents();
+    }
+
+    _subscribeOnEvents() {
 
         this._filterComponent._setActiveFilterAll(() => {
-            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.ALL);
+            this._onFilterChange(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.ALL);
         });
 
         this._filterComponent._setActiveFilterOverdue(() => {
-            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.OVERDUE)
+            this._onFilterChange(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.OVERDUE);
         });
 
         this._filterComponent._setActiveFilterArchive(() => {
-            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.ARCHIVE);
+            this._onFilterChange(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.ARCHIVE);
         });
 
         this._filterComponent._setActiveFilterFavorites(() => {
-            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.FAVORITES);
+            this._onFilterChange(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.FAVORITES);
         });
 
         this._filterComponent._setActiveFilterTodays(() => {
-            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.TODAYS);
+            this._onFilterChange(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.TODAYS);
         });
 
         this._filterComponent._setActiveFilterRepeating(() => {
-            this._taskModel.setFilterType(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.REPEATING);
+            this._onFilterChange(_const__WEBPACK_IMPORTED_MODULE_3__.FilterType.REPEATING);
         })
-
     }
+
+    _rerender() {
+        const newFilters = this._getTasksByFilter();
+        const oldElement = this._filterComponent.getElement();
+        const container = oldElement.parentElement;
+
+        this._filterComponent.removeElement();
+
+        this._filterComponent = new _components_filters__WEBPACK_IMPORTED_MODULE_1__.default(newFilters);
+
+        const newElement = this._filterComponent.getElement();
+
+        container.replaceChild(newElement, oldElement);
+        this._subscribeOnEvents();
+    }
+
+    _updateFilters() {
+        this._rerender();
+      }
 
     _onFilterChange(filterType) {
-        this._taskModel.setFilter(filterType);
+        this._taskModel.setFilterType(filterType);
         this._activeFilterType = filterType;
-    }
-
-
-    
+    }    
 }
 
 /***/ }),
@@ -10061,12 +10201,16 @@ class FiltersController {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Mode": () => (/* binding */ Mode),
+/* harmony export */   "EmptyTask": () => (/* binding */ EmptyTask),
 /* harmony export */   "default": () => (/* binding */ TaskController)
 /* harmony export */ });
 /* harmony import */ var _components_abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/abstract-smart-component.js */ "./src/components/abstract-smart-component.js");
 /* harmony import */ var _components_cardExample_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/cardExample.js */ "./src/components/cardExample.js");
 /* harmony import */ var _components_cardForm_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/cardForm.js */ "./src/components/cardForm.js");
-/* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../render.js */ "./src/render.js");
+/* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
+/* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../render.js */ "./src/render.js");
+
 
 
 
@@ -10075,6 +10219,24 @@ __webpack_require__.r(__webpack_exports__);
 const Mode = {
   EDIT: 'edit',
   DEFAULT: 'default',
+  ADDING: 'adding'
+};
+
+const EmptyTask = {
+  description: ``,
+  dueDate: null,
+  reapeatingDays: {
+    mo: false,
+    tu: false,
+    we: false,
+    th: false,
+    fr: false,
+    sa: false,
+    su: false,
+  },
+  color: `black`,
+  isFavorite: false,
+  isArchive: false,
 };
 
 class TaskController {
@@ -10089,22 +10251,26 @@ class TaskController {
         this._taskEditComponent = null;
     }
 
-    render(task) {
+    render(task, mode) {
       const oldTaskComponent = this._taskComponent;
       const oldTaskEditComponent = this._taskEditComponent;
-        
+      this._mode = mode;
+      
       this._taskComponent = new _components_cardExample_js__WEBPACK_IMPORTED_MODULE_1__.default(task);
-      this._taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_2__.default(task);
+      this._taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_2__.default(task, this._onDataChange);
         
-        
+      
       this._taskComponent.setEditButtonClickHandler(() => {
         this._replaceTaskToEdit();
       });
         
       this._taskEditComponent.setSubmitHandler((evt) => {
         evt.preventDefault();
-        this._replaceEditToTask();
+        const data = this._taskEditComponent.getData();
+        this._onDataChange(this, task, data);
       });
+
+      this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, task, null));
 
       this._taskComponent.setArchiveButtonClickHandler(() => {
         this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
@@ -10113,12 +10279,16 @@ class TaskController {
       this._taskComponent.setFavoritesButtonClickHandler(() => {
         this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
       });
-
+      if (this._mode === Mode.ADDING) {
+        (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(this._container, this._taskEditComponent, _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.AFTERBEGIN);
+        return;
+      }
       if(oldTaskEditComponent && oldTaskComponent) {
-          (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskComponent, oldTaskComponent);
-          (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskEditComponent, oldTaskEditComponent);
+          (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.replace)(this._taskComponent, oldTaskComponent);
+          (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.replace)(this._taskEditComponent, oldTaskEditComponent);
+          this._replaceEditToTask();
       } else {
-          (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.render)(this._container, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_3__.RenderPosition.BEFOREEND);
+          (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(this._container, this._taskComponent, _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND);
       }
   }
 
@@ -10129,19 +10299,21 @@ class TaskController {
     }
 
     destroy() {
-      (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.remove)(this._taskEditComponent);
-      (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.remove)(this._taskComponent);
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.remove)(this._taskEditComponent);
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.remove)(this._taskComponent);
     }
 
     _replaceEditToTask() {
       this._taskEditComponent.reset();
-      (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskComponent, this._taskEditComponent);
+      if (document.contains(this._taskEditComponent.getElement())) {
+        (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.replace)(this._taskComponent, this._taskEditComponent);
+      }
       this._mode = Mode.DEFAULT;
     }
 
     _replaceTaskToEdit() {
       this._onViewChange();
-      (0,_render_js__WEBPACK_IMPORTED_MODULE_3__.replace)(this._taskEditComponent, this._taskComponent);
+      (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.replace)(this._taskEditComponent, this._taskComponent);
       this._mode = Mode.EDIT;
     }
 }
@@ -10252,6 +10424,20 @@ class Tasks {
         this._callHandlers(this._filterChangeHandlers);
     }
 
+    removeTask(id) {
+        const index = this._tasks.findIndex((it) => it.id === id);
+
+        if (index === -1) {
+            return false;
+        }
+
+        this._tasks = [].concat(this._tasks.slice(0, index), this._tasks.slice(index + 1));
+
+        this._callHandlers(this._dataChangeHandlers);
+
+        return true;
+    }
+
     setTasks(tasks) {
         this._tasks = Array.from(tasks);
         this._callHandlers(this._dataChangeHandlers);
@@ -10264,10 +10450,15 @@ class Tasks {
             return false;
         }
 
-        this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(0, index + 1));
+        this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
         this._callHandlers(this._dataChangeHandlers);
 
         return true;
+    }
+
+    addTask(task) {
+        this._tasks = [].concat(task, this._tasks);
+        this._callHandlers(this._dataChangeHandlers);
     }
 
     _setDataChangeHandlers(handler) {
@@ -10540,6 +10731,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 const TASK_COUNT = 22;
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.main__control');
@@ -10547,19 +10739,27 @@ const siteHeaderElement = document.querySelector('.main__control');
 const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_7__.generateTasks)(TASK_COUNT);
 const tasksModel = new _models_tasks_js__WEBPACK_IMPORTED_MODULE_0__.default();
 tasksModel.setTasks(tasks);
-/* const filters = generateFilters(); */
 
-(0,_render_js__WEBPACK_IMPORTED_MODULE_5__.render)(siteHeaderElement, new _components_menu_js__WEBPACK_IMPORTED_MODULE_3__.default(), _render_js__WEBPACK_IMPORTED_MODULE_5__.RenderPosition.BEFOREEND);
+const siteMenu = new _components_menu_js__WEBPACK_IMPORTED_MODULE_3__.default()
+
+;(0,_render_js__WEBPACK_IMPORTED_MODULE_5__.render)(siteHeaderElement, siteMenu, _render_js__WEBPACK_IMPORTED_MODULE_5__.RenderPosition.BEFOREEND);
 const filterController = new _controllers_filters_js__WEBPACK_IMPORTED_MODULE_8__.default(siteMainElement, tasksModel);
 filterController.render();
-/* render(siteMainElement, new FilterComponent(filters), RenderPosition.BEFOREEND); */
-
 
 const boardComponent = new _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_1__.default();
 const boardController = new _controllers_board_contoller_js__WEBPACK_IMPORTED_MODULE_4__.default(boardComponent, tasksModel);
 
 (0,_render_js__WEBPACK_IMPORTED_MODULE_5__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_5__.RenderPosition.BEFOREEND);
-boardController.render(tasks);
+boardController.render();
+
+siteMenu.setOnChangeHandler((menuItem) => {
+    switch (menuItem) {
+        case _components_menu_js__WEBPACK_IMPORTED_MODULE_3__.MenuItem.NEW_TASK:
+            siteMenu.setActiveItem(_components_menu_js__WEBPACK_IMPORTED_MODULE_3__.MenuItem.TASKS);
+            boardController.createTask();
+            break;
+    }
+}); 
 
 
 

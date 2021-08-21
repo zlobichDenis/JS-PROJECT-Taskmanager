@@ -3,9 +3,27 @@ import { defaultReapeatingDays, formatTime, formatDate, generateRepeatingDays, g
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/flatpickr.min.css';
-import { isDate } from "moment";
+import { DAYS } from "../const.js";
 
 
+const parseFormData = (formData) => {
+  const reapeatingDays = DAYS.reduce((acc, day) => {
+    acc[day] = false;
+    return acc;
+  }, {});
+
+  const date = formData.get('date');
+
+  return {
+    description: formData.get('text'),
+    color: formData.get('color'),
+    dueDate: date ? new Date(date) : null,
+    reapeatingDays: formData.getAll('repeat').reduce((acc, it) => {
+      acc[it] = true;
+      return acc;
+    }, reapeatingDays),
+  };
+};
 
 
 const createColorsMarkup = (mainColor) => {
@@ -123,10 +141,13 @@ export default class EditForm extends AbstractSmartComponent {
   constructor(task) {
     super()
     this._task = task;
+    this._copyTask = null;
     this._submitHandler = null;
+    this._deleteButtonHandler = null;
     this._subscribeOnEvents();
     this._flatpickr = null;
     this._applyFlatpickr();
+    
 
   }
 
@@ -136,6 +157,7 @@ export default class EditForm extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonHandler);
     this._subscribeOnEvents();
   }
 
@@ -145,11 +167,18 @@ export default class EditForm extends AbstractSmartComponent {
   }
 
   reset() {
-    const task = this._task;
-    this._isDateShowing = !task.dueDate;
-    this._isRepeatingTask = Object.values(task.reapeatingDays).some(Boolean);
-    this._activeRepeatingDays = Object.assign({}, task.reapeatingDays);
+    this._task = this._copyTask;
     this.rerender();
+  }
+
+  removeElement() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+
+      this._flatpickr = null;
+    }
+
+    super.removeElement();
   }
 
   _applyFlatpickr() {
@@ -161,9 +190,10 @@ export default class EditForm extends AbstractSmartComponent {
     if (this._task.dueDate) {
       const dateElement = this.getElement().querySelector('.card__date');
       this._flatpickr = flatpickr(dateElement, {
-        altInput: true,
+/*         altInput: true, */
         allowInput: true,
-        dateFormat: 'd m',
+        enableTime: true,
+        dateFormat: 'd M H:i',
         defaultDate: this._task.duedate,
       })
     }
@@ -171,11 +201,28 @@ export default class EditForm extends AbstractSmartComponent {
 
 
   setSubmitHandler(handler) {
-    this.getElement().querySelector('form').addEventListener('submit', handler);
+    this.getElement().querySelector('form')
+    .addEventListener('submit', handler);
+
     this._submitHandler = handler;
   }
 
+  getData() {
+    const form = this.getElement().querySelector('.card__form');
+    const formData = new FormData(form);
+     
+    return parseFormData(formData);
+  }
+
+  setDeleteButtonClickHandler(handler) {
+    this.getElement().querySelector('.card__delete')
+    .addEventListener('click', handler);
+
+    this._deleteButtonHandler = handler;
+  }
+
   _subscribeOnEvents() {
+    this._copyTask = Object.assign({}, this._task);
     const element = this.getElement();
 
     element.querySelector('.card__date-deadline-toggle')
