@@ -147,8 +147,6 @@ export default class EditForm extends AbstractSmartComponent {
     this._subscribeOnEvents();
     this._flatpickr = null;
     this._applyFlatpickr();
-    
-
   }
 
   getTemplate() {

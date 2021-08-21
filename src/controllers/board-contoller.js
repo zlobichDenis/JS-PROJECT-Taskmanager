@@ -97,7 +97,7 @@ export default class BoardController {
 
     const taskListElement = this._tasksComponent.getElement();
     this._creatingTask = new TaskController(taskListElement, this._onDataChange, this._onViewChange);
-    this._creatingTask.render(EmptyTask, TaskControllerMode.ADDING)
+    this._creatingTask.render(EmptyTask, TaskControllerMode.ADDING);
   }
 
   _removeTasks() {
@@ -155,15 +155,14 @@ export default class BoardController {
       } else {
         this._taskModel.addTask(newData);
         taskController.render(newData, TaskControllerMode.DEFAULT);
-
         if (this._showingTasksCount % SHOW_TASK_BY_BTN === 0) {
           const destroyedTask = this._showedTaskContollers.pop();
           destroyedTask.destroy();
         }
     
-        this._showedTaskContollers = [].concat(taskController, this._showedTaksControllers);
+        this._showedTaskContollers = [].concat(taskController, this._showedTaskContollers);
         this._showingTasksCount = this._showedTaskContollers.length;
-    
+        console.log(this._showedTaskContollers)
         this._renderLoadMoreButton();
       }
     } else if (newData === null) {

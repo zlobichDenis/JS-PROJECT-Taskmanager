@@ -9419,8 +9419,6 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
     this._subscribeOnEvents();
     this._flatpickr = null;
     this._applyFlatpickr();
-    
-
   }
 
   getTemplate() {
@@ -9983,7 +9981,7 @@ class BoardController {
 
     const taskListElement = this._tasksComponent.getElement();
     this._creatingTask = new _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.default(taskListElement, this._onDataChange, this._onViewChange);
-    this._creatingTask.render(_task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.EmptyTask, _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.Mode.ADDING)
+    this._creatingTask.render(_task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.EmptyTask, _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.Mode.ADDING);
   }
 
   _removeTasks() {
@@ -10041,15 +10039,14 @@ class BoardController {
       } else {
         this._taskModel.addTask(newData);
         taskController.render(newData, _task_contoller_js__WEBPACK_IMPORTED_MODULE_7__.Mode.DEFAULT);
-
         if (this._showingTasksCount % SHOW_TASK_BY_BTN === 0) {
           const destroyedTask = this._showedTaskContollers.pop();
           destroyedTask.destroy();
         }
     
-        this._showedTaskContollers = [].concat(taskController, this._showedTaksControllers);
+        this._showedTaskContollers = [].concat(taskController, this._showedTaskContollers);
         this._showingTasksCount = this._showedTaskContollers.length;
-    
+        console.log(this._showedTaskContollers)
         this._renderLoadMoreButton();
       }
     } else if (newData === null) {
