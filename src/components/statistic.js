@@ -1,4 +1,7 @@
 import AbstractComponent from "./abstract-component";
+import { Chart } from "chart.js";
+import { RenderPosition, render } from "../render";
+
 
 const createStatisticTemplate = () => {
     return `<section class="statistic container">
@@ -37,8 +40,15 @@ export default class StatisticComponent extends AbstractComponent {
     constructor(taskModel) {
         super();
         this._taskModel = taskModel;
+        this._container = null;
+
     }
+
     getTemplate() {
         return createStatisticTemplate();
+    }
+
+    _createCanvas() {
+        const chartWrapper = this.getElement().querySelector('.statistic__days').getContext('2d');
     }
 }

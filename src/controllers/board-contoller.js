@@ -88,7 +88,7 @@ export default class BoardController {
     this._renderTasks(tasks.slice(0, this._showingTasksCount));
     
     this._renderLoadMoreButton();
-};
+}
 
   createTask() {
     if (this._creatingTask) {

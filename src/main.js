@@ -3,6 +3,7 @@ import BoardComponent from "./components/board-tasks.js";
 import FilterComponent from "./components/filters.js";
 import SiteMenuComponent, {MenuItem} from './components/menu.js';
 import BoardController from "./controllers/board-contoller.js";
+import StatisticComponent from "./components/statistic.js";
 
 import { render, RenderPosition, replace, remove} from "./render.js";
 import { generateFilters } from "./mock/filter.js";
@@ -26,6 +27,7 @@ const filterController = new FiltersController(siteMainElement, tasksModel);
 filterController.render();
 
 const boardComponent = new BoardComponent();
+const statisticComponent = new StatisticComponent();
 const boardController = new BoardController(boardComponent, tasksModel);
 
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
@@ -35,7 +37,23 @@ siteMenu.setOnChangeHandler((menuItem) => {
     switch (menuItem) {
         case MenuItem.NEW_TASK:
             siteMenu.setActiveItem(MenuItem.TASKS);
+            remove(statisticComponent);
+            render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
+            boardController._removeTasks();
+            boardController.render();
             boardController.createTask();
+            break;   
+        case MenuItem.TASKS:
+            siteMenu.setActiveItem(MenuItem.TASKS);
+            remove(statisticComponent);
+            render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
+            boardController._removeTasks();
+            boardController.render();
+            break;
+        case MenuItem.STATISTICS:
+            siteMenu.setActiveItem(MenuItem.STATISTICS);
+            remove(boardComponent)
+            render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
             break;
     }
 }); 

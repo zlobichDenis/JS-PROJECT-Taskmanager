@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component.js";
 
 export const MenuItem = {
     NEW_TASK: 'control__new-task',
-    STATISTICS: 'control__statistics',
+    STATISTICS: 'control__statistic',
     TASKS: 'control__task',
 };
 
@@ -40,13 +40,18 @@ const createSiteMenuTemplate = () => {
 };
 
 export default class SiteMenu extends AbstractComponent {
+    constructor() {
+        super();
+        this._activeComponent = null;
+    }
+
     getTemplate() {
         return createSiteMenuTemplate();
     }
-
-    setActiveItem(menuItem) {
+    
+    setActiveItem(menuItem, activeComponent) {
         const item = this.getElement().querySelector(`#${menuItem}`);
-
+        this._activeComponent = activeComponent;
         if (item) {
             item.checked = true;
         }
@@ -60,7 +65,18 @@ export default class SiteMenu extends AbstractComponent {
 
             const menuItem = evt.target.id;
 
-            handler(menuItem);
+            handler(menuItem, this._activeComponent);
         });
+    }
+
+    _changeActiveComponent(oldComponent, newComponent) {
+        const oldElement = oldComponent.getElement();
+        const container = oldElement.parentElement;
+
+        oldComponent.removeElement();
+
+        const newElement = this._activeComponent.getElement();
+
+        container.replaceChild(newElement, oldElement);
     }
 }
