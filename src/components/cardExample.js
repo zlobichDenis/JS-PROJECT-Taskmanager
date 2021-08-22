@@ -1,3 +1,4 @@
+import { encode } from "he";
 import { COLORS_CARD, TASK_DESC, MONTH_NAMES } from "../const.js";
 import { formatTime, formatDate } from "../util.js";
 import AbstractComponent from "./abstract-component.js";
@@ -13,8 +14,8 @@ const createButtonMarkup = (name, isActive) => {
 
 const createCardTemplate = (task) => {
 
-  const {description, color, reapeatingDays, dueDate} = task;
-
+  const {description: notSanitazedDescription, color, reapeatingDays, dueDate} = task;
+  const savedDescription = encode(notSanitazedDescription);
   const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
   const isDateShowing = !!dueDate; 
 
@@ -52,7 +53,7 @@ const createCardTemplate = (task) => {
         </div>
 
         <div class="card__textarea-wrap">
-          <p class="card__text">${description}</p>
+          <p class="card__text">${savedDescription}</p>
         </div>
 
         <div class="card__settings">

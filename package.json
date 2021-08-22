@@ -13,6 +13,7 @@
     "eslint": "6.1.0",
     "eslint-config-htmlacademy": "0.5.2",
     "flatpickr": "4.6.9",
+    "he": "1.2.0",
     "moment": "2.29.1",
     "moment-locales-webpack-plugin": "1.2.0",
     "style-loader": "3.2.1",

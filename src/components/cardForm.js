@@ -4,6 +4,7 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/flatpickr.min.css';
 import { DAYS } from "../const.js";
+import { encode } from "he";
 
 
 const parseFormData = (formData) => {
@@ -50,9 +51,9 @@ const createRepeatingDaysMarkup = (reapeatingDays) => {
 
 const createEditCardForm = (task) => {
 
-  const {description, color, reapeatingDays, dueDate} = task;
+  const {description: currentDescription, color, reapeatingDays, dueDate} = task;
 
-
+  const savedDescription = encode(currentDescription);
   const mainColor = color;
   const reapeatingDaysMarkup = createRepeatingDaysMarkup(reapeatingDays); 
   const colors = createColorsMarkup(mainColor); 
@@ -85,7 +86,7 @@ const createEditCardForm = (task) => {
               class="card__text"
               placeholder="Start typing your text here..."
               name="text"
-            >${description}</textarea>
+            >${savedDescription}</textarea>
           </label>
         </div>
 

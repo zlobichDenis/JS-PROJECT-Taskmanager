@@ -162,7 +162,6 @@ export default class BoardController {
     
         this._showedTaskContollers = [].concat(taskController, this._showedTaskContollers);
         this._showingTasksCount = this._showedTaskContollers.length;
-        console.log(this._showedTaskContollers)
         this._renderLoadMoreButton();
       }
     } else if (newData === null) {
