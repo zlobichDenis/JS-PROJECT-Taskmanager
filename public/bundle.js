@@ -25430,7 +25430,6 @@ class StatisticController {
         this.createCharts();
 
         this._statisticComponent._setOnDateChange((flatpickr) => {
-            console.log('work')
             const selectedDates = flatpickr.selectedDates;
             const tasksOfSelectedDate = this._getTasksOfSelectedDates(selectedDates);
             this._rerenderChart(tasksOfSelectedDate);
@@ -25440,9 +25439,7 @@ class StatisticController {
     _rerenderChart(tasks) {
         this._groupedTasksByDays = getGroupTasksByDays(tasks);
         this._chartDaysData.labels = getLineChartLabels(Object.keys(this._groupedTasksByDays));
-        this._chartDaysData.data = getLineChartData(this._groupedTasksByDays);
-       this._chartDays.update();
-        
+        this._chartDays.update(); 
     }
 
     removeElement() {
