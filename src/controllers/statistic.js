@@ -113,6 +113,7 @@ const getLineChartData = (tasks) => {
 export default class StatisticController {
     constructor(taskModel) {
         this._taskModel = taskModel;
+        this._flatpickr = null;
 
         this._allTasks = this._taskModel.getAllTasks();
     }
@@ -122,40 +123,66 @@ export default class StatisticController {
         this._createChartOfDays();
     }
 
+    _getTasksOfSelectedDates = (selectedDates) => {
+        const [startDate, endDate] = selectedDates;
+        return this._sortedTasks.filter((task) => {
+            if (task.dueDate > startDate && task.dueDate < endDate) {
+                return task;
+            }
+        })
+    }
+
     render(container) {
         this._container = container;
+        this._sortedTasks = getSortTasks(this._allTasks);
+        this._groupedTasksByDays = getGroupTasksByDays(this._sortedTasks);
 
-        this._statisticComponent = new StatisticComponent();
+        this._statisticComponent = new StatisticComponent(this._sortedTasks);
         render(this._container, this._statisticComponent, RenderPosition.BEFOREEND);
         this.createCharts();
+
+        this._statisticComponent._setOnDateChange((flatpickr) => {
+            console.log('work')
+            const selectedDates = flatpickr.selectedDates;
+            const tasksOfSelectedDate = this._getTasksOfSelectedDates(selectedDates);
+            this._rerenderChart(tasksOfSelectedDate);
+        });
+    }
+
+    _rerenderChart(tasks) {
+        this._groupedTasksByDays = getGroupTasksByDays(tasks);
+        this._chartDaysData.labels = getLineChartLabels(Object.keys(this._groupedTasksByDays));
+        this._chartDaysData.data = getLineChartData(this._groupedTasksByDays);
+       this._chartDays.update();
+        
     }
 
     removeElement() {
-        remove(this._statisticComponent)
+        remove(this._statisticComponent);
     }
+    
   
-      _createChartOfDays() {
+    _createChartOfDays() {
         const daysChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__days');
-        const sortedTasks = getSortTasks(this._allTasks);
-        const groupedTasksByDays = getGroupTasksByDays(sortedTasks);
-        console.log(groupedTasksByDays)
+
+        this._chartDaysData =  {
+            labels: getLineChartLabels(Object.keys(this._groupedTasksByDays)),
+            datasets: [{
+              label: 'Tasks By Days',
+              backgroundColor: '#ffffff',
+              borderColor: 'rgb(0, 0, 0)',
+              data: getLineChartData(this._groupedTasksByDays),
+            }]
+          };
 
         this._chartDays = new Chart(daysChartWrapper, {
             type: 'line',
-            data: {
-                labels: getLineChartLabels(Object.keys(groupedTasksByDays)),
-                datasets: [{
-                  label: 'Tasks By Days',
-                  backgroundColor: '#ffffff',
-                  borderColor: 'rgb(0, 0, 0)',
-                  data: getLineChartData(groupedTasksByDays),
-                }]
-              },
+            data: this._chartDaysData,
             options: {},
         });
     }
   
-      _createChartOfColors() {
+    _createChartOfColors() {
         const colorsChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__colors');
         this._allTasks = this._taskModel.getAllTasks();
         const groupedTasksByColors = getTasksByColors(this._allTasks);

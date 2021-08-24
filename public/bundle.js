@@ -24786,12 +24786,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ StatisticComponent)
 /* harmony export */ });
-/* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component */ "./src/components/abstract-component.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util */ "./src/util.js");
+/* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-component */ "./src/components/abstract-component.js");
 
 
 
-const createStatisticTemplate = () => {
-    return `<section class="statistic container">
+const findDefaultDate = (tasks) => {
+  const result = [];
+  const tasksContainsDate = tasks.filter((task) => task.dueDate);
+  result.push(tasksContainsDate[0].dueDate);
+  result.push(tasksContainsDate[tasksContainsDate.length - 1].dueDate)
+  return (result);
+};
+
+const getDefaultDates = (tasks) => {
+  const defaultDates = findDefaultDate(tasks);
+  return defaultDates;
+}
+
+const createStatisticTemplate = (placeholder) => {
+  const [firstDate, secondDate] = placeholder;
+  const firstPlaceholder = (0,_util__WEBPACK_IMPORTED_MODULE_0__.formatDate)(firstDate);
+  const secondPlaceholder = (0,_util__WEBPACK_IMPORTED_MODULE_0__.formatDate)(secondDate);
+  return `<section class="statistic container">
     <div class="statistic__line">
       <div class="statistic__period">
         <h2 class="statistic__period-title">Task Activity DIAGRAM</h2>
@@ -24800,7 +24817,7 @@ const createStatisticTemplate = () => {
           <input
             class="statistic__period-input"
             type="text"
-            placeholder="01 Feb - 08 Feb"
+            placeholder="${firstPlaceholder} - ${secondPlaceholder}"
           />
         </div>
 
@@ -24823,18 +24840,48 @@ const createStatisticTemplate = () => {
     `
 };
 
-class StatisticComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__.default {
-    constructor(taskModel) {
+class StatisticComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_1__.default {
+    constructor(tasks) {
         super();
-        this._taskModel = taskModel;
+        this._sortedTasks = tasks;
         this._container = null;
+        this._flatpickr = null;
 
         this._chartDays = null;
         this._chartColors = null;
+
+        this._defaultDates = getDefaultDates(this._sortedTasks);
+        this._applyFlatpickr();
     }
 
     getTemplate() {
-        return createStatisticTemplate();
+      return createStatisticTemplate(this._defaultDates);
+    }
+
+    _applyFlatpickr() {
+      if (this._flatpickr) {
+        this._flatpickr.destroy();
+        this._flatpickr = null;
+      }
+        const dateElement = this.getElement().querySelector('.statistic__period-input');
+        this._flatpickr = flatpickr(dateElement, {
+          mode: 'range',
+          allowInput: true,
+          dateFormat: 'd M',
+          enable: [
+            {
+              from: this._defaultDates[0],
+              to: this._defaultDates[1],
+            }
+          ],
+          defaultDate: this._defaultDates,
+        })
+    }
+
+    _setOnDateChange(handler) {
+        this._flatpickr.config.onClose.push(() => {
+          handler(this._flatpickr);
+        });
     }
 }
 
@@ -25354,6 +25401,7 @@ const getLineChartData = (tasks) => {
 class StatisticController {
     constructor(taskModel) {
         this._taskModel = taskModel;
+        this._flatpickr = null;
 
         this._allTasks = this._taskModel.getAllTasks();
     }
@@ -25363,40 +25411,66 @@ class StatisticController {
         this._createChartOfDays();
     }
 
+    _getTasksOfSelectedDates = (selectedDates) => {
+        const [startDate, endDate] = selectedDates;
+        return this._sortedTasks.filter((task) => {
+            if (task.dueDate > startDate && task.dueDate < endDate) {
+                return task;
+            }
+        })
+    }
+
     render(container) {
         this._container = container;
+        this._sortedTasks = getSortTasks(this._allTasks);
+        this._groupedTasksByDays = getGroupTasksByDays(this._sortedTasks);
 
-        this._statisticComponent = new _components_statistic__WEBPACK_IMPORTED_MODULE_3__.default();
+        this._statisticComponent = new _components_statistic__WEBPACK_IMPORTED_MODULE_3__.default(this._sortedTasks);
         (0,_render__WEBPACK_IMPORTED_MODULE_2__.render)(this._container, this._statisticComponent, _render__WEBPACK_IMPORTED_MODULE_2__.RenderPosition.BEFOREEND);
         this.createCharts();
+
+        this._statisticComponent._setOnDateChange((flatpickr) => {
+            console.log('work')
+            const selectedDates = flatpickr.selectedDates;
+            const tasksOfSelectedDate = this._getTasksOfSelectedDates(selectedDates);
+            this._rerenderChart(tasksOfSelectedDate);
+        });
+    }
+
+    _rerenderChart(tasks) {
+        this._groupedTasksByDays = getGroupTasksByDays(tasks);
+        this._chartDaysData.labels = getLineChartLabels(Object.keys(this._groupedTasksByDays));
+        this._chartDaysData.data = getLineChartData(this._groupedTasksByDays);
+       this._chartDays.update();
+        
     }
 
     removeElement() {
-        (0,_render__WEBPACK_IMPORTED_MODULE_2__.remove)(this._statisticComponent)
+        (0,_render__WEBPACK_IMPORTED_MODULE_2__.remove)(this._statisticComponent);
     }
+    
   
-      _createChartOfDays() {
+    _createChartOfDays() {
         const daysChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__days');
-        const sortedTasks = getSortTasks(this._allTasks);
-        const groupedTasksByDays = getGroupTasksByDays(sortedTasks);
-        console.log(groupedTasksByDays)
+
+        this._chartDaysData =  {
+            labels: getLineChartLabels(Object.keys(this._groupedTasksByDays)),
+            datasets: [{
+              label: 'Tasks By Days',
+              backgroundColor: '#ffffff',
+              borderColor: 'rgb(0, 0, 0)',
+              data: getLineChartData(this._groupedTasksByDays),
+            }]
+          };
 
         this._chartDays = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(daysChartWrapper, {
             type: 'line',
-            data: {
-                labels: getLineChartLabels(Object.keys(groupedTasksByDays)),
-                datasets: [{
-                  label: 'Tasks By Days',
-                  backgroundColor: '#ffffff',
-                  borderColor: 'rgb(0, 0, 0)',
-                  data: getLineChartData(groupedTasksByDays),
-                }]
-              },
+            data: this._chartDaysData,
             options: {},
         });
     }
   
-      _createChartOfColors() {
+    _createChartOfColors() {
         const colorsChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__colors');
         this._allTasks = this._taskModel.getAllTasks();
         const groupedTasksByColors = getTasksByColors(this._allTasks);

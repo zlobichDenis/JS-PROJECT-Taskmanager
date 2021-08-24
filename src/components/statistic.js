@@ -1,8 +1,24 @@
+import { formatDate } from "../util";
 import AbstractComponent from "./abstract-component";
 
+const findDefaultDate = (tasks) => {
+  const result = [];
+  const tasksContainsDate = tasks.filter((task) => task.dueDate);
+  result.push(tasksContainsDate[0].dueDate);
+  result.push(tasksContainsDate[tasksContainsDate.length - 1].dueDate)
+  return (result);
+};
 
-const createStatisticTemplate = () => {
-    return `<section class="statistic container">
+const getDefaultDates = (tasks) => {
+  const defaultDates = findDefaultDate(tasks);
+  return defaultDates;
+}
+
+const createStatisticTemplate = (placeholder) => {
+  const [firstDate, secondDate] = placeholder;
+  const firstPlaceholder = formatDate(firstDate);
+  const secondPlaceholder = formatDate(secondDate);
+  return `<section class="statistic container">
     <div class="statistic__line">
       <div class="statistic__period">
         <h2 class="statistic__period-title">Task Activity DIAGRAM</h2>
@@ -11,7 +27,7 @@ const createStatisticTemplate = () => {
           <input
             class="statistic__period-input"
             type="text"
-            placeholder="01 Feb - 08 Feb"
+            placeholder="${firstPlaceholder} - ${secondPlaceholder}"
           />
         </div>
 
@@ -35,16 +51,46 @@ const createStatisticTemplate = () => {
 };
 
 export default class StatisticComponent extends AbstractComponent {
-    constructor(taskModel) {
+    constructor(tasks) {
         super();
-        this._taskModel = taskModel;
+        this._sortedTasks = tasks;
         this._container = null;
+        this._flatpickr = null;
 
         this._chartDays = null;
         this._chartColors = null;
+
+        this._defaultDates = getDefaultDates(this._sortedTasks);
+        this._applyFlatpickr();
     }
 
     getTemplate() {
-        return createStatisticTemplate();
+      return createStatisticTemplate(this._defaultDates);
+    }
+
+    _applyFlatpickr() {
+      if (this._flatpickr) {
+        this._flatpickr.destroy();
+        this._flatpickr = null;
+      }
+        const dateElement = this.getElement().querySelector('.statistic__period-input');
+        this._flatpickr = flatpickr(dateElement, {
+          mode: 'range',
+          allowInput: true,
+          dateFormat: 'd M',
+          enable: [
+            {
+              from: this._defaultDates[0],
+              to: this._defaultDates[1],
+            }
+          ],
+          defaultDate: this._defaultDates,
+        })
+    }
+
+    _setOnDateChange(handler) {
+        this._flatpickr.config.onClose.push(() => {
+          handler(this._flatpickr);
+        });
     }
 }
