@@ -24784,79 +24784,12 @@ class NoTaskComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__.d
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "labels": () => (/* binding */ labels),
-/* harmony export */   "lineChartData": () => (/* binding */ lineChartData),
-/* harmony export */   "pieChartData": () => (/* binding */ pieChartData),
 /* harmony export */   "default": () => (/* binding */ StatisticComponent)
 /* harmony export */ });
 /* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component */ "./src/components/abstract-component.js");
-/* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/chart.esm.js");
-/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../render */ "./src/render.js");
-/* harmony import */ var _const__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../const */ "./src/const.js");
-
-chart_js__WEBPACK_IMPORTED_MODULE_1__.Chart.register(
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.ArcElement,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.LineElement,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.BarElement,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.PointElement,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.BarController,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.BubbleController,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.DoughnutController,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.LineController,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.PieController,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.PolarAreaController,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.RadarController,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.ScatterController,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.CategoryScale,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.LinearScale,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.LogarithmicScale,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.RadialLinearScale,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.TimeScale,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.TimeSeriesScale,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.Decimation,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.Filler,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.Legend,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.Title,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.Tooltip,
-    chart_js__WEBPACK_IMPORTED_MODULE_1__.SubTitle
-  );
 
 
 
-
-
-const labels = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-];
-const lineChartData = {
-  labels: labels,
-  datasets: [{
-    label: 'My First dataset',
-    backgroundColor: '#ffffff',
-    borderColor: 'rgb(0, 0, 0)',
-    data: [0, 10, 5, 2, 20, 30, 45],
-  }]
-};
-const pieChartData = {
-  labels: _const__WEBPACK_IMPORTED_MODULE_3__.COLORS_CARD,
-  datasets: [{
-    label: 'My First Dataset',
-    data: [300, 50, 100, 100, 50],
-    backgroundColor: [
-      'rgb(0, 0, 0)',
-      '#f11a1a',
-      '#31b55c',
-      '#ffe125',
-      '#ff3cb9',
-    ],
-    hoverOffset: 4,
-  }]
-};
 const createStatisticTemplate = () => {
     return `<section class="statistic container">
     <div class="statistic__line">
@@ -24902,29 +24835,6 @@ class StatisticComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_0_
 
     getTemplate() {
         return createStatisticTemplate();
-    }
-
-    createCharts() {
-      this._createChartOfColors();
-      this._createChartOfDays();
-    }
-
-    _createChartOfDays() {
-        const daysChartWrapper = this.getElement().querySelector('.statistic__days');
-        this._chartDays = new chart_js__WEBPACK_IMPORTED_MODULE_1__.Chart(daysChartWrapper, {
-          type: 'line',
-          data: lineChartData,
-          options: {},
-      });
-    }
-
-    _createChartOfColors() {
-      const colorsChartWrapper = this.getElement().querySelector('.statistic__colors');
-      this._chartColors = new chart_js__WEBPACK_IMPORTED_MODULE_1__.Chart(colorsChartWrapper, {
-        type: 'doughnut',
-        data: pieChartData,
-        options: {},
-      })
     }
 }
 
@@ -25351,6 +25261,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_statistic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/statistic */ "./src/components/statistic.js");
 /* harmony import */ var prelude_ls__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prelude-ls */ "./node_modules/prelude-ls/lib/index.js");
 /* harmony import */ var prelude_ls__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prelude_ls__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util */ "./src/util.js");
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register(
     chart_js__WEBPACK_IMPORTED_MODULE_0__.ArcElement,
     chart_js__WEBPACK_IMPORTED_MODULE_0__.LineElement,
@@ -25384,6 +25295,7 @@ chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register(
 
 
 
+
 const labels = [
   'January',
   'February',
@@ -25392,30 +25304,7 @@ const labels = [
   'May',
   'June',
 ];
-const lineChartData = {
-  labels: labels,
-  datasets: [{
-    label: 'My First dataset',
-    backgroundColor: '#ffffff',
-    borderColor: 'rgb(0, 0, 0)',
-    data: [0, 10, 5, 2, 20, 30, 45],
-  }]
-};
-const pieChartData = {
-  labels: _const__WEBPACK_IMPORTED_MODULE_1__.COLORS_CARD,
-  datasets: [{
-    label: 'My First Dataset',
-    data: [300, 50, 100, 100, 50],
-    backgroundColor: [
-      'rgb(0, 0, 0)',
-      '#f11a1a',
-      '#31b55c',
-      '#ffe125',
-      '#ff3cb9',
-    ],
-    hoverOffset: 4,
-  }]
-};
+
 
 const getColorProportion = (tasksByColors, allTasks) => {
     return tasksByColors.map((group) => {
@@ -25431,9 +25320,42 @@ const getTasksByColors = (tasks) => {
     });
 };
 
+const getGroupTasksByDays = (allTasks) => {
+    return allTasks.reduce((acc, task) => {
+        const date = task.dueDate;
+        if (date) {
+            if (acc[date]) {
+                acc[date].push(task);
+            } else {
+                acc[date] = [task];
+            }
+        }
+        return acc;
+    }, {});
+};
+
+const getSortTasks = (allTasks) => {
+    return allTasks.sort((a, b) => a.dueDate - b.dueDate);
+};
+
+const getLineChartLabels = (keys) => {
+    return keys.map((key) => {
+        return (0,_util__WEBPACK_IMPORTED_MODULE_5__.formatDate)(key);
+    });
+}
+
+const getLineChartData = (tasks) => {
+    const dates = Object.keys(tasks);
+    return dates.map((date) => {
+        return tasks[date].length
+    });
+};
+
 class StatisticController {
     constructor(taskModel) {
         this._taskModel = taskModel;
+
+        this._allTasks = this._taskModel.getAllTasks();
     }
 
     createCharts() {
@@ -25454,20 +25376,31 @@ class StatisticController {
     }
   
       _createChartOfDays() {
-          const daysChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__days');
-          this._chartDays = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(daysChartWrapper, {
+        const daysChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__days');
+        const sortedTasks = getSortTasks(this._allTasks);
+        const groupedTasksByDays = getGroupTasksByDays(sortedTasks);
+        console.log(groupedTasksByDays)
+
+        this._chartDays = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(daysChartWrapper, {
             type: 'line',
-            data: lineChartData,
+            data: {
+                labels: getLineChartLabels(Object.keys(groupedTasksByDays)),
+                datasets: [{
+                  label: 'Tasks By Days',
+                  backgroundColor: '#ffffff',
+                  borderColor: 'rgb(0, 0, 0)',
+                  data: getLineChartData(groupedTasksByDays),
+                }]
+              },
             options: {},
         });
     }
   
       _createChartOfColors() {
         const colorsChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__colors');
-        const allTasks = this._taskModel.getAllTasks();
-        const groupedTasksByColors = getTasksByColors(allTasks);
-        const chartData = getColorProportion(groupedTasksByColors, allTasks);
-        console.log(chartData)
+        this._allTasks = this._taskModel.getAllTasks();
+        const groupedTasksByColors = getTasksByColors(this._allTasks);
+        const chartData = getColorProportion(groupedTasksByColors, this._allTasks);
         this._chartColors = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(colorsChartWrapper, {
           type: 'doughnut',
           data: {
