@@ -46,7 +46,7 @@ siteMenu.setOnChangeHandler((menuItem) => {
             break;   
         case MenuItem.TASKS:
             siteMenu.setActiveItem(MenuItem.TASKS);
-            remove(statisticComponent);
+            statisticController.removeElement();
             render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
             boardController._removeTasks();
             boardController.render();

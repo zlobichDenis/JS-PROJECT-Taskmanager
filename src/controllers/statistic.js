@@ -49,8 +49,9 @@ import { Chart, ArcElement,
     Tooltip,
     SubTitle } from "chart.js";
 import { COLORS_CARD } from "../const";
-import { render, RenderPosition } from "../render";
+import { render, RenderPosition, remove } from "../render";
 import StatisticComponent from "../components/statistic";
+import { all } from "prelude-ls";
 
 
 const labels = [
@@ -86,6 +87,20 @@ const pieChartData = {
   }]
 };
 
+const getColorProportion = (tasksByColors, allTasks) => {
+    return tasksByColors.map((group) => {
+        const colorProportion = Math.round((100 * group.length) / allTasks.length);
+        return colorProportion * 10;
+    })
+    
+};
+
+const getTasksByColors = (tasks) => {
+    return COLORS_CARD.map((color) => {
+        return tasks.filter((task) => task.color === color);
+    });
+};
+
 export default class StatisticController {
     constructor(taskModel) {
         this._taskModel = taskModel;
@@ -103,6 +118,10 @@ export default class StatisticController {
         render(this._container, this._statisticComponent, RenderPosition.BEFOREEND);
         this.createCharts();
     }
+
+    removeElement() {
+        remove(this._statisticComponent)
+    }
   
       _createChartOfDays() {
           const daysChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__days');
@@ -115,9 +134,27 @@ export default class StatisticController {
   
       _createChartOfColors() {
         const colorsChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__colors');
+        const allTasks = this._taskModel.getAllTasks();
+        const groupedTasksByColors = getTasksByColors(allTasks);
+        const chartData = getColorProportion(groupedTasksByColors, allTasks);
+        console.log(chartData)
         this._chartColors = new Chart(colorsChartWrapper, {
           type: 'doughnut',
-          data: pieChartData,
+          data: {
+            labels: COLORS_CARD,
+            datasets: [{
+              label: 'Tasks By Colors',
+              data: chartData,
+              backgroundColor: [
+                'rgb(0, 0, 0)',
+                '#f11a1a',
+                '#31b55c',
+                '#ffe125',
+                '#ff3cb9',
+              ],
+              hoverOffset: 4,
+            }]
+          },
           options: {},
         })
     }
