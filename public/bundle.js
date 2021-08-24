@@ -23384,17 +23384,6 @@ class SiteMenu extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_1__.defau
             handler(menuItem, this._activeComponent);
         });
     }
-
-    _changeActiveComponent(oldComponent, newComponent) {
-        const oldElement = oldComponent.getElement();
-        const container = oldElement.parentElement;
-
-        oldComponent.removeElement();
-
-        const newElement = this._activeComponent.getElement();
-
-        container.replaceChild(newElement, oldElement);
-    }
 }
 
 /***/ }),
@@ -23436,16 +23425,79 @@ class NoTaskComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__.d
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "labels": () => (/* binding */ labels),
+/* harmony export */   "lineChartData": () => (/* binding */ lineChartData),
+/* harmony export */   "pieChartData": () => (/* binding */ pieChartData),
 /* harmony export */   "default": () => (/* binding */ StatisticComponent)
 /* harmony export */ });
 /* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component */ "./src/components/abstract-component.js");
 /* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/chart.esm.js");
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../render */ "./src/render.js");
+/* harmony import */ var _const__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../const */ "./src/const.js");
+
+chart_js__WEBPACK_IMPORTED_MODULE_1__.Chart.register(
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.ArcElement,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.LineElement,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.BarElement,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.PointElement,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.BarController,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.BubbleController,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.DoughnutController,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.LineController,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.PieController,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.PolarAreaController,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.RadarController,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.ScatterController,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.CategoryScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.LinearScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.LogarithmicScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.RadialLinearScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.TimeScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.TimeSeriesScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.Decimation,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.Filler,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.Legend,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.Title,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.Tooltip,
+    chart_js__WEBPACK_IMPORTED_MODULE_1__.SubTitle
+  );
 
 
 
 
 
+const labels = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+];
+const lineChartData = {
+  labels: labels,
+  datasets: [{
+    label: 'My First dataset',
+    backgroundColor: '#ffffff',
+    borderColor: 'rgb(0, 0, 0)',
+    data: [0, 10, 5, 2, 20, 30, 45],
+  }]
+};
+const pieChartData = {
+  labels: _const__WEBPACK_IMPORTED_MODULE_3__.COLORS_CARD,
+  datasets: [{
+    label: 'My First Dataset',
+    data: [300, 50, 100, 100, 50],
+    backgroundColor: [
+      'rgb(0, 0, 0)',
+      '#f11a1a',
+      '#31b55c',
+      '#ffe125',
+      '#ff3cb9',
+    ],
+    hoverOffset: 4,
+  }]
+};
 const createStatisticTemplate = () => {
     return `<section class="statistic container">
     <div class="statistic__line">
@@ -23465,13 +23517,13 @@ const createStatisticTemplate = () => {
           <span class="statistic__task-found">0</span> tasks were fulfilled.
         </p>
       </div>
-      <div class="statistic__line-graphic visually-hidden">
+      <div class="statistic__line-graphic">
         <canvas class="statistic__days" width="550" height="150"></canvas>
       </div>
     </div>
 
     <div class="statistic__circle">
-      <div class="statistic__colors-wrap visually-hidden">
+      <div class="statistic__colors-wrap">
         <canvas class="statistic__colors" width="400" height="300"></canvas>
       </div>
     </div>
@@ -23485,14 +23537,35 @@ class StatisticComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_0_
         this._taskModel = taskModel;
         this._container = null;
 
+        this._chartDays = null;
+        this._chartColors = null;
     }
 
     getTemplate() {
         return createStatisticTemplate();
     }
 
-    _createCanvas() {
-        const chartWrapper = this.getElement().querySelector('.statistic__days').getContext('2d');
+    createCharts() {
+      this._createChartOfColors();
+      this._createChartOfDays();
+    }
+
+    _createChartOfDays() {
+        const daysChartWrapper = this.getElement().querySelector('.statistic__days');
+        this._chartDays = new chart_js__WEBPACK_IMPORTED_MODULE_1__.Chart(daysChartWrapper, {
+          type: 'line',
+          data: lineChartData,
+          options: {},
+      });
+    }
+
+    _createChartOfColors() {
+      const colorsChartWrapper = this.getElement().querySelector('.statistic__colors');
+      this._chartColors = new chart_js__WEBPACK_IMPORTED_MODULE_1__.Chart(colorsChartWrapper, {
+        type: 'doughnut',
+        data: pieChartData,
+        options: {},
+      })
     }
 }
 
@@ -23899,6 +23972,126 @@ class FiltersController {
         this._activeFilterType = filterType;
     }    
 }
+
+/***/ }),
+
+/***/ "./src/controllers/statistic.js":
+/*!**************************************!*\
+  !*** ./src/controllers/statistic.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StatisticController)
+/* harmony export */ });
+/* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/chart.esm.js");
+/* harmony import */ var _const__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../const */ "./src/const.js");
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../render */ "./src/render.js");
+/* harmony import */ var _components_statistic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/statistic */ "./src/components/statistic.js");
+chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register(
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.ArcElement,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.LineElement,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.BarElement,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.PointElement,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.BarController,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.BubbleController,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.DoughnutController,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.LineController,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.PieController,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.PolarAreaController,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.RadarController,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.ScatterController,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.CategoryScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.LinearScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.LogarithmicScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.RadialLinearScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.TimeScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.TimeSeriesScale,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.Decimation,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.Filler,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.Legend,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.Title,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.Tooltip,
+    chart_js__WEBPACK_IMPORTED_MODULE_0__.SubTitle
+  );
+
+
+
+
+
+
+const labels = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+];
+const lineChartData = {
+  labels: labels,
+  datasets: [{
+    label: 'My First dataset',
+    backgroundColor: '#ffffff',
+    borderColor: 'rgb(0, 0, 0)',
+    data: [0, 10, 5, 2, 20, 30, 45],
+  }]
+};
+const pieChartData = {
+  labels: _const__WEBPACK_IMPORTED_MODULE_1__.COLORS_CARD,
+  datasets: [{
+    label: 'My First Dataset',
+    data: [300, 50, 100, 100, 50],
+    backgroundColor: [
+      'rgb(0, 0, 0)',
+      '#f11a1a',
+      '#31b55c',
+      '#ffe125',
+      '#ff3cb9',
+    ],
+    hoverOffset: 4,
+  }]
+};
+
+class StatisticController {
+    constructor(taskModel) {
+        this._taskModel = taskModel;
+    }
+
+    createCharts() {
+        this._createChartOfColors();
+        this._createChartOfDays();
+    }
+
+    render(container) {
+        this._container = container;
+
+        this._statisticComponent = new _components_statistic__WEBPACK_IMPORTED_MODULE_3__.default();
+        (0,_render__WEBPACK_IMPORTED_MODULE_2__.render)(this._container, this._statisticComponent, _render__WEBPACK_IMPORTED_MODULE_2__.RenderPosition.BEFOREEND);
+        this.createCharts();
+    }
+  
+      _createChartOfDays() {
+          const daysChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__days');
+          this._chartDays = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(daysChartWrapper, {
+            type: 'line',
+            data: lineChartData,
+            options: {},
+        });
+    }
+  
+      _createChartOfColors() {
+        const colorsChartWrapper = this._statisticComponent.getElement().querySelector('.statistic__colors');
+        this._chartColors = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(colorsChartWrapper, {
+          type: 'doughnut',
+          data: pieChartData,
+          options: {},
+        })
+    }
+}
+
 
 /***/ }),
 
@@ -24430,6 +24623,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
 /* harmony import */ var _mock_task_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./mock/task.js */ "./src/mock/task.js");
 /* harmony import */ var _controllers_filters_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./controllers/filters.js */ "./src/controllers/filters.js");
+/* harmony import */ var _controllers_statistic_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./controllers/statistic.js */ "./src/controllers/statistic.js");
+
 
 
 
@@ -24459,8 +24654,8 @@ const filterController = new _controllers_filters_js__WEBPACK_IMPORTED_MODULE_9_
 filterController.render();
 
 const boardComponent = new _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_1__.default();
-const statisticComponent = new _components_statistic_js__WEBPACK_IMPORTED_MODULE_5__.default();
 const boardController = new _controllers_board_contoller_js__WEBPACK_IMPORTED_MODULE_4__.default(boardComponent, tasksModel);
+const statisticController = new _controllers_statistic_js__WEBPACK_IMPORTED_MODULE_10__.default(tasksModel);
 
 (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
 boardController.render();
@@ -24484,8 +24679,9 @@ siteMenu.setOnChangeHandler((menuItem) => {
             break;
         case _components_menu_js__WEBPACK_IMPORTED_MODULE_3__.MenuItem.STATISTICS:
             siteMenu.setActiveItem(_components_menu_js__WEBPACK_IMPORTED_MODULE_3__.MenuItem.STATISTICS);
-            (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(boardComponent)
-            ;(0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(siteMainElement, statisticComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+            (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(boardComponent);
+            statisticController.render(siteMainElement);
+            /* render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND); */
             break;
     }
 }); 

@@ -9,6 +9,7 @@ import { render, RenderPosition, replace, remove} from "./render.js";
 import { generateFilters } from "./mock/filter.js";
 import { generateTasks } from "./mock/task.js";
 import FiltersController from "./controllers/filters.js";
+import StatisticController from "./controllers/statistic.js";
 
 
 
@@ -27,8 +28,8 @@ const filterController = new FiltersController(siteMainElement, tasksModel);
 filterController.render();
 
 const boardComponent = new BoardComponent();
-const statisticComponent = new StatisticComponent();
 const boardController = new BoardController(boardComponent, tasksModel);
+const statisticController = new StatisticController(tasksModel);
 
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 boardController.render();
@@ -52,8 +53,9 @@ siteMenu.setOnChangeHandler((menuItem) => {
             break;
         case MenuItem.STATISTICS:
             siteMenu.setActiveItem(MenuItem.STATISTICS);
-            remove(boardComponent)
-            render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
+            remove(boardComponent);
+            statisticController.render(siteMainElement);
+            /* render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND); */
             break;
     }
 }); 

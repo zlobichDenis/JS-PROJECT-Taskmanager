@@ -68,15 +68,4 @@ export default class SiteMenu extends AbstractComponent {
             handler(menuItem, this._activeComponent);
         });
     }
-
-    _changeActiveComponent(oldComponent, newComponent) {
-        const oldElement = oldComponent.getElement();
-        const container = oldElement.parentElement;
-
-        oldComponent.removeElement();
-
-        const newElement = this._activeComponent.getElement();
-
-        container.replaceChild(newElement, oldElement);
-    }
 }
