@@ -125,11 +125,12 @@ export default class StatisticController {
 
     _getTasksOfSelectedDates = (selectedDates) => {
         const [startDate, endDate] = selectedDates;
-        return this._sortedTasks.filter((task) => {
-            if (task.dueDate > startDate && task.dueDate < endDate) {
+        const result =  this._sortedTasks.filter((task) => {
+            if (task.dueDate >= startDate && task.dueDate <= endDate) {
                 return task;
             }
         })
+        return result;
     }
 
     render(container) {
@@ -151,6 +152,7 @@ export default class StatisticController {
     _rerenderChart(tasks) {
         this._groupedTasksByDays = getGroupTasksByDays(tasks);
         this._chartDaysData.labels = getLineChartLabels(Object.keys(this._groupedTasksByDays));
+        this._chartDaysData.data = getLineChartData(this._groupedTasksByDays);
         this._chartDays.update(); 
     }
 

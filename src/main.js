@@ -37,8 +37,10 @@ boardController.render();
 siteMenu.setOnChangeHandler((menuItem) => {
     switch (menuItem) {
         case MenuItem.NEW_TASK:
+            if (MenuItem.STATISTICS === menuItem) {
+                statisticController.removeElement();
+            }
             siteMenu.setActiveItem(MenuItem.TASKS);
-            remove(statisticComponent);
             render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
             boardController._removeTasks();
             boardController.render();

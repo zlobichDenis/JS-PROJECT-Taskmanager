@@ -24870,8 +24870,8 @@ class StatisticComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_1_
           dateFormat: 'd M',
           enable: [
             {
-              from: this._defaultDates[0],
-              to: this._defaultDates[1],
+              from: this._defaultDates[0].setDate(this._defaultDates[0].getDate() - 1),
+              to: this._defaultDates[1].setDate(this._defaultDates[1].getDate() + 1),
             }
           ],
           defaultDate: this._defaultDates,
@@ -25413,11 +25413,12 @@ class StatisticController {
 
     _getTasksOfSelectedDates = (selectedDates) => {
         const [startDate, endDate] = selectedDates;
-        return this._sortedTasks.filter((task) => {
-            if (task.dueDate > startDate && task.dueDate < endDate) {
+        const result =  this._sortedTasks.filter((task) => {
+            if (task.dueDate >= startDate && task.dueDate <= endDate) {
                 return task;
             }
         })
+        return result;
     }
 
     render(container) {
@@ -25437,8 +25438,11 @@ class StatisticController {
     }
 
     _rerenderChart(tasks) {
+        console.log(tasks);
         this._groupedTasksByDays = getGroupTasksByDays(tasks);
+        console.log(this._groupedTasksByDays);
         this._chartDaysData.labels = getLineChartLabels(Object.keys(this._groupedTasksByDays));
+        this._chartDaysData.data = getLineChartData(this._groupedTasksByDays);
         this._chartDays.update(); 
     }
 
@@ -26065,8 +26069,10 @@ boardController.render();
 siteMenu.setOnChangeHandler((menuItem) => {
     switch (menuItem) {
         case _components_menu_js__WEBPACK_IMPORTED_MODULE_3__.MenuItem.NEW_TASK:
+            if (_components_menu_js__WEBPACK_IMPORTED_MODULE_3__.MenuItem.STATISTICS === menuItem) {
+                statisticController.removeElement();
+            }
             siteMenu.setActiveItem(_components_menu_js__WEBPACK_IMPORTED_MODULE_3__.MenuItem.TASKS);
-            (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(statisticComponent);
             (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
             boardController._removeTasks();
             boardController.render();

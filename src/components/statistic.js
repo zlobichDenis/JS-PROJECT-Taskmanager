@@ -80,8 +80,8 @@ export default class StatisticComponent extends AbstractComponent {
           dateFormat: 'd M',
           enable: [
             {
-              from: this._defaultDates[0],
-              to: this._defaultDates[1],
+              from: this._defaultDates[0].setDate(this._defaultDates[0].getDate() - 1),
+              to: this._defaultDates[1].setDate(this._defaultDates[1].getDate() + 1),
             }
           ],
           defaultDate: this._defaultDates,
