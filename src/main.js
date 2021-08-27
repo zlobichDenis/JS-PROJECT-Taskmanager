@@ -1,12 +1,10 @@
+import {API} from './api.js';
 import TasksModel from "./models/tasks.js";
 import BoardComponent from "./components/board-tasks.js";
-import FilterComponent from "./components/filters.js";
 import SiteMenuComponent, {MenuItem} from './components/menu.js';
 import BoardController from "./controllers/board-contoller.js";
-import StatisticComponent from "./components/statistic.js";
 
 import { render, RenderPosition, replace, remove} from "./render.js";
-import { generateFilters } from "./mock/filter.js";
 import { generateTasks } from "./mock/task.js";
 import FiltersController from "./controllers/filters.js";
 import StatisticController from "./controllers/statistic.js";
@@ -18,15 +16,24 @@ const TASK_COUNT = 22;
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.main__control');
 
+const AUTHORIZATION = `Basic: asdfasdfasdfasdf`;
+const dateTo = new Date();
+const dateFrom = (() => {
+    const d = new Date(dateTo);
+    d.setDate(d.getDate() - 7);
+
+    return d;
+});
 
 const tasks = generateTasks(TASK_COUNT);
+const api = new API('some url',AUTHORIZATION);
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
 
 const siteMenu = new SiteMenuComponent()
 const filterController = new FiltersController(siteMainElement, tasksModel);
 const boardComponent = new BoardComponent();
-const boardController = new BoardController(boardComponent, tasksModel);
+const boardController = new BoardController(boardComponent, tasksModel, api);
 const statisticController = new StatisticController(tasksModel);
 
 render(siteHeaderElement, siteMenu, RenderPosition.BEFOREEND);
@@ -61,5 +68,11 @@ siteMenu.setOnChangeHandler((menuItem) => {
     }
 }); 
 
+
+api.getTasks()
+    .then((tasks) => {
+        taskModel.setTasks(tasks);
+        boardController.render();
+    });
 
 

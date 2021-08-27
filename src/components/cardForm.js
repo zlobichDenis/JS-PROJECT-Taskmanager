@@ -7,25 +7,6 @@ import { DAYS } from "../const.js";
 import { encode } from "he";
 
 
-const parseFormData = (formData) => {
-  const reapeatingDays = DAYS.reduce((acc, day) => {
-    acc[day] = false;
-    return acc;
-  }, {});
-
-  const date = formData.get('date');
-
-  return {
-    description: formData.get('text'),
-    color: formData.get('color'),
-    dueDate: date ? new Date(date) : null,
-    reapeatingDays: formData.getAll('repeat').reduce((acc, it) => {
-      acc[it] = true;
-      return acc;
-    }, reapeatingDays),
-  };
-};
-
 
 const createColorsMarkup = (mainColor) => {
   return COLORS_CARD.map((color) => {
@@ -70,6 +51,7 @@ const createEditCardForm = (task) => {
   const isRepeated = Object.values(reapeatingDays).some(Boolean); 
 
   const repeatClass = isRepeated ? 'card--repeat' : '';
+
 
     return `<article class="card card--edit card--${mainColor} ${repeatClass} ${deadlineClass}">
     <form class="card__form" method="get">
@@ -208,9 +190,10 @@ export default class EditForm extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector('.card__form');
-    const formData = new FormData(form);
+    /* const formData = new FormData(form); */
      
-    return parseFormData(formData);
+    /* return parseFormData(formData); */
+    return new FormData(form);
   }
 
   setDeleteButtonClickHandler(handler) {

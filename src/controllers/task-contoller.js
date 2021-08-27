@@ -1,8 +1,29 @@
-import AbstractSmartComponent from "../components/abstract-smart-component.js";
-import Task from "../components/cardExample.js";
+import Task from "../models/task.js";
 import EditForm from "../components/cardForm.js";
 import { COLORS_CARD } from "../const.js";
 import { render, replace, RenderPosition, remove } from "../render.js";
+
+
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
+const parseFormData = (formData) => {
+  const repeatingDays = DAYS.reduce((acc, day) => {
+    acc[day] = false;
+    return acc;
+  }, {});
+
+  const date = formData.get('date');
+
+  return new TaskModel({
+    "description": formData.get('text'),
+    "dueDate": date ? new Date(date) : null,
+    "repeating_days": formData.getAll(`repeat`).reduce((acc, it) => { 
+      acc[it] = true;
+      return acc}, repeatingDays),
+      "is_favorite": false,
+      "is_done": false,
+  });
+};
 
 export const Mode = {
   EDIT: 'edit',
@@ -54,18 +75,26 @@ export default class TaskController {
         
       this._taskEditComponent.setSubmitHandler((evt) => {
         evt.preventDefault();
-        const data = this._taskEditComponent.getData();
+        /* const data = this._taskEditComponent.getData(); */
+        const formData = this._taskEditComponent.getData();
+        const data = parseFormData(formData);
         this._onDataChange(this, task, data);
       });
 
       this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, task, null));
 
       this._taskComponent.setArchiveButtonClickHandler(() => {
-        this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
+        // this._onDataChange(this, task, Object.assign({}, task, { isArchive: !task.isArchive, }));
+        const newTask = TaskModel.clone(task);
+        newTask.isArchive = !newTask.isArchive;
+        this._onDataChange(this, task, newTask);
       });
 
       this._taskComponent.setFavoritesButtonClickHandler(() => {
-        this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }))
+        // this._onDataChange(this, task, Object.assign({}, task, { isFavorite: !task.isFavorite, }));
+        const newTask = TaskModel.clone(task);
+        newTask.isFavorite = !newTask.isFavorite;
+        this._onDataChange(this, task, newTask);
       });
       if (this._mode === Mode.ADDING) {
         render(this._container, this._taskEditComponent, RenderPosition.AFTERBEGIN);
@@ -103,5 +132,15 @@ export default class TaskController {
       this._onViewChange();
       replace(this._taskEditComponent, this._taskComponent);
       this._mode = Mode.EDIT;
+    }
+
+    shake() { 
+      this._taskEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+      this._taskComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+      setTimeout(() => {
+        this._taskEditComponent.getElement().style.animation = ``;
+        this._taskComponent.getElement().style.animation = ``;
+      }, SHAKE_ANIMATION_TIMEOUT)
     }
 }
