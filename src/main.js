@@ -14,23 +14,23 @@ import StatisticController from "./controllers/statistic.js";
 
 
 const TASK_COUNT = 22;
+
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.main__control');
+
 
 const tasks = generateTasks(TASK_COUNT);
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
 
 const siteMenu = new SiteMenuComponent()
-
-render(siteHeaderElement, siteMenu, RenderPosition.BEFOREEND);
 const filterController = new FiltersController(siteMainElement, tasksModel);
-filterController.render();
-
 const boardComponent = new BoardComponent();
 const boardController = new BoardController(boardComponent, tasksModel);
 const statisticController = new StatisticController(tasksModel);
 
+render(siteHeaderElement, siteMenu, RenderPosition.BEFOREEND);
+filterController.render();
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 boardController.render();
 
@@ -57,7 +57,6 @@ siteMenu.setOnChangeHandler((menuItem) => {
             siteMenu.setActiveItem(MenuItem.STATISTICS);
             remove(boardComponent);
             statisticController.render(siteMainElement);
-            /* render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND); */
             break;
     }
 }); 

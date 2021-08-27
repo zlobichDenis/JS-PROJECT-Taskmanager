@@ -25438,9 +25438,7 @@ class StatisticController {
     }
 
     _rerenderChart(tasks) {
-        console.log(tasks);
         this._groupedTasksByDays = getGroupTasksByDays(tasks);
-        console.log(this._groupedTasksByDays);
         this._chartDaysData.labels = getLineChartLabels(Object.keys(this._groupedTasksByDays));
         this._chartDaysData.data = getLineChartData(this._groupedTasksByDays);
         this._chartDays.update(); 
@@ -26046,23 +26044,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const TASK_COUNT = 22;
+
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.main__control');
+
 
 const tasks = (0,_mock_task_js__WEBPACK_IMPORTED_MODULE_8__.generateTasks)(TASK_COUNT);
 const tasksModel = new _models_tasks_js__WEBPACK_IMPORTED_MODULE_0__.default();
 tasksModel.setTasks(tasks);
 
 const siteMenu = new _components_menu_js__WEBPACK_IMPORTED_MODULE_3__.default()
-
-;(0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(siteHeaderElement, siteMenu, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
 const filterController = new _controllers_filters_js__WEBPACK_IMPORTED_MODULE_9__.default(siteMainElement, tasksModel);
-filterController.render();
-
 const boardComponent = new _components_board_tasks_js__WEBPACK_IMPORTED_MODULE_1__.default();
 const boardController = new _controllers_board_contoller_js__WEBPACK_IMPORTED_MODULE_4__.default(boardComponent, tasksModel);
 const statisticController = new _controllers_statistic_js__WEBPACK_IMPORTED_MODULE_10__.default(tasksModel);
 
+(0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(siteHeaderElement, siteMenu, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
+filterController.render();
 (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.render)(siteMainElement, boardComponent, _render_js__WEBPACK_IMPORTED_MODULE_6__.RenderPosition.BEFOREEND);
 boardController.render();
 
@@ -26089,7 +26087,6 @@ siteMenu.setOnChangeHandler((menuItem) => {
             siteMenu.setActiveItem(_components_menu_js__WEBPACK_IMPORTED_MODULE_3__.MenuItem.STATISTICS);
             (0,_render_js__WEBPACK_IMPORTED_MODULE_6__.remove)(boardComponent);
             statisticController.render(siteMainElement);
-            /* render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND); */
             break;
     }
 }); 
