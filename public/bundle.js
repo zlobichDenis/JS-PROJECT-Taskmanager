@@ -24512,6 +24512,10 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
         this.rerender();
       })
     }
+    element.querySelector('.card__text')
+    .addEventListener('input', (event) => {
+      this._task.description = event.target.value;
+    });
   }
 }
 

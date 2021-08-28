@@ -255,5 +255,9 @@ export default class EditForm extends AbstractSmartComponent {
         this.rerender();
       })
     }
+    element.querySelector('.card__text')
+    .addEventListener('input', (event) => {
+      this._task.description = event.target.value;
+    });
   }
 }
