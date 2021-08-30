@@ -23990,37 +23990,10 @@ class AbstractSmartComponent extends _abstract_component__WEBPACK_IMPORTED_MODUL
 
 /***/ }),
 
-/***/ "./src/components/board-tasks.js":
-/*!***************************************!*\
-  !*** ./src/components/board-tasks.js ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Board)
-/* harmony export */ });
-/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
-
-
-const createBoardTemplate = () => {
-    return `<section class="board container"></section>
-    `
-}; 
-
-class Board extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.default {
-    getTemplate() {
-        return createBoardTemplate();
-    }
-}
-
-/***/ }),
-
-/***/ "./src/components/boardFilters.js":
-/*!****************************************!*\
-  !*** ./src/components/boardFilters.js ***!
-  \****************************************/
+/***/ "./src/components/board-filters.js":
+/*!*****************************************!*\
+  !*** ./src/components/board-filters.js ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -24083,10 +24056,37 @@ class Sort extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.default {
 
 /***/ }),
 
-/***/ "./src/components/btnLoadMore.js":
+/***/ "./src/components/board-tasks.js":
 /*!***************************************!*\
-  !*** ./src/components/btnLoadMore.js ***!
+  !*** ./src/components/board-tasks.js ***!
   \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Board)
+/* harmony export */ });
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
+
+const createBoardTemplate = () => {
+    return `<section class="board container"></section>
+    `
+}; 
+
+class Board extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.default {
+    getTemplate() {
+        return createBoardTemplate();
+    }
+}
+
+/***/ }),
+
+/***/ "./src/components/btn-load-more.js":
+/*!*****************************************!*\
+  !*** ./src/components/btn-load-more.js ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -24111,413 +24111,6 @@ class LoadMoreBtn extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_0__.de
         this.getElement().addEventListener('click', handler);
     }
 };
-
-
-/***/ }),
-
-/***/ "./src/components/cardExample.js":
-/*!***************************************!*\
-  !*** ./src/components/cardExample.js ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Task)
-/* harmony export */ });
-/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
-/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
-/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
-/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
-
-
-
-
-
-const createButtonMarkup = (name, isActive) => {
-  return (
-    `<button type="button" class="card__btn card__btn--${name} ${isActive ? '' : 'card__btn--disabled'}">
-    ${name}
-  </button>`
-  )
-};
-
-
-const createCardTemplate = (task) => {
-
-  const {description: notSanitazedDescription, color, reapeatingDays, dueDate} = task;
-  const savedDescription = (0,he__WEBPACK_IMPORTED_MODULE_0__.encode)(notSanitazedDescription);
-  const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
-  const isDateShowing = !!dueDate; 
-
-  const date = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_2__.formatDate)(dueDate): '';  
-  const time = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_2__.formatTime)(dueDate) : '';
- 
-  const isRepeat = (element) => {
-   return element === true;
-  };
-
-  const editButton = createButtonMarkup('edit');
-  const archiveButton = createButtonMarkup('archive', task.isArchive);
-  const favoritesButton = createButtonMarkup('favorites', task.isFavorite);
-
-  const deadlineClass = isExpired ? `card--deadline` : ``; 
-  const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
-
-  const repeatClass = isRepeated ? 'card--repeat' : '';
-
-
-    return `<article class="card card--${color} ${repeatClass} ${deadlineClass}"
-    >
-    <div class="card__form">
-      <div class="card__inner">
-        <div class="card__control">
-          ${editButton}
-          ${archiveButton}
-          ${favoritesButton}
-        </div>
-
-        <div class="card__color-bar">
-          <svg class="card__color-bar-wave" width="100%" height="10">
-            <use xlink:href="#wave"></use>
-          </svg>
-        </div>
-
-        <div class="card__textarea-wrap">
-          <p class="card__text">${savedDescription}</p>
-        </div>
-
-        <div class="card__settings">
-          <div class="card__details">
-            <div class="card__dates">
-              <div class="card__date-deadline">
-                <p class="card__input-deadline-wrap">
-                  <span class="card__date">${isDateShowing ? date : ''}</span>
-                  <span class="card__time">${time}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </article>
-    `
-};
-
-class Task extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_3__.default {
-    constructor(task) {
-      super();
-      this._task = task;
-    }
-
-    getTemplate() {
-      return createCardTemplate(this._task);
-    }
-
-    setEditButtonClickHandler(handler) {
-      this.getElement().querySelector('.card__btn--edit').addEventListener('click', handler)
-    }
-
-    setFavoritesButtonClickHandler(handler) {
-      this.getElement().querySelector('.card__btn--favorites')
-      .addEventListener('click', handler);
-    }
-
-    setArchiveButtonClickHandler(handler) {
-      this.getElement().querySelector('.card__btn--archive')
-      .addEventListener('click', handler);
-    }
-}
-
-
-
-
-/***/ }),
-
-/***/ "./src/components/cardForm.js":
-/*!************************************!*\
-  !*** ./src/components/cardForm.js ***!
-  \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ EditForm)
-/* harmony export */ });
-/* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
-/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
-/* harmony import */ var _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./abstract-smart-component.js */ "./src/components/abstract-smart-component.js");
-/* harmony import */ var flatpickr__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js");
-/* harmony import */ var flatpickr_dist_flatpickr_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flatpickr/dist/flatpickr.min.css */ "./node_modules/flatpickr/dist/flatpickr.min.css");
-/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
-/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_5__);
-
-
-
-
-
-
-
-
-
-const parseFormData = (formData) => {
-  const reapeatingDays = _const_js__WEBPACK_IMPORTED_MODULE_0__.DAYS.reduce((acc, day) => {
-    acc[day] = false;
-    return acc;
-  }, {});
-
-  const date = formData.get('date');
-
-  return {
-    description: formData.get('text'),
-    color: formData.get('color'),
-    dueDate: date ? new Date(date) : null,
-    reapeatingDays: formData.getAll('repeat').reduce((acc, it) => {
-      acc[it] = true;
-      return acc;
-    }, reapeatingDays),
-  };
-};
-
-
-const createColorsMarkup = (mainColor) => {
-  return _const_js__WEBPACK_IMPORTED_MODULE_0__.COLORS_CARD.map((color) => {
-    return `
-    <input type="radio" id="color-${color}-4" class="card__color-input card__color-input--${color} visually-hidden" name="color"value="${color}"
-    ${color === mainColor ? 'checked' : ''}/>
-    <label for="color-${color}-4" class="card__color card__color--${color}">${color}</label
->
-`
-  }).join('\n');
-};
-
-const createRepeatingDaysMarkup = (reapeatingDays) => { 
-  const keys = Object.keys(reapeatingDays);
-  return keys.map((key) => {
-    return `
-    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${key}-4" name="repeat" value="${key}" ${reapeatingDays[key] ? 'checked = "true"' : ''}/>
-  <label class="card__repeat-day" for="repeat-${key}-4">${key}</label>
-`
-  }).join('\n');
-};
-
-
-const createEditCardForm = (task) => {
-
-  const {description: currentDescription, color, reapeatingDays, dueDate} = task;
-
-  const savedDescription = (0,he__WEBPACK_IMPORTED_MODULE_5__.encode)(currentDescription);
-  const mainColor = color;
-  const reapeatingDaysMarkup = createRepeatingDaysMarkup(reapeatingDays); 
-  const colors = createColorsMarkup(mainColor); 
-
-  const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
-  const isDateShowing = !!dueDate;
- /*  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : '';   */
-  const date = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.formatDate)(dueDate) : ``;
-  const time = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.formatTime)(dueDate) : ``;
-  const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
-
-
-
-  const isRepeated = Object.values(reapeatingDays).some(Boolean); 
-
-  const repeatClass = isRepeated ? 'card--repeat' : '';
-
-    return `<article class="card card--edit card--${mainColor} ${repeatClass} ${deadlineClass}">
-    <form class="card__form" method="get">
-      <div class="card__inner">
-        <div class="card__color-bar">
-          <svg class="card__color-bar-wave" width="100%" height="10">
-            <use xlink:href="#wave"></use>
-          </svg>
-        </div>
-
-        <div class="card__textarea-wrap">
-          <label>
-            <textarea
-              class="card__text"
-              placeholder="Start typing your text here..."
-              name="text"
-            >${savedDescription}</textarea>
-          </label>
-        </div>
-
-        <div class="card__settings">
-          <div class="card__details">
-            <div class="card__dates">
-              <button class="card__date-deadline-toggle" type="button">
-                date: <span class="card__date-status">${isDateShowing ? 'yes' : 'no'}</span>
-              </button>
-              ${isDateShowing ? `<fieldset class="card__date-deadline">
-                      <label class="card__input-deadline-wrap">
-                        <input
-                          class="card__date"
-                          type="text"
-                          placeholder="${date} ${time}"
-                          name="date"
-                          value="${date} ${time}"
-                        />
-                      </label>
-                    </fieldset>`
-               : ''}
-              <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">${isRepeated ? 'yes' : 'no'}</span>
-              </button>
-              ${isRepeated ? `<fieldset class="card__repeat-days">
-              <div class="card__repeat-days-inner">
-                ${reapeatingDaysMarkup}
-              </div>
-            </fieldset>` : ''}
-            </div>
-          </div>
-
-          <div class="card__colors-inner">
-            <h3 class="card__colors-title">Color</h3>
-            <div class="card__colors-wrap">
-              ${colors}
-            </div>
-          </div>
-        </div>
-
-        <div class="card__status-btns">
-          <button class="card__save" type="submit">save</button>
-          <button class="card__delete" type="button">delete</button>
-        </div>
-      </div>
-    </form>
-  </article>
-  `
-};
-
-
-class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__.default {
-  constructor(task) {
-    super()
-    this._task = task;
-    this._copyTask = null;
-    this._submitHandler = null;
-    this._deleteButtonHandler = null;
-    this._subscribeOnEvents();
-    this._flatpickr = null;
-    this._applyFlatpickr();
-  }
-
-  getTemplate() {
-    return createEditCardForm(this._task);
-  }
-
-  recoveryListeners() {
-    this.setSubmitHandler(this._submitHandler);
-    this.setDeleteButtonClickHandler(this._deleteButtonHandler);
-    this._subscribeOnEvents();
-  }
-
-  rerender() {
-    super.rerender();
-    this._applyFlatpickr();
-  }
-
-  reset() {
-    this._task = this._copyTask;
-    this.rerender();
-  }
-
-  removeElement() {
-    if (this._flatpickr) {
-      this._flatpickr.destroy();
-
-      this._flatpickr = null;
-    }
-
-    super.removeElement();
-  }
-
-  _applyFlatpickr() {
-    if (this._flatpickr) {
-      this._flatpickr.destroy();
-      this._flatpickr = null;
-    }
-
-    if (this._task.dueDate) {
-      const dateElement = this.getElement().querySelector('.card__date');
-      this._flatpickr = (0,flatpickr__WEBPACK_IMPORTED_MODULE_3__.default)(dateElement, {
-/*         altInput: true, */
-        allowInput: true,
-        enableTime: true,
-        dateFormat: 'd M H:i',
-        defaultDate: this._task.duedate,
-      })
-    }
-  }
-
-
-  setSubmitHandler(handler) {
-    this.getElement().querySelector('form')
-    .addEventListener('submit', handler);
-
-    this._submitHandler = handler;
-  }
-
-  getData() {
-    const form = this.getElement().querySelector('.card__form');
-    const formData = new FormData(form);
-     
-    return parseFormData(formData);
-  }
-
-  setDeleteButtonClickHandler(handler) {
-    this.getElement().querySelector('.card__delete')
-    .addEventListener('click', handler);
-
-    this._deleteButtonHandler = handler;
-  }
-
-  _subscribeOnEvents() {
-    this._copyTask = Object.assign({}, this._task);
-    const element = this.getElement();
-
-    element.querySelector('.card__date-deadline-toggle')
-    .addEventListener('click', () => {
-      this._task.dueDate === null
-        ? this._task.dueDate = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.getRandomDate)()
-        : this._task.dueDate = null;
-      this.rerender();
-    });
-
-    element.querySelector('.card__repeat-toggle')
-    .addEventListener('click', () => {
-      this._isRepeatingTask = Object.values(this._task.reapeatingDays).some(Boolean)
-        ? this._task.reapeatingDays = _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays
-        : this._task.reapeatingDays = Object.assign({}, _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays,{ 'mo': true });
-      this.rerender();
-    });
-
-    element.querySelector('.card__colors-wrap')
-    .addEventListener('change', (evt) => {
-      this._task.color = evt.target.value;
-
-      this.rerender();
-    });
-
-    const repeatDays = element.querySelector('.card__repeat-days');
-    if(repeatDays) {
-      repeatDays.addEventListener('change', (evt) => {
-        this._activeRepeatingDays = this._task.reapeatingDays;
-        this._activeRepeatingDays[evt.target.value] = evt.target.checked;
-        this.rerender();
-      })
-    }
-    element.querySelector('.card__text')
-    .addEventListener('input', (event) => {
-      this._task.description = event.target.value;
-    });
-  }
-}
 
 
 /***/ }),
@@ -24891,6 +24484,413 @@ class StatisticComponent extends _abstract_component__WEBPACK_IMPORTED_MODULE_1_
 
 /***/ }),
 
+/***/ "./src/components/task-edit.js":
+/*!*************************************!*\
+  !*** ./src/components/task-edit.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EditForm)
+/* harmony export */ });
+/* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./abstract-smart-component.js */ "./src/components/abstract-smart-component.js");
+/* harmony import */ var flatpickr__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js");
+/* harmony import */ var flatpickr_dist_flatpickr_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flatpickr/dist/flatpickr.min.css */ "./node_modules/flatpickr/dist/flatpickr.min.css");
+/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
+/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+
+
+
+const parseFormData = (formData) => {
+  const reapeatingDays = _const_js__WEBPACK_IMPORTED_MODULE_0__.DAYS.reduce((acc, day) => {
+    acc[day] = false;
+    return acc;
+  }, {});
+
+  const date = formData.get('date');
+
+  return {
+    description: formData.get('text'),
+    color: formData.get('color'),
+    dueDate: date ? new Date(date) : null,
+    reapeatingDays: formData.getAll('repeat').reduce((acc, it) => {
+      acc[it] = true;
+      return acc;
+    }, reapeatingDays),
+  };
+};
+
+
+const createColorsMarkup = (mainColor) => {
+  return _const_js__WEBPACK_IMPORTED_MODULE_0__.COLORS_CARD.map((color) => {
+    return `
+    <input type="radio" id="color-${color}-4" class="card__color-input card__color-input--${color} visually-hidden" name="color"value="${color}"
+    ${color === mainColor ? 'checked' : ''}/>
+    <label for="color-${color}-4" class="card__color card__color--${color}">${color}</label
+>
+`
+  }).join('\n');
+};
+
+const createRepeatingDaysMarkup = (reapeatingDays) => { 
+  const keys = Object.keys(reapeatingDays);
+  return keys.map((key) => {
+    return `
+    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${key}-4" name="repeat" value="${key}" ${reapeatingDays[key] ? 'checked = "true"' : ''}/>
+  <label class="card__repeat-day" for="repeat-${key}-4">${key}</label>
+`
+  }).join('\n');
+};
+
+
+const createEditCardForm = (task) => {
+
+  const {description: currentDescription, color, reapeatingDays, dueDate} = task;
+
+  const savedDescription = (0,he__WEBPACK_IMPORTED_MODULE_5__.encode)(currentDescription);
+  const mainColor = color;
+  const reapeatingDaysMarkup = createRepeatingDaysMarkup(reapeatingDays); 
+  const colors = createColorsMarkup(mainColor); 
+
+  const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
+  const isDateShowing = !!dueDate;
+ /*  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : '';   */
+  const date = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.formatDate)(dueDate) : ``;
+  const time = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.formatTime)(dueDate) : ``;
+  const deadlineClass = isExpired ? `card--deadline` : ``; // для карточки задачи 
+
+
+
+  const isRepeated = Object.values(reapeatingDays).some(Boolean); 
+
+  const repeatClass = isRepeated ? 'card--repeat' : '';
+
+    return `<article class="card card--edit card--${mainColor} ${repeatClass} ${deadlineClass}">
+    <form class="card__form" method="get">
+      <div class="card__inner">
+        <div class="card__color-bar">
+          <svg class="card__color-bar-wave" width="100%" height="10">
+            <use xlink:href="#wave"></use>
+          </svg>
+        </div>
+
+        <div class="card__textarea-wrap">
+          <label>
+            <textarea
+              class="card__text"
+              placeholder="Start typing your text here..."
+              name="text"
+            >${savedDescription}</textarea>
+          </label>
+        </div>
+
+        <div class="card__settings">
+          <div class="card__details">
+            <div class="card__dates">
+              <button class="card__date-deadline-toggle" type="button">
+                date: <span class="card__date-status">${isDateShowing ? 'yes' : 'no'}</span>
+              </button>
+              ${isDateShowing ? `<fieldset class="card__date-deadline">
+                      <label class="card__input-deadline-wrap">
+                        <input
+                          class="card__date"
+                          type="text"
+                          placeholder="${date} ${time}"
+                          name="date"
+                          value="${date} ${time}"
+                        />
+                      </label>
+                    </fieldset>`
+               : ''}
+              <button class="card__repeat-toggle" type="button">
+                repeat:<span class="card__repeat-status">${isRepeated ? 'yes' : 'no'}</span>
+              </button>
+              ${isRepeated ? `<fieldset class="card__repeat-days">
+              <div class="card__repeat-days-inner">
+                ${reapeatingDaysMarkup}
+              </div>
+            </fieldset>` : ''}
+            </div>
+          </div>
+
+          <div class="card__colors-inner">
+            <h3 class="card__colors-title">Color</h3>
+            <div class="card__colors-wrap">
+              ${colors}
+            </div>
+          </div>
+        </div>
+
+        <div class="card__status-btns">
+          <button class="card__save" type="submit">save</button>
+          <button class="card__delete" type="button">delete</button>
+        </div>
+      </div>
+    </form>
+  </article>
+  `
+};
+
+
+class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__.default {
+  constructor(task) {
+    super()
+    this._task = task;
+    this._copyTask = null;
+    this._submitHandler = null;
+    this._deleteButtonHandler = null;
+    this._subscribeOnEvents();
+    this._flatpickr = null;
+    this._applyFlatpickr();
+  }
+
+  getTemplate() {
+    return createEditCardForm(this._task);
+  }
+
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonHandler);
+    this._subscribeOnEvents();
+  }
+
+  rerender() {
+    super.rerender();
+    this._applyFlatpickr();
+  }
+
+  reset() {
+    this._task = this._copyTask;
+    this.rerender();
+  }
+
+  removeElement() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+
+      this._flatpickr = null;
+    }
+
+    super.removeElement();
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._task.dueDate) {
+      const dateElement = this.getElement().querySelector('.card__date');
+      this._flatpickr = (0,flatpickr__WEBPACK_IMPORTED_MODULE_3__.default)(dateElement, {
+/*         altInput: true, */
+        allowInput: true,
+        enableTime: true,
+        dateFormat: 'd M H:i',
+        defaultDate: this._task.duedate,
+      })
+    }
+  }
+
+
+  setSubmitHandler(handler) {
+    this.getElement().querySelector('form')
+    .addEventListener('submit', handler);
+
+    this._submitHandler = handler;
+  }
+
+  getData() {
+    const form = this.getElement().querySelector('.card__form');
+    const formData = new FormData(form);
+     
+    return parseFormData(formData);
+  }
+
+  setDeleteButtonClickHandler(handler) {
+    this.getElement().querySelector('.card__delete')
+    .addEventListener('click', handler);
+
+    this._deleteButtonHandler = handler;
+  }
+
+  _subscribeOnEvents() {
+    this._copyTask = Object.assign({}, this._task);
+    const element = this.getElement();
+
+    element.querySelector('.card__date-deadline-toggle')
+    .addEventListener('click', () => {
+      this._task.dueDate === null
+        ? this._task.dueDate = (0,_util_js__WEBPACK_IMPORTED_MODULE_1__.getRandomDate)()
+        : this._task.dueDate = null;
+      this.rerender();
+    });
+
+    element.querySelector('.card__repeat-toggle')
+    .addEventListener('click', () => {
+      this._isRepeatingTask = Object.values(this._task.reapeatingDays).some(Boolean)
+        ? this._task.reapeatingDays = _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays
+        : this._task.reapeatingDays = Object.assign({}, _util_js__WEBPACK_IMPORTED_MODULE_1__.defaultReapeatingDays,{ 'mo': true });
+      this.rerender();
+    });
+
+    element.querySelector('.card__colors-wrap')
+    .addEventListener('change', (evt) => {
+      this._task.color = evt.target.value;
+
+      this.rerender();
+    });
+
+    const repeatDays = element.querySelector('.card__repeat-days');
+    if(repeatDays) {
+      repeatDays.addEventListener('change', (evt) => {
+        this._activeRepeatingDays = this._task.reapeatingDays;
+        this._activeRepeatingDays[evt.target.value] = evt.target.checked;
+        this.rerender();
+      })
+    }
+    element.querySelector('.card__text')
+    .addEventListener('input', (event) => {
+      this._task.description = event.target.value;
+    });
+  }
+}
+
+
+/***/ }),
+
+/***/ "./src/components/task.js":
+/*!********************************!*\
+  !*** ./src/components/task.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Task)
+/* harmony export */ });
+/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
+/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+/* harmony import */ var _abstract_component_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./abstract-component.js */ "./src/components/abstract-component.js");
+
+
+
+
+
+const createButtonMarkup = (name, isActive) => {
+  return (
+    `<button type="button" class="card__btn card__btn--${name} ${isActive ? '' : 'card__btn--disabled'}">
+    ${name}
+  </button>`
+  )
+};
+
+
+const createCardTemplate = (task) => {
+
+  const {description: notSanitazedDescription, color, reapeatingDays, dueDate} = task;
+  const savedDescription = (0,he__WEBPACK_IMPORTED_MODULE_0__.encode)(notSanitazedDescription);
+  const isExpired = dueDate instanceof Date && dueDate < Date.now(); 
+  const isDateShowing = !!dueDate; 
+
+  const date = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_2__.formatDate)(dueDate): '';  
+  const time = isDateShowing ? (0,_util_js__WEBPACK_IMPORTED_MODULE_2__.formatTime)(dueDate) : '';
+ 
+  const isRepeat = (element) => {
+   return element === true;
+  };
+
+  const editButton = createButtonMarkup('edit');
+  const archiveButton = createButtonMarkup('archive', task.isArchive);
+  const favoritesButton = createButtonMarkup('favorites', task.isFavorite);
+
+  const deadlineClass = isExpired ? `card--deadline` : ``; 
+  const isRepeated = Object.values(reapeatingDays).some(isRepeat); 
+
+  const repeatClass = isRepeated ? 'card--repeat' : '';
+
+
+    return `<article class="card card--${color} ${repeatClass} ${deadlineClass}"
+    >
+    <div class="card__form">
+      <div class="card__inner">
+        <div class="card__control">
+          ${editButton}
+          ${archiveButton}
+          ${favoritesButton}
+        </div>
+
+        <div class="card__color-bar">
+          <svg class="card__color-bar-wave" width="100%" height="10">
+            <use xlink:href="#wave"></use>
+          </svg>
+        </div>
+
+        <div class="card__textarea-wrap">
+          <p class="card__text">${savedDescription}</p>
+        </div>
+
+        <div class="card__settings">
+          <div class="card__details">
+            <div class="card__dates">
+              <div class="card__date-deadline">
+                <p class="card__input-deadline-wrap">
+                  <span class="card__date">${isDateShowing ? date : ''}</span>
+                  <span class="card__time">${time}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+    `
+};
+
+class Task extends _abstract_component_js__WEBPACK_IMPORTED_MODULE_3__.default {
+    constructor(task) {
+      super();
+      this._task = task;
+    }
+
+    getTemplate() {
+      return createCardTemplate(this._task);
+    }
+
+    setEditButtonClickHandler(handler) {
+      this.getElement().querySelector('.card__btn--edit').addEventListener('click', handler)
+    }
+
+    setFavoritesButtonClickHandler(handler) {
+      this.getElement().querySelector('.card__btn--favorites')
+      .addEventListener('click', handler);
+    }
+
+    setArchiveButtonClickHandler(handler) {
+      this.getElement().querySelector('.card__btn--archive')
+      .addEventListener('click', handler);
+    }
+}
+
+
+
+
+/***/ }),
+
 /***/ "./src/components/tasks-list-component.js":
 /*!************************************************!*\
   !*** ./src/components/tasks-list-component.js ***!
@@ -24980,10 +24980,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ BoardController)
 /* harmony export */ });
-/* harmony import */ var _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/btnLoadMore.js */ "./src/components/btnLoadMore.js");
-/* harmony import */ var _components_cardForm_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/cardForm.js */ "./src/components/cardForm.js");
-/* harmony import */ var _components_cardExample_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/cardExample.js */ "./src/components/cardExample.js");
-/* harmony import */ var _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/boardFilters.js */ "./src/components/boardFilters.js");
+/* harmony import */ var _components_btn_load_more_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/btn-load-more.js */ "./src/components/btn-load-more.js");
+/* harmony import */ var _components_task_edit_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/task-edit.js */ "./src/components/task-edit.js");
+/* harmony import */ var _components_task_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/task.js */ "./src/components/task.js");
+/* harmony import */ var _components_board_filters_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/board-filters.js */ "./src/components/board-filters.js");
 /* harmony import */ var _components_no_tasks_component_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/no-tasks-component.js */ "./src/components/no-tasks-component.js");
 /* harmony import */ var _components_tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/tasks-list-component.js */ "./src/components/tasks-list-component.js");
 /* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../render.js */ "./src/render.js");
@@ -25023,13 +25023,13 @@ const getSortedTasks = (tasks, sortType, from, to) => {
     const showingTaks = tasks.slice();
 
     switch (sortType){
-        case _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DATE_UP:
+        case _components_board_filters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DATE_UP:
             sortedTasks = showingTaks.sort((a, b) => a.dueDate - b.dueDate);
             break;
-        case _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DATE_DOWN:
+        case _components_board_filters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DATE_DOWN:
             sortedTasks = showingTaks.sort((a, b) => b.dueDate - a.dueDate);
             break;
-        case _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DEFAULT:
+        case _components_board_filters_js__WEBPACK_IMPORTED_MODULE_3__.SortType.DEFAULT:
             sortedTasks = showingTaks;
             break;
     }
@@ -25049,8 +25049,8 @@ class BoardController {
         
     this._noTaskComponent = new _components_no_tasks_component_js__WEBPACK_IMPORTED_MODULE_4__.default();
     this._tasksComponent = new _components_tasks_list_component_js__WEBPACK_IMPORTED_MODULE_5__.default();
-    this._sortComponent = new _components_boardFilters_js__WEBPACK_IMPORTED_MODULE_3__.default();
-    this._loadMoreButtonComponent = new _components_btnLoadMore_js__WEBPACK_IMPORTED_MODULE_0__.default();
+    this._sortComponent = new _components_board_filters_js__WEBPACK_IMPORTED_MODULE_3__.default();
+    this._loadMoreButtonComponent = new _components_btn_load_more_js__WEBPACK_IMPORTED_MODULE_0__.default();
 
     this._creatingTask = null;
 
@@ -25415,7 +25415,7 @@ class StatisticController {
         this._createChartOfDays();
     }
 
-    _getTasksOfSelectedDates = (selectedDates) => {
+    _getTasksOfSelectedDates (selectedDates){
         const [startDate, endDate] = selectedDates;
         const result =  this._sortedTasks.filter((task) => {
             if (task.dueDate >= startDate && task.dueDate <= endDate) {
@@ -25517,8 +25517,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ TaskController)
 /* harmony export */ });
 /* harmony import */ var _components_abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/abstract-smart-component.js */ "./src/components/abstract-smart-component.js");
-/* harmony import */ var _components_cardExample_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/cardExample.js */ "./src/components/cardExample.js");
-/* harmony import */ var _components_cardForm_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/cardForm.js */ "./src/components/cardForm.js");
+/* harmony import */ var _components_task_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/task.js */ "./src/components/task.js");
+/* harmony import */ var _components_task_edit_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/task-edit.js */ "./src/components/task-edit.js");
 /* harmony import */ var _const_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../const.js */ "./src/const.js");
 /* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../render.js */ "./src/render.js");
 
@@ -25567,8 +25567,8 @@ class TaskController {
       const oldTaskEditComponent = this._taskEditComponent;
       this._mode = mode;
       
-      this._taskComponent = new _components_cardExample_js__WEBPACK_IMPORTED_MODULE_1__.default(task);
-      this._taskEditComponent = new _components_cardForm_js__WEBPACK_IMPORTED_MODULE_2__.default(task, this._onDataChange);
+      this._taskComponent = new _components_task_js__WEBPACK_IMPORTED_MODULE_1__.default(task);
+      this._taskEditComponent = new _components_task_edit_js__WEBPACK_IMPORTED_MODULE_2__.default(task, this._onDataChange);
         
       
       this._taskComponent.setEditButtonClickHandler(() => {

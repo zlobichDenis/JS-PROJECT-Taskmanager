@@ -1,15 +1,15 @@
-import LoadMoreBtnComponent from '../components/btnLoadMore.js';
-import EditFormComponent from '../components/cardForm.js';
-import TaskComponent from '../components/cardExample.js';
-import SortComponent from '../components/boardFilters.js'
+import LoadMoreBtnComponent from '../components/btn-load-more.js';
+import EditFormComponent from '../components/task-edit.js';
+import TaskComponent from '../components/task.js';
+import SortComponent from '../components/board-filters.js'
 import NoTaskComponent from '../components/no-tasks-component.js';
 import TaskList from '../components/tasks-list-component.js';
 
 
 import { render, RenderPosition, replace, remove } from "../render.js"
-import { SortType } from '../components/boardFilters.js';
+import { SortType } from '../components/board-filters.js';
 import TaskController, {Mode as TaskControllerMode, EmptyTask} from './task-contoller.js';
-import Task from '../components/cardExample.js';
+import Task from '../components/task.js';
 import Filter from '../components/filters.js';
 
 

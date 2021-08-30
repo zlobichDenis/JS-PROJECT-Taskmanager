@@ -123,7 +123,7 @@ export default class StatisticController {
         this._createChartOfDays();
     }
 
-    _getTasksOfSelectedDates = (selectedDates) => {
+    _getTasksOfSelectedDates (selectedDates){
         const [startDate, endDate] = selectedDates;
         const result =  this._sortedTasks.filter((task) => {
             if (task.dueDate >= startDate && task.dueDate <= endDate) {

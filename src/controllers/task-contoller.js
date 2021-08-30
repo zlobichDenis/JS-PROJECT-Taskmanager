@@ -1,6 +1,6 @@
 import AbstractSmartComponent from "../components/abstract-smart-component.js";
-import Task from "../components/cardExample.js";
-import EditForm from "../components/cardForm.js";
+import Task from "../components/task.js";
+import EditForm from "../components/task-edit.js";
 import { COLORS_CARD } from "../const.js";
 import { render, replace, RenderPosition, remove } from "../render.js";
 
