@@ -24652,6 +24652,8 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
     this._subscribeOnEvents();
     this._flatpickr = null;
     this._applyFlatpickr();
+
+    this._btnSaveIsDisabled = this._btnSaveIsDisabled.bind(this);
   }
 
   getTemplate() {
@@ -24662,6 +24664,7 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
     this.setSubmitHandler(this._submitHandler);
     this.setDeleteButtonClickHandler(this._deleteButtonHandler);
     this._subscribeOnEvents();
+    this._btnSaveIsDisabled();
   }
 
   rerender() {
@@ -24727,6 +24730,7 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
   _subscribeOnEvents() {
     this._copyTask = Object.assign({}, this._task);
     const element = this.getElement();
+    
 
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
@@ -24751,6 +24755,13 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
       this.rerender();
     });
 
+    element.querySelector('.card__text')
+    .addEventListener('input', (event) => {
+      this._task.description = event.target.value;
+      this._btnSaveIsDisabled();
+    });
+
+
     const repeatDays = element.querySelector('.card__repeat-days');
     if(repeatDays) {
       repeatDays.addEventListener('change', (evt) => {
@@ -24759,10 +24770,15 @@ class EditForm extends _abstract_smart_component_js__WEBPACK_IMPORTED_MODULE_2__
         this.rerender();
       })
     }
-    element.querySelector('.card__text')
-    .addEventListener('input', (event) => {
-      this._task.description = event.target.value;
-    });
+  }
+
+  _btnSaveIsDisabled() {
+    console.log(!(!this._task.description))
+    if (!this._task.description) {
+      this.getElement().querySelector('.card__save').disabled = true;
+    } else {
+      this.getElement().querySelector('.card__save').disabled = false;
+    }
   }
 }
 
@@ -25592,6 +25608,7 @@ class TaskController {
       });
       if (this._mode === Mode.ADDING) {
         (0,_render_js__WEBPACK_IMPORTED_MODULE_4__.render)(this._container, this._taskEditComponent, _render_js__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.AFTERBEGIN);
+        this._taskEditComponent._btnSaveIsDisabled();
         return;
       }
       if(oldTaskEditComponent && oldTaskComponent) {

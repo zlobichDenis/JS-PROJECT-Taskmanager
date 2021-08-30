@@ -69,6 +69,7 @@ export default class TaskController {
       });
       if (this._mode === Mode.ADDING) {
         render(this._container, this._taskEditComponent, RenderPosition.AFTERBEGIN);
+        this._taskEditComponent._btnSaveIsDisabled();
         return;
       }
       if(oldTaskEditComponent && oldTaskComponent) {

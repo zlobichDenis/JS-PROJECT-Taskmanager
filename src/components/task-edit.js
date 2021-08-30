@@ -148,6 +148,8 @@ export default class EditForm extends AbstractSmartComponent {
     this._subscribeOnEvents();
     this._flatpickr = null;
     this._applyFlatpickr();
+
+    this._btnSaveIsDisabled = this._btnSaveIsDisabled.bind(this);
   }
 
   getTemplate() {
@@ -158,6 +160,7 @@ export default class EditForm extends AbstractSmartComponent {
     this.setSubmitHandler(this._submitHandler);
     this.setDeleteButtonClickHandler(this._deleteButtonHandler);
     this._subscribeOnEvents();
+    this._btnSaveIsDisabled();
   }
 
   rerender() {
@@ -223,6 +226,7 @@ export default class EditForm extends AbstractSmartComponent {
   _subscribeOnEvents() {
     this._copyTask = Object.assign({}, this._task);
     const element = this.getElement();
+    
 
     element.querySelector('.card__date-deadline-toggle')
     .addEventListener('click', () => {
@@ -247,6 +251,13 @@ export default class EditForm extends AbstractSmartComponent {
       this.rerender();
     });
 
+    element.querySelector('.card__text')
+    .addEventListener('input', (event) => {
+      this._task.description = event.target.value;
+      this._btnSaveIsDisabled();
+    });
+
+
     const repeatDays = element.querySelector('.card__repeat-days');
     if(repeatDays) {
       repeatDays.addEventListener('change', (evt) => {
@@ -255,9 +266,14 @@ export default class EditForm extends AbstractSmartComponent {
         this.rerender();
       })
     }
-    element.querySelector('.card__text')
-    .addEventListener('input', (event) => {
-      this._task.description = event.target.value;
-    });
+  }
+
+  _btnSaveIsDisabled() {
+    console.log(!(!this._task.description))
+    if (!this._task.description) {
+      this.getElement().querySelector('.card__save').disabled = true;
+    } else {
+      this.getElement().querySelector('.card__save').disabled = false;
+    }
   }
 }
